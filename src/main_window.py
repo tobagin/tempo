@@ -256,7 +256,7 @@ class TempoWindow(Adw.ApplicationWindow):
         elif widget == self.tempo_scale:
             self.tempo_spin.set_value(tempo)
             
-    def _on_time_signature_changed(self, widget: Gtk.Widget) -> None:
+    def _on_time_signature_changed(self, widget: Gtk.Widget, *args) -> None:
         """Handle time signature change."""
         numerator = int(self.beats_spin.get_value())
         denominator_values = [2, 4, 8, 16]
