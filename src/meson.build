@@ -6,6 +6,7 @@ python_sources = [
   'preferences_dialog.py',
   'metronome.py',
   'audio.py',
+  'simple_audio.py',
   '_version.py'
 ]
 

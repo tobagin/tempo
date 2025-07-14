@@ -4,11 +4,16 @@ using Adw 1;
 template $TempoWindow : Adw.ApplicationWindow {
   default-width: 400;
   default-height: 500;
-  title: _("Tempo");
   
-  Adw.ToolbarView {
-    [top]
+  Gtk.Box {
+    orientation: vertical;
+    
     Adw.HeaderBar {
+      title-widget: Adw.WindowTitle {
+        title: _("Tempo");
+        subtitle: _("Metronome");
+      };
+      
       [end]
       Gtk.MenuButton {
         icon-name: "open-menu-symbolic";
@@ -17,8 +22,9 @@ template $TempoWindow : Adw.ApplicationWindow {
       }
     }
 
-    content: Adw.Clamp {
+    Adw.Clamp {
       maximum-size: 400;
+      vexpand: true;
       
       Gtk.Box {
         orientation: vertical;
@@ -152,7 +158,7 @@ template $TempoWindow : Adw.ApplicationWindow {
           tooltip-text: _("Tap repeatedly to set tempo");
         }
       }
-    };
+    }
   }
 }
 

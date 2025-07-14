@@ -78,7 +78,7 @@ gresource_h = gnome.compile_resources(
   'tempo-resources-h',
   'resources/tempo.gresource.xml',
   dependencies: ui_compiled,
-  source_dir: meson.current_source_dir(),
+  source_dir: [meson.current_source_dir(), meson.current_build_dir()],
   c_name: 'tempo_resources'
 )
 
@@ -86,7 +86,7 @@ gresource_file = gnome.compile_resources(
   'tempo-resources',
   'resources/tempo.gresource.xml',
   dependencies: ui_compiled,
-  source_dir: meson.current_source_dir(),
+  source_dir: [meson.current_source_dir(), meson.current_build_dir()],
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir

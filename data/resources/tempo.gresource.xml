@@ -2,8 +2,8 @@
 <gresources>
   <gresource prefix="/io/github/tobagin/tempo">
     <!-- UI Files -->
-    <file preprocess="xml-stripblanks">ui/main_window.ui</file>
-    <file preprocess="xml-stripblanks">ui/preferences_dialog.ui</file>
+    <file preprocess="xml-stripblanks" alias="ui/main_window.ui">main_window.ui</file>
+    <file preprocess="xml-stripblanks" alias="ui/preferences_dialog.ui">preferences_dialog.ui</file>
     
     <!-- Icons -->
     <file>icons/io.github.tobagin.tempo.svg</file>
