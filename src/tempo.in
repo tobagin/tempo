@@ -54,21 +54,18 @@ resource_paths = [
 
 resource_loaded = False
 for resource_path in resource_paths:
-    print(f"Checking resource path: {resource_path}")
     if os.path.exists(resource_path):
         try:
-            print(f"Loading resource from: {resource_path}")
             resource = Gio.Resource.load(resource_path)
             Gio.resources_register(resource)
             resource_loaded = True
-            print("Resource loaded and registered successfully")
             break
-        except Exception as e:
-            print(f"Failed to load resource from {resource_path}: {e}")
+        except Exception:
             continue
 
 if not resource_loaded:
-    print("ERROR: No UI resources found!")
+    # Resources not found - will fail during window creation
+    pass
 
 
 class TempoApplication(Adw.Application):

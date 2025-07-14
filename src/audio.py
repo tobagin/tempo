@@ -142,7 +142,6 @@ class MetronomeAudio:
         for sink_type in sink_types:
             sink = Gst.ElementFactory.make(sink_type, f"{name}-sink")
             if sink:
-                print(f"Using audio sink: {sink_type}")
                 break
         
         if not sink:
@@ -162,22 +161,17 @@ class MetronomeAudio:
         
         # Configure sink for low latency
         sink_name = sink.get_factory().get_name()
-        print(f"Configuring sink: {sink_name}")
         
         if sink_name == "pulsesink":
             sink.set_property("buffer-time", 10000)  # 10ms buffer
             sink.set_property("latency-time", 5000)   # 5ms latency
-            print("PulseAudio sink configured for low latency")
         elif sink_name == "pipewireaudiosink":
             # PipeWire configuration for low latency
             try:
                 sink.set_property("buffer-time", 10000)
                 sink.set_property("latency-time", 5000)
-                print("PipeWire sink configured for low latency")
-            except Exception as e:
-                print(f"PipeWire sink configuration failed: {e}")
-        else:
-            print(f"Using default configuration for {sink_name}")
+            except Exception:
+                pass
             
         # Add elements to bin
         for element in elements:
