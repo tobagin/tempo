@@ -50,13 +50,9 @@ class MetronomeEngine:
         
     def start(self) -> None:
         """Start the metronome."""
-        print(f"Metronome start called")
         if self.state.is_running:
-            print("Already running, skipping")
             return
             
-        print(f"Starting metronome: BPM={self.state.bpm}, beats_per_bar={self.state.beats_per_bar}")
-        
         self.state.is_running = True
         self.state.is_playing = True
         self.state.current_beat = 0
@@ -65,8 +61,6 @@ class MetronomeEngine:
         self._stop_event.clear()
         self._thread = Thread(target=self._run_loop, daemon=True)
         self._thread.start()
-        
-        print(f"Metronome thread started: {self._thread.is_alive()}")
         
     def stop(self) -> None:
         """Stop the metronome."""
@@ -125,13 +119,9 @@ class MetronomeEngine:
         
         Uses absolute time references to prevent drift and jitter.
         """
-        print(f"Metronome run loop starting")
-        
         # Initialize timing
         self._beat_duration = 60.0 / self.state.bpm
         self._next_beat_time = time.perf_counter() + self._beat_duration
-        
-        print(f"Beat duration: {self._beat_duration} seconds")
         
         while not self._stop_event.is_set():
             current_time = time.perf_counter()
@@ -157,15 +147,10 @@ class MetronomeEngine:
             # Determine if this is a downbeat
             is_downbeat = (self.state.current_beat % self.state.beats_per_bar) == 0
             
-            print(f"Beat {self.state.current_beat}: downbeat={is_downbeat}")
-            
             # Emit beat signal via callback
             if self.beat_callback:
                 # Use GLib.idle_add for thread-safe GUI updates
                 GLib.idle_add(self.beat_callback, self.state.current_beat, is_downbeat)
-                print(f"Beat callback called")
-            else:
-                print(f"No beat callback set!")
                 
             # Update beat counter
             self.state.current_beat += 1

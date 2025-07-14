@@ -135,7 +135,18 @@ class MetronomeAudio:
         converter = Gst.ElementFactory.make("audioconvert", f"{name}-convert")
         resampler = Gst.ElementFactory.make("audioresample", f"{name}-resample")
         volume = Gst.ElementFactory.make("volume", f"{name}-volume")
-        sink = Gst.ElementFactory.make("autoaudiosink", f"{name}-sink")
+        
+        # Try different audio sinks for better Flatpak compatibility
+        sink_types = ["pulsesink", "pipewireaudiosink", "autoaudiosink"]
+        sink = None
+        for sink_type in sink_types:
+            sink = Gst.ElementFactory.make(sink_type, f"{name}-sink")
+            if sink:
+                print(f"Using audio sink: {sink_type}")
+                break
+        
+        if not sink:
+            sink = Gst.ElementFactory.make("autoaudiosink", f"{name}-sink")
         
         # Check if all elements were created
         elements = [source, decoder, converter, resampler, volume, sink]
@@ -150,9 +161,23 @@ class MetronomeAudio:
         volume.set_property("volume", self.volume)
         
         # Configure sink for low latency
-        if sink.get_factory().get_name() == "pulsesink":
+        sink_name = sink.get_factory().get_name()
+        print(f"Configuring sink: {sink_name}")
+        
+        if sink_name == "pulsesink":
             sink.set_property("buffer-time", 10000)  # 10ms buffer
             sink.set_property("latency-time", 5000)   # 5ms latency
+            print("PulseAudio sink configured for low latency")
+        elif sink_name == "pipewireaudiosink":
+            # PipeWire configuration for low latency
+            try:
+                sink.set_property("buffer-time", 10000)
+                sink.set_property("latency-time", 5000)
+                print("PipeWire sink configured for low latency")
+            except Exception as e:
+                print(f"PipeWire sink configuration failed: {e}")
+        else:
+            print(f"Using default configuration for {sink_name}")
             
         # Add elements to bin
         for element in elements:
@@ -225,58 +250,46 @@ class MetronomeAudio:
         
     def play_click(self, is_downbeat: bool = False) -> None:
         """
-        Play a metronome click sound.
+        Play a metronome click sound using simplified approach.
         
         Args:
             is_downbeat: True for accented beat, False for regular beat
         """
         if not self.is_initialized:
-            print(f"Audio not initialized, cannot play click")
             return
             
         # Choose the appropriate player
         player = self.high_player if is_downbeat else self.low_player
         volume_level = self.accent_volume if is_downbeat else self.volume
         
-        print(f"Playing click: downbeat={is_downbeat}, volume={volume_level}")
-        
         # Set volume
         volume_element = getattr(player, "volume_element", None)
         if volume_element:
             volume_element.set_property("volume", volume_level)
-            print(f"Volume set to {volume_level}")
-        else:
-            print("No volume element found")
             
-        # Seek to beginning and play
+        # Play using simplified approach
         self._play_player(player)
         
     def _play_player(self, player: Gst.Element) -> None:
         """
-        Play a specific player element.
+        Play a specific player element using simple, direct approach.
         
         Args:
             player: GStreamer player element to play
         """
-        print(f"Playing player: {player}")
-        
-        # Set to playing state first
-        state_result = player.set_state(Gst.State.PLAYING)
-        print(f"Set state result: {state_result}")
-        
-        # Try to seek to start (may fail if pipeline not ready)
+        # Use simple direct playback - no complex state management
         try:
-            seek_result = player.seek_simple(
-                Gst.Format.TIME,
-                Gst.SeekFlags.FLUSH | Gst.SeekFlags.KEY_UNIT,
-                0
-            )
-            print(f"Seek result: {seek_result}")
+            # Set to NULL first for clean state
+            player.set_state(Gst.State.NULL)
+            
+            # Set to PLAYING immediately
+            player.set_state(Gst.State.PLAYING)
+            
+            # Schedule stop after short duration
+            GLib.timeout_add(400, self._stop_player, player)
+            
         except Exception as e:
-            print(f"Seek failed: {e}")
-        
-        # Schedule stop after a short duration
-        GLib.timeout_add(500, self._stop_player, player)
+            print(f"Audio playback failed: {e}")
         
     def _stop_player(self, player: Gst.Element) -> bool:
         """
