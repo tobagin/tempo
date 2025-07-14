@@ -145,7 +145,6 @@ class TempoApplication(Adw.Application):
         )
         
         # Add additional information
-        about.add_link(_('Source Code'), 'https://github.com/tobagin/tempo')
         about.add_link(_('Report Issues'), 'https://github.com/tobagin/tempo/issues')
         about.add_link(_('Discussions'), 'https://github.com/tobagin/tempo/discussions')
         
