@@ -231,16 +231,22 @@ class MetronomeAudio:
             is_downbeat: True for accented beat, False for regular beat
         """
         if not self.is_initialized:
+            print(f"Audio not initialized, cannot play click")
             return
             
         # Choose the appropriate player
         player = self.high_player if is_downbeat else self.low_player
         volume_level = self.accent_volume if is_downbeat else self.volume
         
+        print(f"Playing click: downbeat={is_downbeat}, volume={volume_level}")
+        
         # Set volume
         volume_element = getattr(player, "volume_element", None)
         if volume_element:
             volume_element.set_property("volume", volume_level)
+            print(f"Volume set to {volume_level}")
+        else:
+            print("No volume element found")
             
         # Seek to beginning and play
         self._play_player(player)
@@ -252,15 +258,19 @@ class MetronomeAudio:
         Args:
             player: GStreamer player element to play
         """
+        print(f"Playing player: {player}")
+        
         # Seek to start
-        player.seek_simple(
+        seek_result = player.seek_simple(
             Gst.Format.TIME,
             Gst.SeekFlags.FLUSH | Gst.SeekFlags.KEY_UNIT,
             0
         )
+        print(f"Seek result: {seek_result}")
         
         # Set to playing state
-        player.set_state(Gst.State.PLAYING)
+        state_result = player.set_state(Gst.State.PLAYING)
+        print(f"Set state result: {state_result}")
         
         # Schedule stop after a short duration
         GLib.timeout_add(100, self._stop_player, player)
