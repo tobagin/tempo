@@ -8,27 +8,15 @@
   
   <description>
     <p>
-      Tempo is a simple, reliable, and aesthetically pleasing metronome application 
-      designed for musicians of all levels. Built with modern GTK4 and Libadwaita 
-      technologies, it provides precise timing and a distraction-free user experience.
+      Tempo is a reliable metronome application designed for musicians of all levels. 
+      Built with modern GTK4 and Libadwaita, it provides accurate timing and a 
+      distraction-free user experience perfect for music practice.
     </p>
     <p>
-      Features include:
-    </p>
-    <ul>
-      <li>Precise timing with sub-millisecond accuracy</li>
-      <li>Customizable tempo from 40 to 240 BPM</li>
-      <li>Support for various time signatures</li>
-      <li>Visual beat indicator with downbeat accents</li>
-      <li>Low-latency audio playback</li>
-      <li>Tap tempo functionality</li>
-      <li>Keyboard shortcuts for quick control</li>
-      <li>Settings persistence</li>
-    </ul>
-    <p>
-      The application uses a high-precision timing engine with drift compensation 
-      to ensure accurate metronome beats. The audio system is optimized for minimal 
-      latency using GStreamer, making it suitable for professional music practice.
+      Key features include customizable tempo (40-240 BPM), multiple time signatures, 
+      visual beat indicators with downbeat accents, tap tempo functionality, and 
+      keyboard shortcuts for quick control. The high-precision timing engine with 
+      drift compensation ensures professional-grade accuracy.
     </p>
   </description>
   
@@ -95,6 +83,16 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.0.4" date="2025-01-14">
+      <description>
+        <p>Improved metadata quality for better Flathub presentation</p>
+        <ul>
+          <li>Streamlined description to be more concise and user-focused</li>
+          <li>Enhanced readability following Flathub quality guidelines</li>
+          <li>Removed redundant technical details for better clarity</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.3" date="2025-01-14">
       <description>
         <p>Fix AppStream control redefinition warning</p>
