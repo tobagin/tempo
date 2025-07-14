@@ -79,10 +79,12 @@ class TempoWindow(Adw.ApplicationWindow):
     def _setup_audio(self) -> None:
         """Initialize the audio system."""
         try:
+            print("=== AUDIO SETUP STARTING ===")
             config = AudioConfig()
-            # Load volume settings
-            config.volume = self.settings.get_double('click-volume')
-            config.accent_volume = self.settings.get_double('accent-volume')
+            
+            # Use hardcoded values for now to avoid GSettings issues
+            config.volume = 0.8
+            config.accent_volume = 1.0
             
             print(f"Audio config: volume={config.volume}, accent_volume={config.accent_volume}")
             print(f"Audio files: high={config.high_click_path}, low={config.low_click_path}")
@@ -97,8 +99,12 @@ class TempoWindow(Adw.ApplicationWindow):
                 GLib.timeout_add(2000, self._delayed_audio_test)  # Test after 2 seconds
                 print("Audio test scheduled")
             
+            print("=== AUDIO SETUP COMPLETE ===")
+            
         except Exception as e:
             print(f"Failed to initialize audio: {e}")
+            import traceback
+            traceback.print_exc()
             # Show error dialog
             self._show_error_dialog("Audio Error", 
                                    f"Failed to initialize audio system: {e}")
