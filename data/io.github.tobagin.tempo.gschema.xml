@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="io.github.tobagin.tempo" path="/io/github/tobagin/tempo/">
+    
+    <!-- Metronome Settings -->
+    <key name="tempo" type="i">
+      <range min="40" max="240"/>
+      <default>120</default>
+      <summary>Tempo in BPM</summary>
+      <description>The current tempo setting in beats per minute</description>
+    </key>
+    
+    <key name="time-signature-numerator" type="i">
+      <range min="1" max="16"/>
+      <default>4</default>
+      <summary>Time signature numerator</summary>
+      <description>The number of beats per measure</description>
+    </key>
+    
+    <key name="time-signature-denominator" type="i">
+      <range min="1" max="16"/>
+      <default>4</default>
+      <summary>Time signature denominator</summary>
+      <description>The note value that gets the beat</description>
+    </key>
+    
+    <!-- Audio Settings -->
+    <key name="click-volume" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.8</default>
+      <summary>Click volume</summary>
+      <description>Volume level for metronome clicks</description>
+    </key>
+    
+    <key name="accent-volume" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>1.0</default>
+      <summary>Accent volume</summary>
+      <description>Volume level for accented beats</description>
+    </key>
+    
+    <key name="use-custom-sounds" type="b">
+      <default>false</default>
+      <summary>Use custom sounds</summary>
+      <description>Whether to use custom click sounds</description>
+    </key>
+    
+    <!-- Window Settings -->
+    <key name="window-width" type="i">
+      <default>400</default>
+      <summary>Window width</summary>
+      <description>Width of the main window</description>
+    </key>
+    
+    <key name="window-height" type="i">
+      <default>500</default>
+      <summary>Window height</summary>
+      <description>Height of the main window</description>
+    </key>
+    
+    <key name="window-maximized" type="b">
+      <default>false</default>
+      <summary>Window maximized</summary>
+      <description>Whether the window is maximized</description>
+    </key>
+    
+  </schema>
+</schemalist>

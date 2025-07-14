@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@APPLICATION_ID@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>@PROJECT_NAME@</name>
+  <summary>A modern metronome for musicians</summary>
+  
+  <description>
+    <p>
+      Tempo is a simple, reliable, and aesthetically pleasing metronome application 
+      designed for musicians of all levels. Built with modern GTK4 and Libadwaita 
+      technologies, it provides precise timing and a distraction-free user experience.
+    </p>
+    <p>
+      Features include:
+    </p>
+    <ul>
+      <li>Precise timing with sub-millisecond accuracy</li>
+      <li>Customizable tempo from 40 to 240 BPM</li>
+      <li>Support for various time signatures</li>
+      <li>Visual beat indicator with downbeat accents</li>
+      <li>Low-latency audio playback</li>
+      <li>Tap tempo functionality</li>
+      <li>Keyboard shortcuts for quick control</li>
+      <li>Settings persistence</li>
+    </ul>
+    <p>
+      The application uses a high-precision timing engine with drift compensation 
+      to ensure accurate metronome beats. The audio system is optimized for minimal 
+      latency using GStreamer, making it suitable for professional music practice.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
+  
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/main-window.png</image>
+      <caption>Main window showing tempo controls and beat indicator</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preferences.png</image>
+      <caption>Preferences dialog with audio and visual settings</caption>
+    </screenshot>
+  </screenshots>
+  
+  <url type="homepage">https://github.com/tobagin/tempo</url>
+  <url type="bugtracker">https://github.com/tobagin/tempo/issues</url>
+  <url type="help">https://github.com/tobagin/tempo/wiki</url>
+  <url type="donation">https://github.com/sponsors/tobagin</url>
+  
+  <categories>
+    <category>Audio</category>
+    <category>Music</category>
+    <category>AudioVideo</category>
+    <category>Utility</category>
+  </categories>
+  
+  <keywords>
+    <keyword>metronome</keyword>
+    <keyword>music</keyword>
+    <keyword>tempo</keyword>
+    <keyword>timing</keyword>
+    <keyword>practice</keyword>
+    <keyword>rhythm</keyword>
+    <keyword>beat</keyword>
+    <keyword>BPM</keyword>
+  </keywords>
+  
+  <content_rating type="oars-1.1"/>
+  
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  
+  <requires>
+    <display_length compare="ge">360</display_length>
+    <memory compare="ge">256</memory>
+  </requires>
+  
+  <recommends>
+    <control>keyboard</control>
+    <display_length compare="ge">400</display_length>
+  </recommends>
+  
+  <developer_name>Tempo Contributors</developer_name>
+  <update_contact>tempo@example.com</update_contact>
+  
+  <releases>
+    <release version="1.0.0" date="2025-01-01">
+      <description>
+        <p>Initial release of Tempo metronome</p>
+        <ul>
+          <li>Precise timing engine with drift compensation</li>
+          <li>GTK4 and Libadwaita modern UI</li>
+          <li>Customizable tempo and time signatures</li>
+          <li>Visual beat indicator with downbeat accents</li>
+          <li>Low-latency GStreamer audio</li>
+          <li>Tap tempo functionality</li>
+          <li>Keyboard shortcuts</li>
+          <li>Settings persistence</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+  
+  <kudos>
+    <kudo>ModernToolkit</kudo>
+    <kudo>HiDpiIcon</kudo>
+    <kudo>Notifications</kudo>
+  </kudos>
+  
+  <translation type="gettext">tempo</translation>
+</component>

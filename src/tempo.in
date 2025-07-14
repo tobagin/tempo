@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import sys
+import os
+import locale
+import signal
+import gettext
+
+# Add the package directory to Python path
+sys.path.insert(1, '@PYTHON_DIR@')
+
+# Setup locale
+locale.bindtextdomain('@APPLICATION_ID@', '@LOCALEDIR@')
+locale.textdomain('@APPLICATION_ID@')
+gettext.bindtextdomain('@APPLICATION_ID@', '@LOCALEDIR@')
+gettext.textdomain('@APPLICATION_ID@')
+_ = gettext.gettext
+
+# App info
+VERSION = '@VERSION@'
+PKGDATA_DIR = '@PKGDATA_DIR@'
+APPLICATION_ID = '@APPLICATION_ID@'
+
+# Resource prefix
+RESOURCE_PREFIX = '/io/github/tobagin/tempo'
+
+# Setup GObject introspection
+import gi
+gi.require_version('Gtk', '4.0')
+gi.require_version('Adw', '1')
+gi.require_version('Gst', '1.0')
+
+from gi.repository import Gtk, Adw, Gio, GLib, Gst
+
+# Initialize GStreamer
+Gst.init(None)
+
+# Load resources first, before importing modules that use them
+# Try multiple paths to find the resource file (robust for different environments)
+resource_paths = [
+    # Flatpak installed paths
+    '/app/lib/python3.12/site-packages/tempo-resources.gresource',
+    '/app/share/tempo/tempo-resources.gresource',
+    # System paths
+    '/usr/share/tempo/tempo-resources.gresource',
+    '/usr/local/share/tempo/tempo-resources.gresource',
+    # Package data directory (configured path)
+    os.path.join(PKGDATA_DIR, 'tempo-resources.gresource'),
+    # Development paths
+    os.path.join(os.path.dirname(__file__), '..', '..', 'builddir', 'src', 'tempo', 'tempo-resources.gresource'),
+    os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'tempo-resources.gresource'),
+]
+
+resource_loaded = False
+for resource_path in resource_paths:
+    print(f"Checking resource path: {resource_path}")
+    if os.path.exists(resource_path):
+        try:
+            print(f"Loading resource from: {resource_path}")
+            resource = Gio.Resource.load(resource_path)
+            Gio.resources_register(resource)
+            resource_loaded = True
+            print("Resource loaded and registered successfully")
+            break
+        except Exception as e:
+            print(f"Failed to load resource from {resource_path}: {e}")
+            continue
+
+if not resource_loaded:
+    print("ERROR: No UI resources found!")
+
+
+class TempoApplication(Adw.Application):
+    """Main application class."""
+
+    def __init__(self):
+        super().__init__(
+            application_id=APPLICATION_ID,
+            flags=Gio.ApplicationFlags.FLAGS_NONE
+        )
+        
+        self.set_resource_base_path(RESOURCE_PREFIX)
+        
+        # Connect signals
+        self.connect('activate', self.on_activate)
+        self.connect('startup', self.on_startup)
+        
+        # Handle Ctrl+C gracefully
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    def on_startup(self, app):
+        """Application startup."""
+        # Setup action handlers
+        self.setup_actions()
+
+    def on_activate(self, app):
+        """Application activation."""
+        # Import here after resources are loaded
+        from src.main_window import TempoWindow
+        window = TempoWindow(application=app)
+        window.present()
+
+    def setup_actions(self):
+        """Setup application actions."""
+        # Quit action
+        quit_action = Gio.SimpleAction.new('quit', None)
+        quit_action.connect('activate', self.on_quit)
+        self.add_action(quit_action)
+        self.set_accels_for_action('app.quit', ['<Primary>q'])
+        
+        # About action
+        about_action = Gio.SimpleAction.new('about', None)
+        about_action.connect('activate', self.on_about)
+        self.add_action(about_action)
+        
+        # Preferences action
+        preferences_action = Gio.SimpleAction.new('preferences', None)
+        preferences_action.connect('activate', self.on_preferences)
+        self.add_action(preferences_action)
+
+    def on_quit(self, action, param):
+        """Quit application."""
+        self.quit()
+
+    def on_about(self, action, param):
+        """Show about dialog."""
+        about = Adw.AboutWindow(
+            transient_for=self.get_active_window(),
+            application_name=_('@PROJECT_NAME@'),
+            application_icon=APPLICATION_ID,
+            version=VERSION,
+            developer_name='@PROJECT_NAME@ Contributors',
+            copyright='Copyright © 2025 @PROJECT_NAME@ Contributors',
+            license_type=Gtk.License.GPL_3_0,
+            website='https://github.com/tobagin/tempo',
+            issue_url='https://github.com/tobagin/tempo/issues'
+        )
+        about.present()
+
+    def on_preferences(self, action, param):
+        """Show preferences dialog."""
+        # Import here after resources are loaded
+        from src.preferences_dialog import PreferencesDialog
+        
+        preferences = PreferencesDialog(
+            transient_for=self.get_active_window()
+        )
+        preferences.present()
+
+
+def main():
+    """Main entry point."""
+    app = TempoApplication()
+    return app.run(sys.argv)
+
+
+if __name__ == '__main__':
+    main()

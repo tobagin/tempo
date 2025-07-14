@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/io/github/tobagin/tempo">
+    <!-- UI Files -->
+    <file preprocess="xml-stripblanks">ui/main_window.ui</file>
+    <file preprocess="xml-stripblanks">ui/preferences_dialog.ui</file>
+    
+    <!-- Icons -->
+    <file>icons/io.github.tobagin.tempo.svg</file>
+    <file>icons/io.github.tobagin.tempo-symbolic.svg</file>
+    
+    <!-- Audio Files -->
+    <file>sounds/high.wav</file>
+    <file>sounds/low.wav</file>
+    
+    <!-- CSS Styles -->
+    <file>style.css</file>
+  </gresource>
+</gresources>

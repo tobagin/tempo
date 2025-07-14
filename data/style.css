@@ -1,0 +1,68 @@
+/* Tempo metronome application styles */
+
+/* Beat indicator styling */
+.beat-indicator {
+  border-radius: 50%;
+  transition: all 0.1s ease-out;
+}
+
+.beat-indicator.active {
+  background-color: @accent_color;
+  box-shadow: 0 0 20px @accent_color;
+}
+
+.beat-indicator.downbeat {
+  background-color: @error_color;
+  box-shadow: 0 0 20px @error_color;
+}
+
+/* Tempo display */
+.tempo-display {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: @accent_color;
+}
+
+/* Play/Stop button */
+.play-button {
+  min-width: 120px;
+  min-height: 48px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Time signature controls */
+.time-signature {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+/* Control groups */
+.control-group {
+  margin: 12px 0;
+}
+
+.control-group label {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+/* Spinbutton styling */
+spinbutton {
+  min-width: 80px;
+}
+
+/* Volume slider */
+.volume-slider {
+  min-width: 200px;
+}
+
+/* Preferences window */
+.preferences-group {
+  margin: 24px 0;
+}
+
+/* About dialog enhancements */
+.about-dialog {
+  --window-border-radius: 12px;
+}

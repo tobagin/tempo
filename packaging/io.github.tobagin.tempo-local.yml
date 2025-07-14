@@ -1,0 +1,61 @@
+app-id: io.github.tobagin.tempo
+runtime: org.gnome.Platform
+runtime-version: '48'
+sdk: org.gnome.Sdk
+command: tempo
+
+finish-args:
+  # UI permissions (minimal for GTK4/Libadwaita)
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  
+  # Audio permissions (essential for metronome)
+  - --socket=pulseaudio
+  - --filesystem=xdg-run/pipewire-0:ro
+  
+  # Settings storage (minimal, no full filesystem access)
+  - --persist=.config/tempo
+  
+  # Development permissions
+  - --filesystem=host
+  - --talk-name=org.freedesktop.Flatpak
+
+# Temporarily disable cleanup to debug gresource issue
+# cleanup:
+#   - /include
+#   - /lib/pkgconfig  
+#   - /share/pkgconfig
+#   - /share/aclocal
+#   - /man
+#   - /share/man
+#   - /share/gtk-doc
+#   - /share/vala
+#   - /share/devhelp
+#   - '*.la'
+#   - '*.a'
+
+modules:
+  # Blueprint compiler (build-time only)
+  - name: blueprint-compiler
+    buildsystem: meson
+    cleanup:
+      - /bin/blueprint-compiler
+      - /lib/python3.12/site-packages/blueprintcompiler
+      - /share/pkgconfig/blueprint-compiler.pc
+    sources:
+      - type: git
+        url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
+        tag: v0.18.0
+        commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
+        
+        
+  # Main application
+  - name: tempo
+    buildsystem: meson
+    config-opts:
+      - -Ddevel=true
+    sources:
+      - type: dir
+        path: ..
