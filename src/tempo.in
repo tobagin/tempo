@@ -144,9 +144,7 @@ class TempoApplication(Adw.Application):
             # Release information removed to avoid XML parsing issues
         )
         
-        # Add additional information
-        about.add_link(_('Report Issues'), 'https://github.com/tobagin/tempo/issues')
-        about.add_link(_('Discussions'), 'https://github.com/tobagin/tempo/discussions')
+        # Additional links removed due to deprecation
         
         about.present()
 
