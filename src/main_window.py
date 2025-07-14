@@ -273,11 +273,18 @@ class TempoWindow(Adw.ApplicationWindow):
             
     def _on_play_clicked(self, button: Gtk.Button) -> None:
         """Handle play/stop button click."""
+        print(f"Play button clicked!")
+        
         if not self.metronome:
+            print("No metronome available")
             return
             
+        print(f"Metronome state: running={self.metronome.state.is_running}")
+        print(f"Beat callback set: {self.metronome.beat_callback is not None}")
+        
         if self.metronome.state.is_running:
             # Stop metronome
+            print("Stopping metronome")
             self.metronome.stop()
             button.set_label("Start")
             button.remove_css_class("destructive-action")
@@ -285,6 +292,7 @@ class TempoWindow(Adw.ApplicationWindow):
             
         else:
             # Start metronome
+            print("Starting metronome")
             self.metronome.start()
             button.set_label("Stop")
             button.remove_css_class("suggested-action")
