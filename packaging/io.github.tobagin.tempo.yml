@@ -49,4 +49,4 @@ modules:
       - type: git
         url: https://github.com/tobagin/tempo.git
         tag: v1.0.0
-        commit: main  # Will be replaced with actual commit hash
+        commit: 0437bcce434b33ff7b55a835a6a11e4753c027de
