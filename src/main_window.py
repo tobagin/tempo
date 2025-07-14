@@ -16,6 +16,7 @@ from gi.repository import Gtk, Adw, Gio, GLib, Gdk
 
 from .metronome import MetronomeEngine, TapTempo
 from .audio import MetronomeAudio, AudioConfig
+from .simple_audio import SimpleAudioPlayer
 
 
 @Gtk.Template(resource_path='/io/github/tobagin/tempo/ui/main_window.ui')
@@ -55,6 +56,7 @@ class TempoWindow(Adw.ApplicationWindow):
         # Initialize subsystems
         self.metronome: Optional[MetronomeEngine] = None
         self.audio: Optional[MetronomeAudio] = None
+        self.simple_audio = SimpleAudioPlayer()  # New simple audio player
         self.tap_tempo = TapTempo()
         
         # Beat indicator state
@@ -67,6 +69,9 @@ class TempoWindow(Adw.ApplicationWindow):
         self._setup_audio()
         self._setup_ui()
         self._load_settings()
+        
+        # Add immediate audio test
+        GLib.timeout_add(3000, self._test_audio_on_startup)
         
         # Connect signals
         self._connect_signals()
@@ -96,6 +101,13 @@ class TempoWindow(Adw.ApplicationWindow):
             # Test audio immediately to verify it works
             if self.audio.is_initialized:
                 print("Testing audio playback in setup...")
+                # Try immediate direct test first
+                try:
+                    self.audio.play_click(False)
+                    print("IMMEDIATE AUDIO TEST: SUCCESS")
+                except Exception as e:
+                    print(f"IMMEDIATE AUDIO TEST: FAILED - {e}")
+                    
                 GLib.timeout_add(2000, self._delayed_audio_test)  # Test after 2 seconds
                 print("Audio test scheduled")
             
@@ -175,12 +187,19 @@ class TempoWindow(Adw.ApplicationWindow):
         self.beats_spin.connect('value-changed', self._on_time_signature_changed)
         self.beat_value_dropdown.connect('notify::selected', self._on_time_signature_changed)
         
-        # Buttons
+        # Buttons  
+        try:
+            with open('/tmp/tempo_audio_debug.txt', 'a') as f:
+                f.write("Connecting play button signal...\n")
+                f.flush()
+        except:
+            pass
+            
         self.play_button.connect('clicked', self._on_play_clicked)
         self.tap_button.connect('clicked', self._on_tap_clicked)
         
-        # Add double-click handler for manual audio test
-        self.tap_button.connect('button-press-event', self._on_tap_button_press)
+        # Add double-click handler for manual audio test (GTK4 uses different event handling)
+        # self.tap_button.connect('button-press-event', self._on_tap_button_press)
         
         # Window signals
         self.connect('close-request', self._on_close_request)
@@ -288,26 +307,17 @@ class TempoWindow(Adw.ApplicationWindow):
             
     def _on_play_clicked(self, button: Gtk.Button) -> None:
         """Handle play/stop button click."""
-        print(f"Play button clicked!")
-        
         if not self.metronome:
-            print("No metronome available")
             return
             
-        print(f"Metronome state: running={self.metronome.state.is_running}")
-        print(f"Beat callback set: {self.metronome.beat_callback is not None}")
-        
         if self.metronome.state.is_running:
             # Stop metronome
-            print("Stopping metronome")
             self.metronome.stop()
             button.set_label("Start")
             button.remove_css_class("destructive-action")
             button.add_css_class("suggested-action")
-            
         else:
-            # Start metronome
-            print("Starting metronome")
+            # Start metronome  
             self.metronome.start()
             button.set_label("Stop")
             button.remove_css_class("suggested-action")
@@ -362,12 +372,22 @@ class TempoWindow(Adw.ApplicationWindow):
         Returns:
             False to remove from idle queue
         """
-        # Play audio
-        if self.audio:
-            print(f"Playing beat: count={beat_count}, downbeat={is_downbeat}")
-            self.audio.play_click(is_downbeat)
-        else:
-            print("No audio system available")
+        # Use simple audio player for beat sounds
+        print(f"=== BEAT CALLBACK: beat={beat_count}, downbeat={is_downbeat} ===")
+        
+        try:
+            sound_file = "high.wav" if is_downbeat else "low.wav"
+            file_path = f"/app/share/tempo/sounds/{sound_file}"
+            
+            print(f"Playing {sound_file} for beat {beat_count}")
+            success = self.simple_audio.play_file(file_path)
+            print(f"Beat audio result: {success}")
+            
+        except Exception as e:
+            print(f"ERROR in beat playback: {e}")
+            # Fallback to original audio system
+            if self.audio:
+                self.audio.play_click(is_downbeat)
             
         # Update visual indicator
         self.beat_active = True
@@ -462,6 +482,64 @@ class TempoWindow(Adw.ApplicationWindow):
         if self.audio:
             self.audio.cleanup()
             
+        # Cleanup simple audio player
+        if self.simple_audio:
+            self.simple_audio.cleanup()
+            
+        return False
+        
+    def _test_audio_on_startup(self) -> bool:
+        """Test audio 3 seconds after startup using simple audio player."""
+        print("=== STARTUP AUDIO TEST WITH SIMPLE PLAYER ===")
+        
+        # Test the simple audio player
+        success = self.simple_audio.play_file("/app/share/tempo/sounds/high.wav")
+        print(f"Simple audio test result: {success}")
+        
+        return False
+        
+    def _on_test_message(self, bus, message):
+        """Handle messages from test audio player."""
+        if message.type == Gst.MessageType.ERROR:
+            err, debug = message.parse_error()
+            print(f"AUDIO TEST ERROR: {err} - {debug}")
+        elif message.type == Gst.MessageType.WARNING:
+            warn, debug = message.parse_warning()
+            print(f"AUDIO TEST WARNING: {warn} - {debug}")
+        elif message.type == Gst.MessageType.EOS:
+            print("AUDIO TEST: End of stream")
+        elif message.type == Gst.MessageType.STATE_CHANGED:
+            old, new, pending = message.parse_state_changed()
+            print(f"AUDIO TEST STATE: {old} -> {new} (pending: {pending})")
+        return True
+        
+    def _stop_test_player(self, player):
+        """Stop the test player."""
+        print("Stopping test player...")
+        player.set_state(Gst.State.NULL)
+        bus = player.get_bus()
+        bus.remove_signal_watch()
+        print("Test player stopped")
+        return False
+        
+    def _on_beat_message(self, bus, message, beat_count):
+        """Handle messages from beat audio player."""
+        if message.type == Gst.MessageType.ERROR:
+            err, debug = message.parse_error()
+            print(f"BEAT {beat_count} ERROR: {err} - {debug}")
+        elif message.type == Gst.MessageType.WARNING:
+            warn, debug = message.parse_warning()
+            print(f"BEAT {beat_count} WARNING: {warn} - {debug}")
+        elif message.type == Gst.MessageType.EOS:
+            print(f"BEAT {beat_count}: End of stream")
+        return True
+        
+    def _stop_beat_player(self, player, beat_count):
+        """Stop a beat player."""
+        print(f"Stopping beat player {beat_count}")
+        player.set_state(Gst.State.NULL)
+        bus = player.get_bus()
+        bus.remove_signal_watch()
         return False
         
     def _show_error_dialog(self, title: str, message: str) -> None:

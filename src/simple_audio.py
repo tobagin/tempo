@@ -29,6 +29,11 @@ class SimpleAudioPlayer:
         """
         print(f"=== PLAYING AUDIO FILE: {file_path} ===")
         
+        # Stop any currently playing audio first
+        if self.current_player:
+            print("Stopping previous player before starting new one...")
+            self._stop_current_player()
+        
         # Check if file exists
         if not os.path.exists(file_path):
             print(f"ERROR: File not found: {file_path}")
@@ -108,18 +113,36 @@ class SimpleAudioPlayer:
         return True
         
     def _stop_current_player(self):
-        """Stop the current player."""
+        """Stop the current player properly."""
         if self.current_player:
             print("Stopping current player...")
+            
+            # First set to NULL state to properly clean up
             self.current_player.set_state(Gst.State.NULL)
             
-            bus = self.current_player.get_bus()
-            bus.remove_signal_watch()
+            # Wait for state change to complete
+            ret, state, pending = self.current_player.get_state(1 * Gst.SECOND)
+            if ret == Gst.StateChangeReturn.SUCCESS:
+                print(f"Player stopped successfully, final state: {state}")
+            else:
+                print(f"Warning: Player state change returned: {ret}")
             
+            # Clean up bus
+            bus = self.current_player.get_bus()
+            if bus:
+                bus.remove_signal_watch()
+            
+            # Clear reference
             self.current_player = None
             print("Player stopped and cleaned up")
             
         return False  # Remove from timeout
+    
+    def cleanup(self):
+        """Clean up any remaining players on shutdown."""
+        if self.current_player:
+            print("Cleaning up audio player on shutdown...")
+            self._stop_current_player()
 
 # Test function
 def test_audio():
