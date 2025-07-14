@@ -91,6 +91,12 @@ class TempoWindow(Adw.ApplicationWindow):
             
             print(f"Audio initialized: {self.audio.is_initialized}")
             
+            # Test audio immediately to verify it works
+            if self.audio.is_initialized:
+                print("Testing audio playback in setup...")
+                GLib.timeout_add(2000, self._delayed_audio_test)  # Test after 2 seconds
+                print("Audio test scheduled")
+            
         except Exception as e:
             print(f"Failed to initialize audio: {e}")
             # Show error dialog
@@ -166,6 +172,9 @@ class TempoWindow(Adw.ApplicationWindow):
         # Buttons
         self.play_button.connect('clicked', self._on_play_clicked)
         self.tap_button.connect('clicked', self._on_tap_clicked)
+        
+        # Add double-click handler for manual audio test
+        self.tap_button.connect('button-press-event', self._on_tap_button_press)
         
         # Window signals
         self.connect('close-request', self._on_close_request)
@@ -309,6 +318,27 @@ class TempoWindow(Adw.ApplicationWindow):
             # Visual feedback
             button.add_css_class("suggested-action")
             GLib.timeout_add(100, self._reset_tap_button_style, button)
+            
+    def _on_tap_button_press(self, button: Gtk.Button, event) -> bool:
+        """Handle tap button press for manual audio test."""
+        # Test audio directly on right-click or double-click
+        if event.type == Gdk.EventType.DOUBLE_BUTTON_PRESS or event.button == 3:
+            print("Manual audio test triggered!")
+            if self.audio:
+                self.audio.play_click(False)
+                print("Manual audio test completed")
+            else:
+                print("No audio system available for manual test")
+            return True
+        return False
+        
+    def _delayed_audio_test(self) -> bool:
+        """Test audio playback after a delay."""
+        print("Delayed audio test starting...")
+        if self.audio:
+            self.audio.play_click(False)
+            print("Delayed audio test completed")
+        return False
             
     def _reset_tap_button_style(self, button: Gtk.Button) -> bool:
         """Reset tap button styling."""
