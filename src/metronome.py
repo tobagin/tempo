@@ -163,7 +163,6 @@ class MetronomeEngine:
             if abs(new_duration - self._beat_duration) > 0.001:  # 1ms tolerance
                 self._beat_duration = new_duration
                 
-        print(f"Metronome run loop exiting")
                 
     def get_beat_info(self) -> dict:
         """
