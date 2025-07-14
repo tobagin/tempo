@@ -35,13 +35,12 @@ template $TempoWindow : Adw.ApplicationWindow {
           
           Gtk.Label tempo_label {
             label: "120";
-            margin-bottom: 6;
+            css-classes: ["title-1"];
           }
           
           Gtk.Label {
             label: _("BPM");
-            // // css_classes ["caption"];
-            margin-bottom: 12;
+            css-classes: ["caption"];
           }
           
           Gtk.SpinButton tempo_spin {
@@ -76,7 +75,7 @@ template $TempoWindow : Adw.ApplicationWindow {
           
           Gtk.Label {
             label: _("Time Signature");
-            // // css_classes ["heading"];
+            css-classes: ["heading"];
           }
           
           Gtk.Box {
@@ -125,7 +124,7 @@ template $TempoWindow : Adw.ApplicationWindow {
           
           Gtk.Label {
             label: _("Beat Indicator");
-            // // css_classes ["heading"];
+            css-classes: ["heading"];
           }
           
           Gtk.DrawingArea beat_indicator {
@@ -141,7 +140,7 @@ template $TempoWindow : Adw.ApplicationWindow {
           label: _("Start");
           halign: center;
           margin-top: 12;
-          // css_classes ["suggested-action", "pill", "play-button"];
+          css-classes: ["suggested-action", "pill"];
         }
         
         // Tap Tempo Button
@@ -149,7 +148,7 @@ template $TempoWindow : Adw.ApplicationWindow {
           label: _("Tap Tempo");
           halign: center;
           margin-top: 6;
-          // css_classes ["flat"];
+          css-classes: ["flat"];
           tooltip-text: _("Tap repeatedly to set tempo");
         }
       }

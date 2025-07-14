@@ -20,8 +20,8 @@ class TestAudioConfig:
     def test_default_values(self):
         """Test default configuration values."""
         config = AudioConfig()
-        assert config.high_click_path == "/app/share/tempo/sounds/high.wav"
-        assert config.low_click_path == "/app/share/tempo/sounds/low.wav"
+        assert config.high_click_path == "high.wav"
+        assert config.low_click_path == "low.wav"
         assert config.volume == 0.8
         assert config.accent_volume == 1.0
         assert config.latency_compensation_ms == 10
