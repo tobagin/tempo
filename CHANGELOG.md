@@ -5,6 +5,18 @@ All notable changes to Tempo will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-01-14
+
+### Fixed
+- AppStream metadata validation errors for Flathub submission
+- Developer information and contact details in metadata
+- Removed inapplicable metadata fields (notifications kudo, donation URL)
+- Added proper branding colors for better app store presentation
+
+### Changed
+- Simplified system requirements in AppData
+- Updated help URL to point to GitHub Discussions
+
 ## [1.0.1] - 2025-01-14
 
 ### Added

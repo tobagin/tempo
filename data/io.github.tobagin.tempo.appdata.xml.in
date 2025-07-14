@@ -55,8 +55,7 @@
   
   <url type="homepage">https://github.com/tobagin/tempo</url>
   <url type="bugtracker">https://github.com/tobagin/tempo/issues</url>
-  <url type="help">https://github.com/tobagin/tempo/wiki</url>
-  <url type="donation">https://github.com/sponsors/tobagin</url>
+  <url type="help">https://github.com/tobagin/tempo/discussions</url>
   
   <categories>
     <category>Audio</category>
@@ -86,7 +85,6 @@
   
   <requires>
     <display_length compare="ge">360</display_length>
-    <memory compare="ge">256</memory>
   </requires>
   
   <recommends>
@@ -94,10 +92,21 @@
     <display_length compare="ge">400</display_length>
   </recommends>
   
-  <developer_name>Tempo Contributors</developer_name>
+  <developer_name>Thiago Fernandes</developer_name>
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.0.2" date="2025-01-14">
+      <description>
+        <p>AppStream metadata validation fixes</p>
+        <ul>
+          <li>Fixed AppStream validation errors for Flathub submission</li>
+          <li>Updated developer information and contact details</li>
+          <li>Removed inapplicable metadata fields</li>
+          <li>Added proper branding colors</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.1" date="2025-01-14">
       <description>
         <p>Screenshots and metadata update</p>
@@ -128,8 +137,12 @@
   <kudos>
     <kudo>ModernToolkit</kudo>
     <kudo>HiDpiIcon</kudo>
-    <kudo>Notifications</kudo>
   </kudos>
   
   <translation type="gettext">tempo</translation>
+  
+  <branding>
+    <color type="primary" scheme_preference="light">#3584e4</color>
+    <color type="primary" scheme_preference="dark">#1c71d8</color>
+  </branding>
 </component>
