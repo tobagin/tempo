@@ -260,20 +260,23 @@ class MetronomeAudio:
         """
         print(f"Playing player: {player}")
         
-        # Seek to start
-        seek_result = player.seek_simple(
-            Gst.Format.TIME,
-            Gst.SeekFlags.FLUSH | Gst.SeekFlags.KEY_UNIT,
-            0
-        )
-        print(f"Seek result: {seek_result}")
-        
-        # Set to playing state
+        # Set to playing state first
         state_result = player.set_state(Gst.State.PLAYING)
         print(f"Set state result: {state_result}")
         
+        # Try to seek to start (may fail if pipeline not ready)
+        try:
+            seek_result = player.seek_simple(
+                Gst.Format.TIME,
+                Gst.SeekFlags.FLUSH | Gst.SeekFlags.KEY_UNIT,
+                0
+            )
+            print(f"Seek result: {seek_result}")
+        except Exception as e:
+            print(f"Seek failed: {e}")
+        
         # Schedule stop after a short duration
-        GLib.timeout_add(100, self._stop_player, player)
+        GLib.timeout_add(500, self._stop_player, player)
         
     def _stop_player(self, player: Gst.Element) -> bool:
         """
