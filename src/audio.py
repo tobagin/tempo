@@ -209,7 +209,7 @@ class MetronomeAudio:
             # Link the pads
             ret = pad.link(sink_pad)
             if ret != Gst.PadLinkReturn.OK:
-                print(f"Failed to link pad: {ret}")
+                pass  # Pad linking failed
                 
     def _on_message(self, bus: Gst.Bus, message: Gst.Message) -> bool:
         """
@@ -224,11 +224,11 @@ class MetronomeAudio:
         """
         if message.type == Gst.MessageType.ERROR:
             err, debug = message.parse_error()
-            print(f"GStreamer Error: {err} - Debug: {debug}")
+            # Silently handle GStreamer errors
             
         elif message.type == Gst.MessageType.WARNING:
             warn, debug = message.parse_warning()
-            print(f"GStreamer Warning: {warn} - Debug: {debug}")
+            # Silently handle GStreamer warnings
             
         elif message.type == Gst.MessageType.EOS:
             # End of stream - seek back to beginning for next play
@@ -282,8 +282,8 @@ class MetronomeAudio:
             # Schedule stop after short duration
             GLib.timeout_add(400, self._stop_player, player)
             
-        except Exception as e:
-            print(f"Audio playback failed: {e}")
+        except Exception:
+            pass  # Audio playback failed silently
         
     def _stop_player(self, player: Gst.Element) -> bool:
         """
@@ -355,8 +355,7 @@ class MetronomeAudio:
             GLib.timeout_add(200, lambda: self.play_click(True))  # Downbeat
             return True
             
-        except Exception as e:
-            print(f"Audio test failed: {e}")
+        except Exception:
             return False
             
     def get_latency_info(self) -> dict:

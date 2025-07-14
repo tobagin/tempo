@@ -181,20 +181,6 @@ class MetronomeEngine:
             'time_signature': f"{self.state.beats_per_bar}/{self.state.beat_value}"
         }
         
-    def get_timing_stats(self) -> dict:
-        """
-        Get timing statistics for debugging.
-        
-        Returns:
-            Dictionary with timing statistics
-        """
-        return {
-            'beat_duration': self._beat_duration,
-            'next_beat_time': self._next_beat_time,
-            'current_time': time.perf_counter(),
-            'time_to_next_beat': self._next_beat_time - time.perf_counter(),
-            'thread_alive': self._thread.is_alive() if self._thread else False
-        }
 
 
 class TapTempo:
