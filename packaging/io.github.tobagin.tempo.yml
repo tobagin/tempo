@@ -15,8 +15,8 @@ finish-args:
   - --socket=pulseaudio
   - --filesystem=xdg-run/pipewire-0:ro
   
-  # Settings storage (standard XDG config directory)
-  - --filesystem=xdg-config
+  # Settings storage (app-specific XDG config directory)
+  - --filesystem=xdg-config/tempo:create
 
 cleanup:
   - /include
