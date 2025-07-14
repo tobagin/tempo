@@ -130,8 +130,8 @@ class TempoApplication(Adw.Application):
             application_name=_('@PROJECT_NAME@'),
             application_icon=APPLICATION_ID,
             version=VERSION,
-            developer_name='@PROJECT_NAME@ Contributors',
-            copyright='Copyright © 2025 @PROJECT_NAME@ Contributors',
+            developer_name='Thiago Fernandes',
+            copyright='Copyright © 2025 Thiago Fernandes',
             license_type=Gtk.License.GPL_3_0,
             website='https://github.com/tobagin/tempo',
             issue_url='https://github.com/tobagin/tempo/issues'

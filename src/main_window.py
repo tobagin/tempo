@@ -84,7 +84,12 @@ class TempoWindow(Adw.ApplicationWindow):
             config.volume = self.settings.get_double('click-volume')
             config.accent_volume = self.settings.get_double('accent-volume')
             
+            print(f"Audio config: volume={config.volume}, accent_volume={config.accent_volume}")
+            print(f"Audio files: high={config.high_click_path}, low={config.low_click_path}")
+            
             self.audio = MetronomeAudio(config)
+            
+            print(f"Audio initialized: {self.audio.is_initialized}")
             
         except Exception as e:
             print(f"Failed to initialize audio: {e}")
@@ -315,7 +320,10 @@ class TempoWindow(Adw.ApplicationWindow):
         """
         # Play audio
         if self.audio:
+            print(f"Playing beat: count={beat_count}, downbeat={is_downbeat}")
             self.audio.play_click(is_downbeat)
+        else:
+            print("No audio system available")
             
         # Update visual indicator
         self.beat_active = True
