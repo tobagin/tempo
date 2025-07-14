@@ -88,7 +88,6 @@
   </requires>
   
   <recommends>
-    <control>keyboard</control>
     <display_length compare="ge">400</display_length>
   </recommends>
   
@@ -96,6 +95,15 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.0.3" date="2025-01-14">
+      <description>
+        <p>Fix AppStream control redefinition warning</p>
+        <ul>
+          <li>Removed duplicate keyboard control from recommends section</li>
+          <li>Fixed AppStream validation warning about redefined relation items</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.2" date="2025-01-14">
       <description>
         <p>AppStream metadata validation fixes</p>
