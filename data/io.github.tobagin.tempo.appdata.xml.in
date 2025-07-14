@@ -87,10 +87,10 @@
   </recommends>
   
   <developer_name>Tempo Contributors</developer_name>
-  <update_contact>tempo@example.com</update_contact>
+  <update_contact>noreply@github.com</update_contact>
   
   <releases>
-    <release version="1.0.0" date="2025-01-01">
+    <release version="1.0.0" date="2025-01-14">
       <description>
         <p>Initial release of Tempo metronome</p>
         <ul>
