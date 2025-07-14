@@ -40,8 +40,16 @@
       <caption>Main window showing tempo controls and beat indicator</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preferences.png</image>
-      <caption>Preferences dialog with audio and visual settings</caption>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preference-general.png</image>
+      <caption>General preferences with audio and behavior settings</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preferences-visual.png</image>
+      <caption>Visual preferences with theme selection and beat indicator options</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/about-dialog.png</image>
+      <caption>About dialog showing application information</caption>
     </screenshot>
   </screenshots>
   
@@ -90,6 +98,16 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.0.1" date="2025-01-14">
+      <description>
+        <p>Screenshots and metadata update</p>
+        <ul>
+          <li>Added application screenshots for better visibility</li>
+          <li>Updated metadata with comprehensive visual previews</li>
+          <li>Enhanced AppStream information for software centers</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.0" date="2025-01-14">
       <description>
         <p>Initial release of Tempo metronome</p>

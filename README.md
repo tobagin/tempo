@@ -3,6 +3,19 @@
 
 Tempo is a simple, reliable, and aesthetically pleasing metronome application built with GTK4 and Libadwaita. It provides precise timing, customizable settings, and a distraction-free user experience for musicians of all levels.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="screenshots/main-window.png" alt="Main Window" width="400"/><br/><em>Main window with tempo controls</em></td>
+    <td><img src="screenshots/preference-general.png" alt="General Preferences" width="400"/><br/><em>General preferences</em></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/preferences-visual.png" alt="Visual Preferences" width="400"/><br/><em>Visual preferences with theme selection</em></td>
+    <td><img src="screenshots/about-dialog.png" alt="About Dialog" width="400"/><br/><em>About dialog</em></td>
+  </tr>
+</table>
+
 ## Features
 
 - **Precise Timing**: Sub-millisecond accuracy with drift-free timing engine

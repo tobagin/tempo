@@ -5,6 +5,18 @@ All notable changes to Tempo will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-01-14
+
+### Added
+- Application screenshots showing main window, preferences, and about dialog
+- Enhanced README.md with visual preview gallery
+- Comprehensive AppStream metadata with screenshot URLs
+
+### Changed
+- Moved screenshots to dedicated `/screenshots` directory
+- Updated metadata descriptions for better software center presentation
+- Enhanced visual documentation for users and distributors
+
 ## [1.0.0] - 2025-01-14
 
 ### Initial Release
