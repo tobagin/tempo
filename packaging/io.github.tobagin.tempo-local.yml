@@ -54,8 +54,6 @@ modules:
   # Main application
   - name: tempo
     buildsystem: meson
-    config-opts:
-      - -Ddevel=true
     sources:
       - type: dir
         path: ..

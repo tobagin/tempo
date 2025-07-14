@@ -169,8 +169,8 @@ install_app() {
             flatpak remote-add --user --no-gpg-verify tempo-local "$REPO_DIR"
         fi
         
-        # Install the application
-        if flatpak install -y --user tempo-local "$APP_ID"; then
+        # Install/update the application (force reinstall if already installed)
+        if flatpak install -y --user --reinstall tempo-local "$APP_ID"; then
             print_success "Installation completed successfully"
             print_info "You can now run the application with:"
             print_info "  flatpak run $APP_ID"

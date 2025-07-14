@@ -34,6 +34,7 @@ class PreferencesDialog(Adw.PreferencesWindow):
     tap_sensitivity_spin: Gtk.SpinButton = Gtk.Template.Child()
     start_on_launch_switch: Gtk.Switch = Gtk.Template.Child()
     keep_on_top_switch: Gtk.Switch = Gtk.Template.Child()
+    theme_dropdown: Gtk.DropDown = Gtk.Template.Child()
     show_beat_numbers_switch: Gtk.Switch = Gtk.Template.Child()
     flash_on_beat_switch: Gtk.Switch = Gtk.Template.Child()
     downbeat_color_switch: Gtk.Switch = Gtk.Template.Child()
@@ -76,7 +77,11 @@ class PreferencesDialog(Adw.PreferencesWindow):
         self.start_on_launch_switch.set_active(False)  # Default value
         self.keep_on_top_switch.set_active(False)  # Default value
         
-        # Visual settings
+        # Visual settings - Theme
+        # 0 = Auto, 1 = Light, 2 = Dark
+        self.theme_dropdown.set_selected(0)  # Default to Auto
+        
+        # Visual settings - Beat indicator
         self.show_beat_numbers_switch.set_active(True)  # Default value
         self.flash_on_beat_switch.set_active(True)  # Default value
         self.downbeat_color_switch.set_active(True)  # Default value
@@ -98,6 +103,7 @@ class PreferencesDialog(Adw.PreferencesWindow):
         self.keep_on_top_switch.connect('state-set', self._on_keep_on_top_toggled)
         
         # Visual settings
+        self.theme_dropdown.connect('notify::selected', self._on_theme_changed)
         self.show_beat_numbers_switch.connect('state-set', self._on_show_beat_numbers_toggled)
         self.flash_on_beat_switch.connect('state-set', self._on_flash_on_beat_toggled)
         self.downbeat_color_switch.connect('state-set', self._on_downbeat_color_toggled)
@@ -216,6 +222,31 @@ class PreferencesDialog(Adw.PreferencesWindow):
         parent = self.get_transient_for()
         if parent and hasattr(parent, 'set_keep_above'):
             parent.set_keep_above(state)
+    
+    def _on_theme_changed(self, dropdown: Gtk.DropDown, _param) -> None:
+        """Handle theme selection change."""
+        selected = dropdown.get_selected()
+        
+        # Get the application instance
+        app = self.get_application()
+        if not app:
+            # Try to get it from the transient parent
+            parent = self.get_transient_for()
+            if parent:
+                app = parent.get_application()
+        
+        if app and hasattr(app, 'get_style_manager'):
+            style_manager = app.get_style_manager()
+        else:
+            style_manager = Adw.StyleManager.get_default()
+        
+        # Apply theme based on selection
+        if selected == 0:  # Auto
+            style_manager.set_color_scheme(Adw.ColorScheme.DEFAULT)
+        elif selected == 1:  # Light
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
+        elif selected == 2:  # Dark
+            style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
             
     def _on_show_beat_numbers_toggled(self, switch: Gtk.Switch, state: bool) -> None:
         """Handle show beat numbers toggle."""
@@ -250,6 +281,7 @@ class PreferencesDialog(Adw.PreferencesWindow):
         self.keep_on_top_switch.set_active(False)
         
         # Visual settings
+        self.theme_dropdown.set_selected(0)  # Reset to Auto
         self.show_beat_numbers_switch.set_active(True)
         self.flash_on_beat_switch.set_active(True)
         self.downbeat_color_switch.set_active(True)

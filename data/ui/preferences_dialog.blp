@@ -136,7 +136,29 @@ template $PreferencesDialog : Adw.PreferencesWindow {
   
   Adw.PreferencesPage {
     title: _("Visual");
-    icon-name: "preferences-desktop-theme-symbolic";
+    icon-name: "view-reveal-symbolic";
+    
+    Adw.PreferencesGroup {
+      title: _("Appearance");
+      description: _("Application appearance settings");
+      
+      Adw.ActionRow {
+        title: _("Theme");
+        subtitle: _("Choose application color scheme");
+        
+        Gtk.DropDown theme_dropdown {
+          model: Gtk.StringList {
+            strings [
+              _("Auto"),
+              _("Light"),
+              _("Dark")
+            ]
+          };
+          selected: 0;
+          valign: center;
+        }
+      }
+    }
     
     Adw.PreferencesGroup {
       title: _("Beat Indicator");

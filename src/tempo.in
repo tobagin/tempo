@@ -127,9 +127,9 @@ class TempoApplication(Adw.Application):
             application_name=_('@PROJECT_NAME@'),
             application_icon=APPLICATION_ID,
             version=VERSION,
-            developer_name='Tempo Contributors',
-            copyright='Copyright © 2025 Tempo Contributors',
-            license_type=Gtk.License.GPL_3_0_OR_LATER,
+            developer_name='Thiago Fernandes',
+            copyright='Copyright © 2025 Thiago Fernandes',
+            license_type=Gtk.License.GPL_3_0,
             website='https://github.com/tobagin/tempo',
             issue_url='https://github.com/tobagin/tempo/issues',
             support_url='https://github.com/tobagin/tempo/discussions',
@@ -137,59 +137,17 @@ class TempoApplication(Adw.Application):
             comments=_('A modern, high-precision metronome for musicians'),
             # Credits and acknowledgments
             developers=[
-                'Tempo Contributors',
+                'Thiago Fernandes',
                 'Built with GTK4 and Libadwaita',
                 'Audio engine powered by GStreamer'
             ],
-            # Third-party acknowledgments
-            artists=[
-                'GNOME Design Team - UI/UX inspiration',
-                'Adwaita icon theme contributors'
-            ],
-            # Release information
-            release_notes=_(
-                'Initial stable release featuring:\n'
-                '• High-precision timing engine with sub-millisecond accuracy\n'
-                '• Support for 40-240 BPM with multiple input methods\n'
-                '• Visual beat indicators and audio feedback\n'
-                '• Modern GTK4/Libadwaita interface\n'
-                '• Low-latency audio optimized for all tempos\n'
-                '• Comprehensive keyboard shortcuts\n'
-                '• Professional-grade timing for music practice'
-            )
+            # Release information removed to avoid XML parsing issues
         )
         
         # Add additional information
         about.add_link(_('Source Code'), 'https://github.com/tobagin/tempo')
         about.add_link(_('Report Issues'), 'https://github.com/tobagin/tempo/issues')
         about.add_link(_('Discussions'), 'https://github.com/tobagin/tempo/discussions')
-        about.add_link(_('Releases'), 'https://github.com/tobagin/tempo/releases')
-        
-        # Technical details section
-        about.add_acknowledgement_section(
-            _('Technologies'),
-            [
-                'GTK4 - Modern Linux UI toolkit',
-                'Libadwaita - GNOME design system',
-                'GStreamer - Professional audio pipeline',
-                'Blueprint - Declarative UI markup',
-                'Meson - Build system',
-                'Flatpak - Universal Linux packaging'
-            ]
-        )
-        
-        # Audio engine details
-        about.add_acknowledgement_section(
-            _('Audio Engineering'),
-            [
-                'High-resolution timing with time.perf_counter()',
-                'Drift compensation algorithms',
-                'Preloaded audio samples for rapid playback',
-                'Low-latency buffer management (10ms)',
-                'Multi-threading for precise beat timing',
-                'Cross-platform audio sink detection'
-            ]
-        )
         
         about.present()
 

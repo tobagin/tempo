@@ -45,8 +45,6 @@ modules:
   # Main application (PyGObject already included in GNOME Platform)
   - name: tempo
     buildsystem: meson
-    config-opts:
-      - -Ddevel=false
     sources:
       - type: git
         url: https://github.com/tobagin/tempo.git
