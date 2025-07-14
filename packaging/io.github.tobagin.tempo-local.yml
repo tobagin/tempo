@@ -15,9 +15,6 @@ finish-args:
   - --socket=pulseaudio
   - --filesystem=xdg-run/pipewire-0:ro
   
-  # Settings storage (app-specific XDG config directory)
-  - --filesystem=xdg-config/tempo:create
-  
   # Development permissions
   - --filesystem=host
   - --talk-name=org.freedesktop.Flatpak
