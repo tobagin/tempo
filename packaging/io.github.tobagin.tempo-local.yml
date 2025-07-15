@@ -15,9 +15,6 @@ finish-args:
   - --socket=pulseaudio
   - --filesystem=xdg-run/pipewire-0:ro
   
-  # File picker portal permissions
-  - --talk-name=org.freedesktop.portal.FileChooser
-  
   # Development permissions
   - --filesystem=host
   - --talk-name=org.freedesktop.Flatpak
