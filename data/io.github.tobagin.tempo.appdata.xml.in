@@ -83,6 +83,16 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.0.6" date="2025-01-15">
+      <description>
+        <p>Add file picker portal support</p>
+        <ul>
+          <li>Added proper file picker portal permissions to Flatpak manifest</li>
+          <li>Improved security by using sandboxed file access</li>
+          <li>Enhanced compatibility with desktop file managers</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.5" date="2025-01-15">
       <description>
         <p>Fix desktop file executable reference</p>

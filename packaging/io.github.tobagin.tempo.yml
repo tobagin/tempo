@@ -14,6 +14,9 @@ finish-args:
   # Audio permissions (essential for metronome)
   - --socket=pulseaudio
   - --filesystem=xdg-run/pipewire-0:ro
+  
+  # File picker portal permissions
+  - --talk-name=org.freedesktop.portal.FileChooser
 
 cleanup:
   - /include
