@@ -83,6 +83,16 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.0.5" date="2025-01-15">
+      <description>
+        <p>Fix desktop file executable reference</p>
+        <ul>
+          <li>Fixed desktop file to use correct executable name 'tempo' instead of application ID</li>
+          <li>Resolved application launch issues from desktop environment</li>
+          <li>Improved desktop integration and launcher compatibility</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.4" date="2025-01-14">
       <description>
         <p>Improved metadata quality for better Flathub presentation</p>
