@@ -5,8 +5,8 @@ This package provides a GTK4-based metronome application with precise timing,
 customizable tempo and time signatures, and low-latency audio playback.
 """
 
-__version__ = "1.0.0"
-__author__ = "Tempo Contributors"
+__version__ = "1.0.7"
+__author__ = "Thiago Fernandes"
 __email__ = "tempo@example.com"
 __license__ = "GPL-3.0-or-later"
 __description__ = "A modern metronome application for musicians"

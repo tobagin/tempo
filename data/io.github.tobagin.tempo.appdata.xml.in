@@ -83,6 +83,16 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.0.7" date="2025-01-15">
+      <description>
+        <p>Clean up version references and fix author information</p>
+        <ul>
+          <li>Updated all version references to use current version consistently</li>
+          <li>Fixed author information to use correct name throughout codebase</li>
+          <li>Ensured only metainfo retains version history as intended</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.6" date="2025-01-15">
       <description>
         <p>Add file picker portal support</p>

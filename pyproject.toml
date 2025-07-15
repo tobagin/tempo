@@ -4,10 +4,10 @@ build-backend = "mesonpy"
 
 [project]
 name = "tempo"
-version = "1.0.0"
+version = "1.0.7"
 description = "A modern metronome application for musicians"
 authors = [
-    {name = "Tempo Contributors", email = "tempo@example.com"},
+    {name = "Thiago Fernandes", email = "tempo@example.com"},
 ]
 license = {text = "GPL-3.0-or-later"}
 readme = "README.md"
