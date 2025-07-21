@@ -4,7 +4,7 @@ build-backend = "mesonpy"
 
 [project]
 name = "tempo"
-version = "1.0.7"
+version = "1.0.8"
 description = "A modern metronome application for musicians"
 authors = [
     {name = "Thiago Fernandes", email = "tempo@example.com"},

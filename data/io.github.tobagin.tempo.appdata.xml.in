@@ -83,6 +83,17 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.0.8" date="2025-01-15">
+      <description>
+        <p>Enable proper file picker portal integration</p>
+        <ul>
+          <li>Updated file chooser to use modern Gtk.FileDialog API</li>
+          <li>File picker now properly uses desktop environment portals</li>
+          <li>Improved security through sandboxed file access</li>
+          <li>Removed redundant portal permissions from Flatpak manifest</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.7" date="2025-01-15">
       <description>
         <p>Clean up version references and fix author information</p>

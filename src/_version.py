@@ -2,8 +2,8 @@
 Version information for the Tempo metronome application.
 """
 
-__version__ = "1.0.7"
-__version_info__ = (1, 0, 7)
+__version__ = "1.0.8"
+__version_info__ = (1, 0, 8)
 
 # Build information (can be updated by build system)
 __build_date__ = "2025-01-01"
@@ -12,7 +12,7 @@ __git_hash__ = "unknown"
 # Version components
 VERSION_MAJOR = 1
 VERSION_MINOR = 0
-VERSION_PATCH = 7
+VERSION_PATCH = 8
 
 # Version string
 VERSION_STRING = f"{VERSION_MAJOR}.{VERSION_MINOR}.{VERSION_PATCH}"
