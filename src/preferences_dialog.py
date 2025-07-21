@@ -141,50 +141,44 @@ class PreferencesDialog(Adw.PreferencesWindow):
         Args:
             sound_type: "high" or "low"
         """
-        # Create file chooser dialog
-        dialog = Gtk.FileChooserDialog(
-            title=f"Select {sound_type.title()} Click Sound",
-            transient_for=self,
-            action=Gtk.FileChooserAction.OPEN
-        )
+        # Create file dialog (GTK4 portal-enabled)
+        dialog = Gtk.FileDialog()
+        dialog.set_title(f"Select {sound_type.title()} Click Sound")
         
-        # Add buttons
-        dialog.add_buttons(
-            "Cancel", Gtk.ResponseType.CANCEL,
-            "Open", Gtk.ResponseType.ACCEPT
-        )
-        
-        # Add audio file filter
+        # Create file filters
         filter_audio = Gtk.FileFilter()
         filter_audio.set_name("Audio Files")
         filter_audio.add_mime_type("audio/wav")
         filter_audio.add_mime_type("audio/ogg")
         filter_audio.add_mime_type("audio/mp3")
         filter_audio.add_mime_type("audio/flac")
-        dialog.add_filter(filter_audio)
         
-        # Add all files filter
         filter_all = Gtk.FileFilter()
         filter_all.set_name("All Files")
         filter_all.add_pattern("*")
-        dialog.add_filter(filter_all)
         
-        # Show dialog
-        dialog.present()
-        dialog.connect('response', self._on_file_dialog_response, sound_type)
+        # Create filter list store
+        filters = Gio.ListStore.new(Gtk.FileFilter)
+        filters.append(filter_audio)
+        filters.append(filter_all)
+        dialog.set_filters(filters)
+        dialog.set_default_filter(filter_audio)
         
-    def _on_file_dialog_response(self, dialog: Gtk.FileChooserDialog, 
-                                response: int, sound_type: str) -> None:
+        # Show dialog asynchronously (portal-enabled)
+        dialog.open(self, None, self._on_file_dialog_finish, sound_type)
+        
+    def _on_file_dialog_finish(self, dialog: Gtk.FileDialog, 
+                              result: Gio.AsyncResult, sound_type: str) -> None:
         """
-        Handle file dialog response.
+        Handle file dialog completion (async callback).
         
         Args:
-            dialog: File chooser dialog
-            response: Response ID
+            dialog: File dialog
+            result: Async result
             sound_type: "high" or "low"
         """
-        if response == Gtk.ResponseType.ACCEPT:
-            file = dialog.get_file()
+        try:
+            file = dialog.open_finish(result)
             if file:
                 file_path = file.get_path()
                 
@@ -199,7 +193,9 @@ class PreferencesDialog(Adw.PreferencesWindow):
                 # Save to settings (you might want to add these keys to the schema)
                 # self.settings.set_string(f'custom-{sound_type}-sound', file_path)
                 
-        dialog.destroy()
+        except Exception:
+            # User cancelled or error occurred
+            pass
         
     def _on_tap_sensitivity_changed(self, spin: Gtk.SpinButton) -> None:
         """Handle tap sensitivity change."""
