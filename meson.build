@@ -1,4 +1,4 @@
-project('tempo', 'c',
+project('tempo', ['c', 'vala'],
   version: '1.0.8',
   license: 'GPL3+',
   meson_version: '>= 0.59.0',
@@ -16,18 +16,13 @@ project_description = 'A modern metronome application for musicians'
 # Import gnome module
 gnome = import('gnome')
 i18n = import('i18n')
-python = import('python')
 fs = import('fs')
 
-# Python installation
-python_bin = python.find_installation('python3')
-if not python_bin.found()
-  error('Python 3 is required')
-endif
-
 # Dependencies
-dependency('gtk4', version: '>= 4.10.0')
-dependency('libadwaita-1', version: '>= 1.5')
+gtk4_dep = dependency('gtk4', version: '>= 4.10.0')
+adw_dep = dependency('libadwaita-1', version: '>= 1.5')
+glib_dep = dependency('glib-2.0', version: '>= 2.76')
+gobject_dep = dependency('gobject-2.0', version: '>= 2.76')
 gstreamer_dep = dependency('gstreamer-1.0', version: '>= 1.18', required: false)
 gstreamer_audio_dep = dependency('gstreamer-audio-1.0', version: '>= 1.18', required: false)
 
@@ -43,8 +38,6 @@ conf = configuration_data()
 conf.set('APPLICATION_ID', application_id)
 conf.set('PROJECT_NAME', project_name)
 conf.set('VERSION', meson.project_version())
-conf.set('PYTHON_DIR', python_bin.get_install_dir())
-conf.set('PYTHON_EXEC', python_bin.full_path())
 conf.set('PKGDATA_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'tempo'))
 conf.set('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
 
