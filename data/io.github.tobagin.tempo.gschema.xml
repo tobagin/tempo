@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist>
+<schemalist gettext-domain="tempo">
   <schema id="io.github.tobagin.tempo" path="/io/github/tobagin/tempo/">
     
     <!-- Metronome Settings -->
@@ -43,6 +43,64 @@
       <default>false</default>
       <summary>Use custom sounds</summary>
       <description>Whether to use custom click sounds</description>
+    </key>
+
+    <key name="high-sound-path" type="s">
+      <default>''</default>
+      <summary>High Sound File Path</summary>
+      <description>Path to custom audio file for accent/downbeat clicks</description>
+    </key>
+
+    <key name="low-sound-path" type="s">
+      <default>''</default>
+      <summary>Low Sound File Path</summary>
+      <description>Path to custom audio file for regular clicks</description>
+    </key>
+
+    <!-- Behavior Settings -->
+    <key name="tap-sensitivity" type="i">
+      <default>100</default>
+      <range min="50" max="500"/>
+      <summary>Tap Sensitivity</summary>
+      <description>Milliseconds tolerance for tap tempo detection</description>
+    </key>
+
+    <key name="start-on-launch" type="b">
+      <default>false</default>
+      <summary>Start on Launch</summary>
+      <description>Automatically start the metronome when the application launches</description>
+    </key>
+
+    <key name="keep-on-top" type="b">
+      <default>false</default>
+      <summary>Keep Window on Top</summary>
+      <description>Keep the metronome window above other applications</description>
+    </key>
+
+    <!-- Visual Settings -->
+    <key name="theme" type="i">
+      <default>0</default>
+      <range min="0" max="2"/>
+      <summary>Application Theme</summary>
+      <description>Theme preference: 0=Auto, 1=Light, 2=Dark</description>
+    </key>
+
+    <key name="show-beat-numbers" type="b">
+      <default>true</default>
+      <summary>Show Beat Numbers</summary>
+      <description>Display the current beat number during playback</description>
+    </key>
+
+    <key name="flash-on-beat" type="b">
+      <default>true</default>
+      <summary>Flash on Beat</summary>
+      <description>Flash the beat indicator circle on each beat</description>
+    </key>
+
+    <key name="downbeat-color" type="b">
+      <default>true</default>
+      <summary>Highlight Downbeats</summary>
+      <description>Use different color for downbeat (first beat of bar)</description>
     </key>
     
     <!-- Window Settings -->

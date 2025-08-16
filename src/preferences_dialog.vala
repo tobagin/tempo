@@ -9,7 +9,7 @@ using Gtk;
 using Adw;
 
 [GtkTemplate (ui = "/io/github/tobagin/tempo/ui/preferences_dialog.ui")]
-public class PreferencesDialog : Adw.PreferencesWindow {
+public class PreferencesDialog : Adw.PreferencesDialog {
     
     // UI Elements from Blueprint template - Audio Settings
     [GtkChild] private unowned Scale volume_scale;
