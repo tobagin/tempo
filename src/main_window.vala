@@ -33,6 +33,7 @@ public class TempoWindow : Adw.ApplicationWindow {
     // Beat indicator state
     private bool beat_active = false;
     private bool is_downbeat = false;
+    private int current_beat_number = 1;
     
     public TempoWindow(Adw.Application app) {
         Object(application: app);
@@ -203,6 +204,10 @@ public class TempoWindow : Adw.ApplicationWindow {
         // Update beat indicator state
         beat_active = true;
         is_downbeat = downbeat;
+        
+        // Store the beat number to display (convert to 1-based beat-in-bar)
+        var beat_info = metronome_engine.get_beat_info();
+        current_beat_number = beat_info["beat_in_bar"].get_int32();
         
         // Trigger redraw of beat indicator
         beat_indicator.queue_draw();
@@ -404,10 +409,10 @@ public class TempoWindow : Adw.ApplicationWindow {
      * Enhanced beat indicator drawing function with preference-driven visuals.
      */
     private void draw_beat_indicator(DrawingArea area, Cairo.Context cr, int width, int height) {
-        // Get center coordinates and radius
+        // Get center coordinates and radius - much larger circle with margin for pulse effect
         double center_x = width / 2.0;
         double center_y = height / 2.0;
-        double base_radius = double.min(width, height) / 2.0 - 15;
+        double base_radius = double.min(width, height) / 2 - 85;
         
         // Get current beat info
         var beat_info = metronome_engine.get_beat_info();
@@ -431,10 +436,10 @@ public class TempoWindow : Adw.ApplicationWindow {
         double glow_intensity = 0.0;
         
         if (beat_active && flash_on_beat) {
-            // Enhanced flash effect with smooth scaling
-            double flash_scale = 1.15;
+            // Enhanced flash effect with bigger scaling and glow
+            double flash_scale = 1.3;
             radius = base_radius * flash_scale;
-            glow_intensity = 0.8;
+            glow_intensity = 1.0;
         }
         
         // Define theme-responsive colors
@@ -469,10 +474,10 @@ public class TempoWindow : Adw.ApplicationWindow {
                 downbeat_accent_color : regular_color;
             
             if (flash_on_beat) {
-                // Multi-layer glow effect for enhanced flash
-                for (int i = 3; i >= 0; i--) {
-                    double layer_radius = radius + (i * 8);
-                    double layer_alpha = glow_intensity * (0.3 - i * 0.07);
+                // Multi-layer glow effect with more dramatic expansion
+                for (int i = 4; i >= 0; i--) {
+                    double layer_radius = radius + (i * 12);
+                    double layer_alpha = glow_intensity * (0.4 - i * 0.08);
                     
                     cr.set_source_rgba(active_color[0], active_color[1], active_color[2], layer_alpha);
                     cr.arc(center_x, center_y, layer_radius, 0, 2 * Math.PI);
@@ -530,14 +535,14 @@ public class TempoWindow : Adw.ApplicationWindow {
             cr.select_font_face("Sans", Cairo.FontSlant.NORMAL, Cairo.FontWeight.BOLD);
             cr.set_font_size(font_size);
             
-            var beat_text = current_beat_in_bar.to_string();
+            var beat_text = current_beat_number.to_string();
             Cairo.TextExtents extents;
             cr.text_extents(beat_text, out extents);
             
-            // Text with shadow for better readability
+            // Text with subtle shadow for better readability
             // Shadow
-            cr.set_source_rgba(0, 0, 0, 0.5);
-            cr.move_to(center_x - extents.width / 2 + 2, center_y + extents.height / 2 + 2);
+            cr.set_source_rgba(0, 0, 0, 0.2);
+            cr.move_to(center_x - extents.width / 2 + 1, center_y + extents.height / 2 + 1);
             cr.show_text(beat_text);
             
             // Main text
@@ -559,7 +564,7 @@ public class TempoWindow : Adw.ApplicationWindow {
                 double dot_x = center_x + Math.cos(angle) * indicator_radius;
                 double dot_y = center_y + Math.sin(angle) * indicator_radius;
                 
-                if (i == current_beat_in_bar) {
+                if (i == current_beat_number) {
                     // Current beat - larger, brighter
                     cr.set_source_rgba(regular_color[0], regular_color[1], regular_color[2], 0.9);
                     cr.arc(dot_x, dot_y, indicator_size * 1.5, 0, 2 * Math.PI);

@@ -6,6 +6,7 @@
  */
 
 using GLib;
+using Gst;
 
 /**
  * Error domain for metronome-related errors.
@@ -21,7 +22,7 @@ public errordomain MetronomeError {
  * Uses absolute time references with GLib.get_monotonic_time() to prevent
  * timing drift and jitter. Integrates with the GTK main loop using GLib.Timeout.
  */
-public class MetronomeEngine : Object {
+public class MetronomeEngine : GLib.Object {
     
     // Properties matching Python implementation
     public int bpm { get; set; default = 120; }
@@ -38,6 +39,12 @@ public class MetronomeEngine : Object {
     private int64 next_beat_time = 0;
     private double beat_duration = 0.5; // 120 BPM = 0.5 seconds per beat
     
+    // Audio playback elements
+    private Gst.Element? high_sound_player = null;
+    private Gst.Element? low_sound_player = null;
+    private GLib.Settings? settings = null;
+    private bool audio_initialized = false;
+    
     /**
      * Creates a new MetronomeEngine with default settings.
      */
@@ -49,6 +56,9 @@ public class MetronomeEngine : Object {
         
         // Initialize beat duration
         this.beat_duration = 60.0 / (double)bpm;
+        
+        // Initialize audio
+        initialize_audio();
     }
     
     /**
@@ -145,8 +155,17 @@ public class MetronomeEngine : Object {
         
         info["current_beat"] = new Variant.int32(current_beat);
         info["beats_per_bar"] = new Variant.int32(beats_per_bar);
-        info["beat_in_bar"] = new Variant.int32((current_beat % beats_per_bar) + 1);
-        info["is_downbeat"] = new Variant.boolean((current_beat % beats_per_bar) == 0);
+        
+        // Calculate beat in bar: 1-based, cycles from 1 to beats_per_bar
+        int beat_in_bar;
+        if (current_beat == 0) {
+            beat_in_bar = 1; // Before first beat, show 1
+        } else {
+            beat_in_bar = ((current_beat - 1) % beats_per_bar) + 1;
+        }
+        
+        info["beat_in_bar"] = new Variant.int32(beat_in_bar);
+        info["is_downbeat"] = new Variant.boolean(beat_in_bar == 1);
         info["is_running"] = new Variant.boolean(is_running);
         info["bpm"] = new Variant.int32(bpm);
         info["time_signature"] = new Variant.string("%d/%d".printf(beats_per_bar, beat_value));
@@ -191,14 +210,17 @@ public class MetronomeEngine : Object {
             return false; // Remove timeout
         }
         
-        // Determine if this is a downbeat
-        bool is_downbeat = (current_beat % beats_per_bar) == 0;
+        // Update beat counter first
+        current_beat++;
+        
+        // Determine if this is a downbeat (after incrementing)
+        bool is_downbeat = (current_beat % beats_per_bar) == 1;
+        
+        // Play click sound
+        play_click_sound(is_downbeat);
         
         // Emit beat signal
         beat_occurred(current_beat, is_downbeat);
-        
-        // Update beat counter
-        current_beat++;
         
         // Calculate next beat time (absolute time to prevent drift)
         next_beat_time += (int64)(beat_duration * 1000000);
@@ -215,5 +237,95 @@ public class MetronomeEngine : Object {
         // Remove this timeout (we created a new one)
         timeout_id = 0;
         return false;
+    }
+    
+    /**
+     * Initialize audio system.
+     */
+    private void initialize_audio() {
+        try {
+            settings = new GLib.Settings("io.github.tobagin.tempo");
+            
+            // Initialize GStreamer elements
+            create_audio_players();
+            audio_initialized = true;
+        } catch (Error e) {
+            warning("Failed to initialize audio: %s", e.message);
+        }
+    }
+    
+    /**
+     * Create GStreamer playback elements.
+     */
+    private void create_audio_players() {
+        try {
+            // Create players for high and low sounds
+            high_sound_player = Gst.ElementFactory.make("playbin", "high_sound_player");
+            low_sound_player = Gst.ElementFactory.make("playbin", "low_sound_player");
+            
+            if (high_sound_player == null || low_sound_player == null) {
+                warning("Failed to create GStreamer playbin elements");
+                return;
+            }
+            
+            // Set default sound URIs
+            string app_data_dir = "/app/share/tempo/sounds";
+            high_sound_player.set("uri", "file://" + app_data_dir + "/high.wav");
+            low_sound_player.set("uri", "file://" + app_data_dir + "/low.wav");
+            
+        } catch (Error e) {
+            warning("Error creating audio players: %s", e.message);
+        }
+    }
+    
+    /**
+     * Play a click sound.
+     * 
+     * @param is_downbeat Whether this is a downbeat (accent) or regular beat
+     */
+    private void play_click_sound(bool is_downbeat) {
+        if (!audio_initialized || settings == null) {
+            return;
+        }
+        
+        try {
+            Gst.Element? player = is_downbeat ? high_sound_player : low_sound_player;
+            
+            if (player == null) {
+                return;
+            }
+            
+            // Check if using custom sounds
+            if (settings.get_boolean("use-custom-sounds")) {
+                string? custom_path = is_downbeat ? 
+                    settings.get_string("high-sound-path") : 
+                    settings.get_string("low-sound-path");
+                    
+                if (custom_path != null && custom_path != "") {
+                    player.set("uri", "file://" + custom_path);
+                }
+            }
+            
+            // Set volume
+            double volume = is_downbeat ? 
+                settings.get_double("accent-volume") : 
+                settings.get_double("click-volume");
+            player.set("volume", volume);
+            
+            // Reset to beginning and play
+            player.set_state(Gst.State.NULL);
+            player.set_state(Gst.State.PLAYING);
+            
+            // Stop after short duration to prevent overlap
+            Timeout.add(200, () => {
+                if (player != null) {
+                    player.set_state(Gst.State.NULL);
+                }
+                return false;
+            });
+            
+        } catch (Error e) {
+            warning("Error playing click sound: %s", e.message);
+        }
     }
 }

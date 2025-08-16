@@ -4,6 +4,7 @@ vala_sources = [
   'main_window.vala',
   'metronome_engine.vala',
   'tap_tempo.vala',
+  'preferences_dialog.vala',
 ]
 
 # Create main Tempo executable
@@ -15,12 +16,16 @@ executable('tempo',
     adw_dep,
     glib_dep,
     gobject_dep,
+    gstreamer_dep,
+    gstreamer_audio_dep,
   ],
   vala_args: [
     '--pkg=gtk4',
     '--pkg=libadwaita-1',
     '--pkg=glib-2.0',
     '--pkg=gobject-2.0',
+    '--pkg=gstreamer-1.0',
+    '--pkg=gstreamer-audio-1.0',
     '--target-glib=2.76',
   ],
   c_args: [

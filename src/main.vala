@@ -6,6 +6,7 @@
 
 using Gtk;
 using Adw;
+using Gst;
 
 /**
  * Main application class for Tempo.
@@ -15,7 +16,7 @@ public class TempoApplication : Adw.Application {
     private TempoWindow? main_window = null;
     
     public TempoApplication() {
-        Object(
+        GLib.Object(
             application_id: "io.github.tobagin.tempo",
             flags: ApplicationFlags.DEFAULT_FLAGS
         );
@@ -91,6 +92,9 @@ public class TempoApplication : Adw.Application {
  * Main function - entry point for the application.
  */
 public int main(string[] args) {
+    // Initialize GStreamer for audio playback
+    Gst.init(ref args);
+    
     var app = new TempoApplication();
     return app.run(args);
 }

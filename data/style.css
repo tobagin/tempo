@@ -69,20 +69,10 @@ spinbutton {
 
 /* Modern responsive clamp replacement for deprecated Adw.Clamp */
 .clamp {
-  max-width: 400px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  /* GTK doesn't support margin: auto - using centering with halign instead */
 }
 
-/* Responsive breakpoints for better mobile support */
-@media (max-width: 480px) {
-  .clamp {
-    max-width: 100%;
-    margin-left: 12px;
-    margin-right: 12px;
-  }
-}
+/* GTK doesn't support @media queries - removed responsive breakpoints */
 
 /* Preferences dialog specific styling */
 preferencesdialog {
@@ -198,7 +188,6 @@ preferencesdialog {
   padding: 12px;
   border-radius: 12px;
   background: alpha(@card_bg_color, 0.5);
-  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
@@ -260,7 +249,6 @@ scale trough {
 /* Professional card styling */
 .preferences-card {
   background: alpha(@card_bg_color, 0.95);
-  backdrop-filter: blur(20px);
   border-radius: 16px;
   box-shadow: 0 8px 32px alpha(@accent_color, 0.1);
   border: 1px solid alpha(@accent_color, 0.2);

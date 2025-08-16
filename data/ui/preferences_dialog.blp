@@ -3,9 +3,6 @@ using Adw 1;
 
 template $PreferencesDialog : Adw.PreferencesDialog {
   title: _("Preferences");
-  modal: true;
-  default-width: 600;
-  default-height: 700;
   search-enabled: true;
 
   Adw.PreferencesPage audio_page {
@@ -20,6 +17,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Click Volume");
         subtitle: _("Volume for regular metronome clicks");
 
+        [suffix]
         Scale volume_scale {
           orientation: horizontal;
           adjustment: Adjustment {
@@ -40,6 +38,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Accent Volume");
         subtitle: _("Volume for downbeat accent clicks");
 
+        [suffix]
         Scale accent_volume_scale {
           orientation: horizontal;
           adjustment: Adjustment {
@@ -65,6 +64,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Use Custom Sounds");
         subtitle: _("Replace default click sounds with custom audio files");
 
+        [suffix]
         Switch custom_sounds_switch {
           valign: center;
         }
@@ -74,6 +74,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("High Sound (Accent)");
         subtitle: _("Audio file for downbeat accent clicks");
 
+        [suffix]
         Button high_sound_button {
           label: _("Choose File...");
           valign: center;
@@ -85,6 +86,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Low Sound (Regular)");
         subtitle: _("Audio file for regular metronome clicks");
 
+        [suffix]
         Button low_sound_button {
           label: _("Choose File...");
           valign: center;
@@ -106,6 +108,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Tap Sensitivity");
         subtitle: _("Milliseconds tolerance for tap tempo detection");
 
+        [suffix]
         SpinButton tap_sensitivity_spin {
           adjustment: Adjustment {
             lower: 50.0;
@@ -127,6 +130,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Start Playing on Launch");
         subtitle: _("Automatically start the metronome when the app opens");
 
+        [suffix]
         Switch start_on_launch_switch {
           valign: center;
         }
@@ -136,6 +140,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Keep Window on Top");
         subtitle: _("Keep the metronome window above other applications");
 
+        [suffix]
         Switch keep_on_top_switch {
           valign: center;
         }
@@ -155,6 +160,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Application Theme");
         subtitle: _("Select light, dark, or system theme");
 
+        [suffix]
         DropDown theme_dropdown {
           model: StringList {
             strings [
@@ -176,6 +182,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Show Beat Numbers");
         subtitle: _("Display the current beat number during playback");
 
+        [suffix]
         Switch show_beat_numbers_switch {
           valign: center;
         }
@@ -185,6 +192,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Flash on Beat");
         subtitle: _("Flash the beat indicator circle on each beat");
 
+        [suffix]
         Switch flash_on_beat_switch {
           valign: center;
         }
@@ -194,6 +202,7 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         title: _("Highlight Downbeats");
         subtitle: _("Use different color for downbeat (first beat of bar)");
 
+        [suffix]
         Switch downbeat_color_switch {
           valign: center;
         }
