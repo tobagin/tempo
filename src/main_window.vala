@@ -27,6 +27,9 @@ public class TempoWindow : Adw.ApplicationWindow {
     // Preferences dialog
     private PreferencesDialog? preferences_dialog = null;
     
+    // Settings for visual preferences
+    private GLib.Settings settings;
+    
     // Beat indicator state
     private bool beat_active = false;
     private bool is_downbeat = false;
@@ -34,12 +37,18 @@ public class TempoWindow : Adw.ApplicationWindow {
     public TempoWindow(Adw.Application app) {
         Object(application: app);
         
+        // Initialize settings
+        settings = new GLib.Settings("io.github.tobagin.tempo");
+        
         // Initialize engines
         metronome_engine = new MetronomeEngine();
         tap_tempo = new TapTempo();
         
         setup_ui();
         connect_signals();
+        
+        // Listen for settings changes to update visuals
+        settings.changed.connect(on_settings_changed);
     }
     
     private void setup_ui() {
@@ -375,63 +384,192 @@ public class TempoWindow : Adw.ApplicationWindow {
         }
         preferences_dialog.present(this);
     }
+    
+    /**
+     * Handle settings changes to update visual preferences.
+     */
+    private void on_settings_changed(string key) {
+        switch (key) {
+            case "show-beat-numbers":
+            case "flash-on-beat":
+            case "downbeat-color":
+            case "theme":
+                // Redraw beat indicator with new settings
+                beat_indicator.queue_draw();
+                break;
+        }
+    }
 
-    // Beat indicator drawing function
+    /**
+     * Enhanced beat indicator drawing function with preference-driven visuals.
+     */
     private void draw_beat_indicator(DrawingArea area, Cairo.Context cr, int width, int height) {
-        // Get center coordinates
+        // Get center coordinates and radius
         double center_x = width / 2.0;
         double center_y = height / 2.0;
-        double radius = double.min(width, height) / 2.0 - 10;
+        double base_radius = double.min(width, height) / 2.0 - 15;
         
         // Get current beat info
         var beat_info = metronome_engine.get_beat_info();
         var current_beat_in_bar = beat_info["beat_in_bar"].get_int32();
-        var beats_per_bar = beat_info["beats_per_bar"].get_int32();
+        
+        // Read visual preferences
+        bool show_beat_numbers = settings.get_boolean("show-beat-numbers");
+        bool flash_on_beat = settings.get_boolean("flash-on-beat");
+        bool downbeat_color = settings.get_boolean("downbeat-color");
+        
+        // Get theme-responsive colors
+        var style_manager = Adw.StyleManager.get_default();
+        bool is_dark_theme = style_manager.dark;
         
         // Clear the area
         cr.set_source_rgba(0, 0, 0, 0);
         cr.paint();
         
-        if (beat_active) {
-            // Active beat indicator
-            if (is_downbeat) {
-                // Red for downbeat
-                cr.set_source_rgba(0.9, 0.2, 0.2, 0.8);
-            } else {
-                // Blue for regular beat  
-                cr.set_source_rgba(0.2, 0.6, 0.9, 0.8);
-            }
-            
-            // Draw filled circle
-            cr.arc(center_x, center_y, radius, 0, 2 * Math.PI);
-            cr.fill();
-            
-            // Add glow effect
-            cr.set_source_rgba(is_downbeat ? 0.9 : 0.2, 
-                             is_downbeat ? 0.2 : 0.6, 
-                             is_downbeat ? 0.2 : 0.9, 0.3);
-            cr.arc(center_x, center_y, radius + 5, 0, 2 * Math.PI);
-            cr.fill();
-        } else {
-            // Inactive beat indicator - just outline
-            cr.set_source_rgba(0.5, 0.5, 0.5, 0.5);
-            cr.set_line_width(2);
-            cr.arc(center_x, center_y, radius, 0, 2 * Math.PI);
-            cr.stroke();
+        // Calculate dynamic radius for flash effect
+        double radius = base_radius;
+        double glow_intensity = 0.0;
+        
+        if (beat_active && flash_on_beat) {
+            // Enhanced flash effect with smooth scaling
+            double flash_scale = 1.15;
+            radius = base_radius * flash_scale;
+            glow_intensity = 0.8;
         }
         
-        // Draw beat number if running
-        if (metronome_engine.is_running) {
-            cr.set_source_rgba(1, 1, 1, 0.9);
+        // Define theme-responsive colors
+        double[] regular_color;
+        if (is_dark_theme) {
+            regular_color = {0.3, 0.7, 1.0};     // Light blue for dark theme
+        } else {
+            regular_color = {0.2, 0.5, 0.9};     // Darker blue for light theme
+        }
+            
+        double[] downbeat_accent_color;
+        if (downbeat_color) {
+            if (is_dark_theme) {
+                downbeat_accent_color = {1.0, 0.4, 0.4};     // Light red for dark theme
+            } else {
+                downbeat_accent_color = {0.9, 0.2, 0.2};     // Dark red for light theme
+            }
+        } else {
+            downbeat_accent_color = regular_color;            // Use regular color if downbeat highlighting disabled
+        }
+        
+        double[] inactive_color;
+        if (is_dark_theme) {
+            inactive_color = {0.6, 0.6, 0.6};     // Light gray for dark theme
+        } else {
+            inactive_color = {0.4, 0.4, 0.4};     // Dark gray for light theme
+        }
+        
+        if (beat_active) {
+            // Choose color based on beat type and preferences
+            double[] active_color = (is_downbeat && downbeat_color) ? 
+                downbeat_accent_color : regular_color;
+            
+            if (flash_on_beat) {
+                // Multi-layer glow effect for enhanced flash
+                for (int i = 3; i >= 0; i--) {
+                    double layer_radius = radius + (i * 8);
+                    double layer_alpha = glow_intensity * (0.3 - i * 0.07);
+                    
+                    cr.set_source_rgba(active_color[0], active_color[1], active_color[2], layer_alpha);
+                    cr.arc(center_x, center_y, layer_radius, 0, 2 * Math.PI);
+                    cr.fill();
+                }
+            }
+            
+            // Main filled circle with gradient
+            var pattern = new Cairo.Pattern.radial(center_x, center_y, 0, 
+                                                  center_x, center_y, radius);
+            pattern.add_color_stop_rgba(0.0, active_color[0], active_color[1], active_color[2], 0.9);
+            pattern.add_color_stop_rgba(0.7, active_color[0], active_color[1], active_color[2], 0.7);
+            pattern.add_color_stop_rgba(1.0, active_color[0], active_color[1], active_color[2], 0.3);
+            
+            cr.set_source(pattern);
+            cr.arc(center_x, center_y, radius, 0, 2 * Math.PI);
+            cr.fill();
+            
+            // Inner highlight for 3D effect
+            var highlight = new Cairo.Pattern.radial(center_x - radius/3, center_y - radius/3, 0,
+                                                    center_x, center_y, radius * 0.6);
+            highlight.add_color_stop_rgba(0.0, 1.0, 1.0, 1.0, 0.4);
+            highlight.add_color_stop_rgba(1.0, 1.0, 1.0, 1.0, 0.0);
+            
+            cr.set_source(highlight);
+            cr.arc(center_x, center_y, radius * 0.6, 0, 2 * Math.PI);
+            cr.fill();
+            
+        } else {
+            // Inactive state - elegant outline with subtle gradient
+            double outline_width = 3.0;
+            
+            // Outer glow for inactive state
+            cr.set_source_rgba(inactive_color[0], inactive_color[1], inactive_color[2], 0.2);
+            cr.set_line_width(outline_width * 2);
+            cr.arc(center_x, center_y, base_radius + 2, 0, 2 * Math.PI);
+            cr.stroke();
+            
+            // Main outline
+            cr.set_source_rgba(inactive_color[0], inactive_color[1], inactive_color[2], 0.6);
+            cr.set_line_width(outline_width);
+            cr.arc(center_x, center_y, base_radius, 0, 2 * Math.PI);
+            cr.stroke();
+            
+            // Inner subtle fill
+            cr.set_source_rgba(inactive_color[0], inactive_color[1], inactive_color[2], 0.1);
+            cr.arc(center_x, center_y, base_radius - outline_width, 0, 2 * Math.PI);
+            cr.fill();
+        }
+        
+        // Draw beat number if enabled and running
+        if (show_beat_numbers && metronome_engine.is_running) {
+            // Calculate font size based on circle size
+            double font_size = base_radius * 0.4;
             cr.select_font_face("Sans", Cairo.FontSlant.NORMAL, Cairo.FontWeight.BOLD);
-            cr.set_font_size(24);
+            cr.set_font_size(font_size);
             
             var beat_text = current_beat_in_bar.to_string();
             Cairo.TextExtents extents;
             cr.text_extents(beat_text, out extents);
             
+            // Text with shadow for better readability
+            // Shadow
+            cr.set_source_rgba(0, 0, 0, 0.5);
+            cr.move_to(center_x - extents.width / 2 + 2, center_y + extents.height / 2 + 2);
+            cr.show_text(beat_text);
+            
+            // Main text
+            cr.set_source_rgba(is_dark_theme ? 0.95 : 0.1, 
+                             is_dark_theme ? 0.95 : 0.1, 
+                             is_dark_theme ? 0.95 : 0.1, 1.0);
             cr.move_to(center_x - extents.width / 2, center_y + extents.height / 2);
             cr.show_text(beat_text);
+        }
+        
+        // Draw small beat progress indicators around the circle (when running)
+        if (metronome_engine.is_running) {
+            var total_beats = metronome_engine.beats_per_bar;
+            double indicator_radius = base_radius + 20;
+            double indicator_size = 4.0;
+            
+            for (int i = 1; i <= total_beats; i++) {
+                double angle = (i - 1) * 2 * Math.PI / total_beats - Math.PI / 2;
+                double dot_x = center_x + Math.cos(angle) * indicator_radius;
+                double dot_y = center_y + Math.sin(angle) * indicator_radius;
+                
+                if (i == current_beat_in_bar) {
+                    // Current beat - larger, brighter
+                    cr.set_source_rgba(regular_color[0], regular_color[1], regular_color[2], 0.9);
+                    cr.arc(dot_x, dot_y, indicator_size * 1.5, 0, 2 * Math.PI);
+                } else {
+                    // Other beats - smaller, dimmer
+                    cr.set_source_rgba(inactive_color[0], inactive_color[1], inactive_color[2], 0.4);
+                    cr.arc(dot_x, dot_y, indicator_size, 0, 2 * Math.PI);
+                }
+                cr.fill();
+            }
         }
     }
 }

@@ -103,3 +103,171 @@ preferencesdialog {
   box-shadow: 0 0 15px alpha(@accent_color, 0.8);
   transform: scale(1.1);
 }
+
+/* Advanced beat indicator animations */
+@keyframes beat-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes beat-glow {
+  0% {
+    box-shadow: 0 0 5px alpha(@accent_color, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px alpha(@accent_color, 0.8), 
+                0 0 35px alpha(@accent_color, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 5px alpha(@accent_color, 0.3);
+  }
+}
+
+@keyframes downbeat-flash {
+  0% {
+    background: @accent_color;
+    transform: scale(1);
+  }
+  25% {
+    background: @error_color;
+    transform: scale(1.2);
+    box-shadow: 0 0 30px alpha(@error_color, 0.9);
+  }
+  100% {
+    background: @accent_color;
+    transform: scale(1);
+  }
+}
+
+/* Professional tempo display */
+.tempo-display {
+  font-size: 2.8em;
+  font-weight: 300;
+  color: @accent_color;
+  text-shadow: 0 2px 4px alpha(@accent_color, 0.3);
+  transition: all 0.2s ease;
+}
+
+.tempo-display:hover {
+  transform: scale(1.05);
+  text-shadow: 0 4px 8px alpha(@accent_color, 0.4);
+}
+
+/* Enhanced button styling */
+.play-button {
+  min-width: 140px;
+  min-height: 52px;
+  font-size: 1.1em;
+  font-weight: 600;
+  border-radius: 26px;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 8px alpha(@accent_color, 0.2);
+}
+
+.play-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px alpha(@accent_color, 0.3);
+}
+
+.play-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px alpha(@accent_color, 0.4);
+}
+
+/* Advanced time signature styling */
+.time-signature {
+  font-size: 1.4em;
+  font-weight: 500;
+  color: @accent_color;
+  transition: color 0.2s ease;
+}
+
+/* Smooth control transitions */
+.control-group {
+  margin: 16px 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: alpha(@card_bg_color, 0.5);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.control-group:hover {
+  background: alpha(@card_bg_color, 0.7);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px alpha(@accent_color, 0.15);
+}
+
+/* Professional spinbutton styling */
+spinbutton {
+  min-width: 90px;
+  border-radius: 8px;
+  border: 2px solid alpha(@accent_color, 0.3);
+  background: alpha(@card_bg_color, 0.8);
+  transition: all 0.2s ease;
+}
+
+spinbutton:focus {
+  border-color: @accent_color;
+  box-shadow: 0 0 0 3px alpha(@accent_color, 0.2);
+  background: @card_bg_color;
+}
+
+/* Enhanced volume slider */
+.volume-slider {
+  min-width: 220px;
+  margin: 8px 0;
+}
+
+scale slider {
+  background: linear-gradient(135deg, @accent_color, alpha(@accent_color, 0.8));
+  box-shadow: 0 2px 6px alpha(@accent_color, 0.3);
+  transition: all 0.2s ease;
+}
+
+scale slider:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 9px alpha(@accent_color, 0.4);
+}
+
+scale trough {
+  background: linear-gradient(90deg, 
+              alpha(@accent_color, 0.2), 
+              alpha(@accent_color, 0.4));
+  border-radius: 6px;
+}
+
+/* Theme-responsive beat indicator container */
+.beat-indicator-container {
+  background: radial-gradient(circle, 
+              alpha(@card_bg_color, 0.1) 0%, 
+              transparent 70%);
+  border-radius: 50%;
+  padding: 20px;
+  transition: background 0.3s ease;
+}
+
+/* Professional card styling */
+.preferences-card {
+  background: alpha(@card_bg_color, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px alpha(@accent_color, 0.1);
+  border: 1px solid alpha(@accent_color, 0.2);
+  transition: all 0.3s ease;
+}
+
+.preferences-card:hover {
+  box-shadow: 0 12px 48px alpha(@accent_color, 0.15);
+  transform: translateY(-2px);
+}
