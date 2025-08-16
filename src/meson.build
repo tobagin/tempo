@@ -1,6 +1,7 @@
 # Vala source files for the main application
 vala_sources = [
   'main.vala',
+  'main_window.vala',
   'metronome_engine.vala',
   'tap_tempo.vala',
 ]
@@ -8,6 +9,7 @@ vala_sources = [
 # Create main Tempo executable
 executable('tempo',
   vala_sources,
+  gresource_h,  # Use the generated resource header
   dependencies: [
     gtk4_dep,
     adw_dep,
