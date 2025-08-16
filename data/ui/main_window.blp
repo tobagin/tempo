@@ -22,8 +22,7 @@ template $TempoWindow : Adw.ApplicationWindow {
       }
     }
 
-    Adw.Clamp {
-      maximum-size: 400;
+    Adw.BreakpointBin {
       vexpand: true;
       
       Gtk.Box {
@@ -33,6 +32,9 @@ template $TempoWindow : Adw.ApplicationWindow {
         margin-bottom: 24;
         margin-start: 12;
         margin-end: 12;
+        halign: center;
+        
+        styles ["clamp"]
 
         // BPM Display and Control
         Gtk.Box {
@@ -134,8 +136,8 @@ template $TempoWindow : Adw.ApplicationWindow {
           }
           
           Gtk.DrawingArea beat_indicator {
-            content-width: 120;
-            content-height: 120;
+            content-width: 300;
+            content-height: 300;
             halign: center;
             // // css_classes ["beat-indicator"];
           }
