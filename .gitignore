@@ -1,0 +1,69 @@
+.claude
+PRPs/
+
+# Build directories
+build/
+builddir/
+_build/
+dist/
+*.egg-info/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Compiled files
+*.o
+*.a
+*.la
+*.lo
+*.gir
+*.typelib
+
+# Generated files
+*.ui
+*.gresource
+meson-logs/
+meson-private/
+.mesonpy-native-file.ini
+
+# Test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+
+# Flatpak build files
+.flatpak-builder/
+repo/
+
+# Translation files
+po/*.mo
+po/POTFILES
+
+# Local configuration
+local.conf

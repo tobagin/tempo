@@ -1,0 +1,184 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $TempoWindow : Adw.ApplicationWindow {
+  default-width: 400;
+  default-height: 500;
+  
+  Gtk.Box {
+    orientation: vertical;
+    
+    Adw.HeaderBar {
+      title-widget: Adw.WindowTitle {
+        title: _("Tempo");
+        subtitle: _("Metronome");
+      };
+      
+      [end]
+      Gtk.MenuButton {
+        icon-name: "open-menu-symbolic";
+        menu-model: primary_menu;
+        tooltip-text: _("Main Menu");
+      }
+    }
+
+    Adw.Clamp {
+      maximum-size: 400;
+      vexpand: true;
+      
+      Gtk.Box {
+        orientation: vertical;
+        spacing: 24;
+        margin-top: 24;
+        margin-bottom: 24;
+        margin-start: 12;
+        margin-end: 12;
+
+        // BPM Display and Control
+        Gtk.Box {
+          orientation: vertical;
+          spacing: 12;
+          
+          Gtk.Label tempo_label {
+            label: "120";
+            css-classes: ["title-1"];
+          }
+          
+          Gtk.Label {
+            label: _("BPM");
+            css-classes: ["caption"];
+          }
+          
+          Gtk.SpinButton tempo_spin {
+            adjustment: Gtk.Adjustment {
+              lower: 40;
+              upper: 240;
+              step-increment: 1;
+              page-increment: 10;
+              value: 120;
+            };
+            climb-rate: 1;
+            numeric: true;
+            wrap: false;
+            width-chars: 5;
+            // // css_classes ["tempo-input"];
+          }
+          
+          Gtk.Scale tempo_scale {
+            adjustment: bind tempo_spin.adjustment;
+            draw-value: false;
+            hexpand: true;
+            margin-top: 12;
+            margin-start: 12;
+            margin-end: 12;
+          }
+        }
+
+        // Time Signature Control
+        Gtk.Box {
+          orientation: vertical;
+          spacing: 12;
+          
+          Gtk.Label {
+            label: _("Time Signature");
+            css-classes: ["heading"];
+          }
+          
+          Gtk.Box {
+            orientation: horizontal;
+            spacing: 12;
+            halign: center;
+            
+            Gtk.SpinButton beats_spin {
+              adjustment: Gtk.Adjustment {
+                lower: 1;
+                upper: 16;
+                step-increment: 1;
+                value: 4;
+              };
+              climb-rate: 1;
+              numeric: true;
+              wrap: false;
+              width-chars: 3;
+              // // css_classes ["time-signature"];
+            }
+            
+            Gtk.Label {
+              label: "/";
+              // // css_classes ["time-signature"];
+            }
+            
+            Gtk.DropDown beat_value_dropdown {
+              model: Gtk.StringList {
+                strings [
+                  "2",
+                  "4", 
+                  "8",
+                  "16"
+                ]
+              };
+              selected: 1;
+              // // css_classes ["time-signature"];
+            }
+          }
+        }
+
+        // Visual Beat Indicator
+        Gtk.Box {
+          orientation: vertical;
+          spacing: 12;
+          
+          Gtk.Label {
+            label: _("Beat Indicator");
+            css-classes: ["heading"];
+          }
+          
+          Gtk.DrawingArea beat_indicator {
+            content-width: 120;
+            content-height: 120;
+            halign: center;
+            // // css_classes ["beat-indicator"];
+          }
+        }
+
+        // Play/Stop Button
+        Gtk.Button play_button {
+          label: _("Start");
+          halign: center;
+          margin-top: 12;
+          css-classes: ["suggested-action", "pill"];
+        }
+        
+        // Tap Tempo Button
+        Gtk.Button tap_button {
+          label: _("Tap Tempo");
+          halign: center;
+          margin-top: 6;
+          css-classes: ["flat"];
+          tooltip-text: _("Tap repeatedly to set tempo");
+        }
+      }
+    }
+  }
+}
+
+menu primary_menu {
+  section {
+    item {
+      label: _("Preferences");
+      action: "app.preferences";
+    }
+  }
+  
+  section {
+    item {
+      label: _("About Tempo");
+      action: "app.about";
+    }
+    
+    item {
+      label: _("Quit");
+      action: "app.quit";
+    }
+  }
+}

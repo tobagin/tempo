@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@APPLICATION_ID@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>@PROJECT_NAME@</name>
+  <summary>A modern metronome for musicians</summary>
+  
+  <description>
+    <p>
+      Tempo is a reliable metronome application designed for musicians of all levels. 
+      Built with modern GTK4 and Libadwaita, it provides accurate timing and a 
+      distraction-free user experience perfect for music practice.
+    </p>
+    <p>
+      Key features include customizable tempo (40-240 BPM), multiple time signatures, 
+      visual beat indicators with downbeat accents, tap tempo functionality, and 
+      keyboard shortcuts for quick control. The high-precision timing engine with 
+      drift compensation ensures professional-grade accuracy.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">@APPLICATION_ID@.desktop</launchable>
+  
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/main-window.png</image>
+      <caption>Main window showing tempo controls and beat indicator</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preference-general.png</image>
+      <caption>General preferences with audio and behavior settings</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preferences-visual.png</image>
+      <caption>Visual preferences with theme selection and beat indicator options</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/about-dialog.png</image>
+      <caption>About dialog showing application information</caption>
+    </screenshot>
+  </screenshots>
+  
+  <url type="homepage">https://github.com/tobagin/tempo</url>
+  <url type="bugtracker">https://github.com/tobagin/tempo/issues</url>
+  <url type="help">https://github.com/tobagin/tempo/discussions</url>
+  
+  <categories>
+    <category>Audio</category>
+    <category>Music</category>
+    <category>AudioVideo</category>
+    <category>Utility</category>
+  </categories>
+  
+  <keywords>
+    <keyword>metronome</keyword>
+    <keyword>music</keyword>
+    <keyword>tempo</keyword>
+    <keyword>timing</keyword>
+    <keyword>practice</keyword>
+    <keyword>rhythm</keyword>
+    <keyword>beat</keyword>
+    <keyword>BPM</keyword>
+  </keywords>
+  
+  <content_rating type="oars-1.1"/>
+  
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  
+  <recommends>
+    <display_length compare="ge">400</display_length>
+  </recommends>
+  
+  <developer_name>Thiago Fernandes</developer_name>
+  <update_contact>noreply@github.com</update_contact>
+  
+  <releases>
+    <release version="1.0.8" date="2025-01-15">
+      <description>
+        <p>Enable proper file picker portal integration</p>
+        <ul>
+          <li>Updated file chooser to use modern Gtk.FileDialog API</li>
+          <li>File picker now properly uses desktop environment portals</li>
+          <li>Improved security through sandboxed file access</li>
+          <li>Removed redundant portal permissions from Flatpak manifest</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.7" date="2025-01-15">
+      <description>
+        <p>Clean up version references and fix author information</p>
+        <ul>
+          <li>Updated all version references to use current version consistently</li>
+          <li>Fixed author information to use correct name throughout codebase</li>
+          <li>Ensured only metainfo retains version history as intended</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.6" date="2025-01-15">
+      <description>
+        <p>Add file picker portal support</p>
+        <ul>
+          <li>Added proper file picker portal permissions to Flatpak manifest</li>
+          <li>Improved security by using sandboxed file access</li>
+          <li>Enhanced compatibility with desktop file managers</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.5" date="2025-01-15">
+      <description>
+        <p>Fix desktop file executable reference</p>
+        <ul>
+          <li>Fixed desktop file to use correct executable name 'tempo' instead of application ID</li>
+          <li>Resolved application launch issues from desktop environment</li>
+          <li>Improved desktop integration and launcher compatibility</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.4" date="2025-01-14">
+      <description>
+        <p>Improved metadata quality for better Flathub presentation</p>
+        <ul>
+          <li>Streamlined description to be more concise and user-focused</li>
+          <li>Enhanced readability following Flathub quality guidelines</li>
+          <li>Removed redundant technical details for better clarity</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.3" date="2025-01-14">
+      <description>
+        <p>Fix AppStream control redefinition warning</p>
+        <ul>
+          <li>Removed duplicate keyboard control from recommends section</li>
+          <li>Fixed AppStream validation warning about redefined relation items</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.2" date="2025-01-14">
+      <description>
+        <p>AppStream metadata validation fixes</p>
+        <ul>
+          <li>Fixed AppStream validation errors for Flathub submission</li>
+          <li>Updated developer information and contact details</li>
+          <li>Removed inapplicable metadata fields</li>
+          <li>Added proper branding colors</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.1" date="2025-01-14">
+      <description>
+        <p>Screenshots and metadata update</p>
+        <ul>
+          <li>Added application screenshots for better visibility</li>
+          <li>Updated metadata with comprehensive visual previews</li>
+          <li>Enhanced AppStream information for software centers</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.0" date="2025-01-14">
+      <description>
+        <p>Initial release of Tempo metronome</p>
+        <ul>
+          <li>Precise timing engine with drift compensation</li>
+          <li>GTK4 and Libadwaita modern UI</li>
+          <li>Customizable tempo and time signatures</li>
+          <li>Visual beat indicator with downbeat accents</li>
+          <li>Low-latency GStreamer audio</li>
+          <li>Tap tempo functionality</li>
+          <li>Keyboard shortcuts</li>
+          <li>Settings persistence</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+  
+  <kudos>
+    <kudo>ModernToolkit</kudo>
+    <kudo>HiDpiIcon</kudo>
+  </kudos>
+  
+  <translation type="gettext">tempo</translation>
+  
+  <branding>
+    <color type="primary" scheme_preference="light">#3584e4</color>
+    <color type="primary" scheme_preference="dark">#1c71d8</color>
+  </branding>
+</component>
