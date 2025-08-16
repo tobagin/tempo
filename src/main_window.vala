@@ -73,8 +73,8 @@ public class TempoWindow : Adw.ApplicationWindow {
         // Metronome engine signals
         metronome_engine.beat_occurred.connect(on_beat_occurred);
         
-        // Window focus for keyboard shortcuts (will add in next feature)
-        this.set_focus_visible(true);
+        // Keyboard shortcuts
+        setup_keyboard_shortcuts();
     }
     
     private void update_tempo_display() {
@@ -200,6 +200,166 @@ public class TempoWindow : Adw.ApplicationWindow {
         });
     }
     
+    // Keyboard shortcuts setup
+    private void setup_keyboard_shortcuts() {
+        var key_controller = new EventControllerKey();
+        key_controller.key_pressed.connect(on_key_pressed);
+        ((Widget)this).add_controller(key_controller);
+        
+        // Make sure window can receive focus for keyboard events
+        this.can_focus = true;
+    }
+    
+    private bool on_key_pressed(uint keyval, uint keycode, Gdk.ModifierType state) {
+        // Check for modifier keys
+        bool ctrl_pressed = (state & Gdk.ModifierType.CONTROL_MASK) != 0;
+        bool shift_pressed = (state & Gdk.ModifierType.SHIFT_MASK) != 0;
+        
+        switch (keyval) {
+            case Gdk.Key.space:
+                // Spacebar: Toggle play/stop
+                on_play_clicked();
+                return true;
+                
+            case Gdk.Key.t:
+            case Gdk.Key.T:
+                // T: Tap tempo
+                on_tap_clicked();
+                return true;
+                
+            case Gdk.Key.Up:
+                // Arrow Up: Increase tempo
+                adjust_tempo(shift_pressed ? 10 : 1);
+                return true;
+                
+            case Gdk.Key.Down:
+                // Arrow Down: Decrease tempo
+                adjust_tempo(shift_pressed ? -10 : -1);
+                return true;
+                
+            case Gdk.Key.Left:
+                // Arrow Left: Decrease tempo (alternative)
+                adjust_tempo(shift_pressed ? -10 : -1);
+                return true;
+                
+            case Gdk.Key.Right:
+                // Arrow Right: Increase tempo (alternative)
+                adjust_tempo(shift_pressed ? 10 : 1);
+                return true;
+                
+            case Gdk.Key.r:
+            case Gdk.Key.R:
+                // R: Reset beat counter
+                if (ctrl_pressed) {
+                    metronome_engine.reset_beat_counter();
+                    return true;
+                }
+                break;
+                
+            case Gdk.Key.@1:
+            case Gdk.Key.@2:
+            case Gdk.Key.@3:
+            case Gdk.Key.@4:
+            case Gdk.Key.@5:
+            case Gdk.Key.@6:
+            case Gdk.Key.@7:
+            case Gdk.Key.@8:
+            case Gdk.Key.@9:
+                // Number keys 1-9: Set beats per bar
+                if (ctrl_pressed) {
+                    var beats = (int)(keyval - Gdk.Key.@0);
+                    set_beats_per_bar(beats);
+                    return true;
+                }
+                break;
+                
+            case Gdk.Key.Escape:
+                // Escape: Stop metronome
+                if (metronome_engine.is_running) {
+                    on_play_clicked();
+                    return true;
+                }
+                break;
+                
+            case Gdk.Key.F1:
+                // F1: Show help/shortcuts (placeholder for future)
+                show_shortcuts_help();
+                return true;
+                
+            case Gdk.Key.plus:
+            case Gdk.Key.equal:
+            case Gdk.Key.KP_Add:
+                // Plus: Increase tempo
+                adjust_tempo(shift_pressed ? 10 : 5);
+                return true;
+                
+            case Gdk.Key.minus:
+            case Gdk.Key.underscore:
+            case Gdk.Key.KP_Subtract:
+                // Minus: Decrease tempo
+                adjust_tempo(shift_pressed ? -10 : -5);
+                return true;
+        }
+        
+        return false; // Let other handlers process the key
+    }
+    
+    private void adjust_tempo(int delta) {
+        var current_bpm = metronome_engine.bpm;
+        var new_bpm = current_bpm + delta;
+        
+        try {
+            metronome_engine.set_tempo(new_bpm);
+            update_tempo_display();
+            tempo_scale.set_value(new_bpm);
+        } catch (MetronomeError e) {
+            // Silently ignore out of range values for keyboard shortcuts
+        }
+    }
+    
+    private void set_beats_per_bar(int beats) {
+        var denominator = get_beat_value_from_dropdown();
+        
+        try {
+            metronome_engine.set_time_signature(beats, denominator);
+            update_time_signature_display();
+        } catch (MetronomeError e) {
+            warning("Failed to set beats per bar: %s", e.message);
+        }
+    }
+    
+    private void show_shortcuts_help() {
+        var dialog = new Adw.AlertDialog(_("Keyboard Shortcuts"), 
+                                        _("Quick reference for keyboard shortcuts"));
+        
+        var shortcuts_text = _("""<b>Playback Control:</b>
+• <b>Spacebar</b> - Start/Stop metronome
+• <b>Escape</b> - Stop metronome
+• <b>T</b> - Tap tempo
+
+<b>Tempo Adjustment:</b>
+• <b>↑/↓ Arrow</b> - Adjust tempo (±1 BPM)
+• <b>←/→ Arrow</b> - Adjust tempo (±1 BPM)
+• <b>Shift + Arrows</b> - Adjust tempo (±10 BPM)
+• <b>+/-</b> - Adjust tempo (±5 BPM)
+• <b>Shift + +/-</b> - Adjust tempo (±10 BPM)
+
+<b>Time Signature:</b>
+• <b>Ctrl + 1-9</b> - Set beats per bar
+• <b>Ctrl + R</b> - Reset beat counter
+
+<b>Help:</b>
+• <b>F1</b> - Show this help""");
+        
+        dialog.set_body_use_markup(true);
+        dialog.set_body(shortcuts_text);
+        dialog.add_response("ok", _("OK"));
+        dialog.set_default_response("ok");
+        dialog.set_close_response("ok");
+        
+        dialog.present(this);
+    }
+
     // Beat indicator drawing function
     private void draw_beat_indicator(DrawingArea area, Cairo.Context cr, int width, int height) {
         // Get center coordinates
