@@ -12,6 +12,8 @@ using Adw;
  */
 public class TempoApplication : Adw.Application {
     
+    private TempoWindow? main_window = null;
+    
     public TempoApplication() {
         Object(
             application_id: "io.github.tobagin.tempo",
@@ -19,10 +21,69 @@ public class TempoApplication : Adw.Application {
         );
     }
     
+    protected override void startup() {
+        base.startup();
+        
+        // Setup application actions
+        setup_actions();
+    }
+    
     protected override void activate() {
-        // Create main window using Blueprint template
-        var window = new TempoWindow(this);
-        window.present();
+        if (main_window == null) {
+            // Create main window using Blueprint template
+            main_window = new TempoWindow(this);
+        }
+        
+        main_window.present();
+    }
+    
+    private void setup_actions() {
+        // Preferences action
+        var preferences_action = new SimpleAction("preferences", null);
+        preferences_action.activate.connect(on_preferences_action);
+        this.add_action(preferences_action);
+        
+        // About action
+        var about_action = new SimpleAction("about", null);
+        about_action.activate.connect(on_about_action);
+        this.add_action(about_action);
+        
+        // Quit action
+        var quit_action = new SimpleAction("quit", null);
+        quit_action.activate.connect(on_quit_action);
+        this.add_action(quit_action);
+        this.set_accels_for_action("app.quit", {"<Control>q"});
+    }
+    
+    private void on_preferences_action() {
+        if (main_window != null) {
+            main_window.show_preferences();
+        }
+    }
+    
+    private void on_about_action() {
+        var about_dialog = new Adw.AboutDialog();
+        about_dialog.application_name = _("Tempo");
+        about_dialog.application_icon = "io.github.tobagin.tempo";
+        about_dialog.developer_name = _("Tempo Development Team");
+        about_dialog.version = "1.0.0";
+        about_dialog.website = "https://github.com/tobagin/Tempo";
+        about_dialog.issue_url = "https://github.com/tobagin/Tempo/issues";
+        about_dialog.copyright = _("Copyright © 2024 Tempo Development Team");
+        about_dialog.license_type = License.GPL_3_0;
+        
+        about_dialog.comments = _("A precise and professional metronome application");
+        about_dialog.set_developers({
+            _("Tempo Development Team"),
+        });
+        
+        if (main_window != null) {
+            about_dialog.present(main_window);
+        }
+    }
+    
+    private void on_quit_action() {
+        this.quit();
     }
 }
 

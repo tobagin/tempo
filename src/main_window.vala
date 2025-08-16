@@ -24,6 +24,9 @@ public class TempoWindow : Adw.ApplicationWindow {
     private MetronomeEngine metronome_engine;
     private TapTempo tap_tempo;
     
+    // Preferences dialog
+    private PreferencesDialog? preferences_dialog = null;
+    
     // Beat indicator state
     private bool beat_active = false;
     private bool is_downbeat = false;
@@ -40,11 +43,14 @@ public class TempoWindow : Adw.ApplicationWindow {
     }
     
     private void setup_ui() {
-        // Load CSS styles
+        // Load CSS styles using modern approach
         var css_provider = new CssProvider();
         css_provider.load_from_resource("/io/github/tobagin/tempo/style.css");
-        StyleContext.add_provider_for_display(
-            Gdk.Display.get_default(),
+        
+        // Add CSS provider to display using modern API
+        var display = this.get_display() ?? Gdk.Display.get_default();
+        Gtk.StyleContext.add_provider_for_display(
+            display,
             css_provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         );
@@ -358,6 +364,16 @@ public class TempoWindow : Adw.ApplicationWindow {
         dialog.set_close_response("ok");
         
         dialog.present(this);
+    }
+    
+    /**
+     * Show the preferences dialog.
+     */
+    public void show_preferences() {
+        if (preferences_dialog == null) {
+            preferences_dialog = new PreferencesDialog();
+        }
+        preferences_dialog.present(this);
     }
 
     // Beat indicator drawing function

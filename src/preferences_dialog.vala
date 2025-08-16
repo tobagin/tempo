@@ -39,11 +39,8 @@ public class PreferencesDialog : Adw.PreferencesDialog {
     /**
      * Create a new preferences dialog.
      */
-    public PreferencesDialog(Window parent) {
+    public PreferencesDialog() {
         Object();
-        
-        // Set the parent window
-        this.set_transient_for(parent);
         
         // Initialize settings
         settings = new GLib.Settings("io.github.tobagin.tempo");
@@ -53,6 +50,14 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         
         // Connect signals
         connect_signals();
+    }
+    
+    /**
+     * Present the preferences dialog with a parent window.
+     */
+    public new void present(Window parent) {
+        this.set_transient_for(parent);
+        base.present(parent);
     }
     
     /**

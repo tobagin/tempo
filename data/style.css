@@ -66,3 +66,40 @@ spinbutton {
 .about-dialog {
   --window-border-radius: 12px;
 }
+
+/* Modern responsive clamp replacement for deprecated Adw.Clamp */
+.clamp {
+  max-width: 400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsive breakpoints for better mobile support */
+@media (max-width: 480px) {
+  .clamp {
+    max-width: 100%;
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+}
+
+/* Preferences dialog specific styling */
+preferencesdialog {
+  min-width: 600px;
+  min-height: 700px;
+}
+
+/* Enhanced beat indicator for preferences */
+.beat-indicator-preview {
+  border-radius: 50%;
+  background: linear-gradient(45deg, alpha(@accent_color, 0.3), alpha(@accent_color, 0.1));
+  border: 2px solid alpha(@accent_color, 0.5);
+  transition: all 0.3s ease;
+}
+
+.beat-indicator-preview.flash {
+  background: @accent_color;
+  box-shadow: 0 0 15px alpha(@accent_color, 0.8);
+  transform: scale(1.1);
+}

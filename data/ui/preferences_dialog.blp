@@ -1,195 +1,201 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $PreferencesDialog : Adw.PreferencesWindow {
+template $PreferencesDialog : Adw.PreferencesDialog {
   title: _("Preferences");
   modal: true;
-  default-width: 500;
-  default-height: 600;
-  
-  Adw.PreferencesPage {
-    title: _("General");
-    icon-name: "preferences-system-symbolic";
-    
+  default-width: 600;
+  default-height: 700;
+  search-enabled: true;
+
+  Adw.PreferencesPage audio_page {
+    title: _("Audio");
+    icon-name: "audio-volume-high-symbolic";
+
     Adw.PreferencesGroup {
-      title: _("Audio Settings");
-      description: _("Configure metronome audio options");
-      
+      title: _("Volume");
+      description: _("Adjust click and accent volume levels");
+
       Adw.ActionRow {
         title: _("Click Volume");
-        subtitle: _("Volume level for regular beats");
-        
-        Gtk.Scale volume_scale {
-          adjustment: Gtk.Adjustment {
+        subtitle: _("Volume for regular metronome clicks");
+
+        Scale volume_scale {
+          orientation: horizontal;
+          adjustment: Adjustment {
             lower: 0.0;
             upper: 1.0;
-            step-increment: 0.1;
-            page-increment: 0.2;
+            step-increment: 0.01;
+            page-increment: 0.1;
             value: 0.8;
           };
+          digits: 2;
           draw-value: true;
-          value-pos: right;
-          digits: 1;
-          width-request: 200;
+          hexpand: true;
           valign: center;
         }
       }
-      
+
       Adw.ActionRow {
         title: _("Accent Volume");
-        subtitle: _("Volume level for accented beats (downbeats)");
-        
-        Gtk.Scale accent_volume_scale {
-          adjustment: Gtk.Adjustment {
+        subtitle: _("Volume for downbeat accent clicks");
+
+        Scale accent_volume_scale {
+          orientation: horizontal;
+          adjustment: Adjustment {
             lower: 0.0;
             upper: 1.0;
-            step-increment: 0.1;
-            page-increment: 0.2;
+            step-increment: 0.01;
+            page-increment: 0.1;
             value: 1.0;
           };
+          digits: 2;
           draw-value: true;
-          value-pos: right;
-          digits: 1;
-          width-request: 200;
+          hexpand: true;
           valign: center;
         }
       }
     }
-    
+
     Adw.PreferencesGroup {
-      title: _("Sound Settings");
-      description: _("Choose metronome click sounds");
-      
+      title: _("Custom Sounds");
+      description: _("Use custom audio files for metronome sounds");
+
       Adw.ActionRow {
         title: _("Use Custom Sounds");
-        subtitle: _("Use custom click sounds instead of built-in ones");
-        
-        Gtk.Switch custom_sounds_switch {
+        subtitle: _("Replace default click sounds with custom audio files");
+
+        Switch custom_sounds_switch {
           valign: center;
         }
       }
-      
+
       Adw.ActionRow {
-        title: _("High Click Sound");
-        subtitle: _("Sound file for accented beats");
-        sensitive: bind custom_sounds_switch.active;
-        
-        Gtk.Button high_sound_button {
-          label: _("Choose File");
+        title: _("High Sound (Accent)");
+        subtitle: _("Audio file for downbeat accent clicks");
+
+        Button high_sound_button {
+          label: _("Choose File...");
           valign: center;
+          styles ["flat"]
         }
       }
-      
+
       Adw.ActionRow {
-        title: _("Low Click Sound");
-        subtitle: _("Sound file for regular beats");
-        sensitive: bind custom_sounds_switch.active;
-        
-        Gtk.Button low_sound_button {
-          label: _("Choose File");
+        title: _("Low Sound (Regular)");
+        subtitle: _("Audio file for regular metronome clicks");
+
+        Button low_sound_button {
+          label: _("Choose File...");
+          valign: center;
+          styles ["flat"]
+        }
+      }
+    }
+  }
+
+  Adw.PreferencesPage behavior_page {
+    title: _("Behavior");
+    icon-name: "preferences-system-symbolic";
+
+    Adw.PreferencesGroup {
+      title: _("Tap Tempo");
+      description: _("Configure tap tempo sensitivity and behavior");
+
+      Adw.ActionRow {
+        title: _("Tap Sensitivity");
+        subtitle: _("Milliseconds tolerance for tap tempo detection");
+
+        SpinButton tap_sensitivity_spin {
+          adjustment: Adjustment {
+            lower: 50.0;
+            upper: 500.0;
+            step-increment: 10.0;
+            page-increment: 50.0;
+            value: 100.0;
+          };
           valign: center;
         }
       }
     }
-    
+
     Adw.PreferencesGroup {
-      title: _("Behavior");
-      description: _("Metronome behavior settings");
-      
+      title: _("Window Behavior");
+      description: _("Configure application window behavior");
+
       Adw.ActionRow {
-        title: _("Tap Tempo Sensitivity");
-        subtitle: _("How sensitive tap tempo detection is");
-        
-        Gtk.SpinButton tap_sensitivity_spin {
-          adjustment: Gtk.Adjustment {
-            lower: 1;
-            upper: 10;
-            step-increment: 1;
-            value: 5;
-          };
-          climb-rate: 1;
-          numeric: true;
-          width-chars: 3;
+        title: _("Start Playing on Launch");
+        subtitle: _("Automatically start the metronome when the app opens");
+
+        Switch start_on_launch_switch {
           valign: center;
         }
       }
-      
-      Adw.ActionRow {
-        title: _("Start on Launch");
-        subtitle: _("Automatically start metronome when app launches");
-        
-        Gtk.Switch start_on_launch_switch {
-          valign: center;
-        }
-      }
-      
+
       Adw.ActionRow {
         title: _("Keep Window on Top");
-        subtitle: _("Keep metronome window above other windows");
-        
-        Gtk.Switch keep_on_top_switch {
+        subtitle: _("Keep the metronome window above other applications");
+
+        Switch keep_on_top_switch {
           valign: center;
         }
       }
     }
   }
-  
-  Adw.PreferencesPage {
+
+  Adw.PreferencesPage visual_page {
     title: _("Visual");
-    icon-name: "view-reveal-symbolic";
-    
+    icon-name: "applications-graphics-symbolic";
+
     Adw.PreferencesGroup {
-      title: _("Appearance");
-      description: _("Application appearance settings");
-      
+      title: _("Theme");
+      description: _("Choose the application appearance theme");
+
       Adw.ActionRow {
-        title: _("Theme");
-        subtitle: _("Choose application color scheme");
-        
-        Gtk.DropDown theme_dropdown {
-          model: Gtk.StringList {
+        title: _("Application Theme");
+        subtitle: _("Select light, dark, or system theme");
+
+        DropDown theme_dropdown {
+          model: StringList {
             strings [
-              _("Auto"),
+              _("Follow System"),
               _("Light"),
               _("Dark")
             ]
           };
-          selected: 0;
           valign: center;
         }
       }
     }
-    
+
     Adw.PreferencesGroup {
       title: _("Beat Indicator");
-      description: _("Visual beat indicator settings");
-      
+      description: _("Configure visual beat indicator settings");
+
       Adw.ActionRow {
         title: _("Show Beat Numbers");
-        subtitle: _("Display current beat number in indicator");
-        
-        Gtk.Switch show_beat_numbers_switch {
+        subtitle: _("Display the current beat number during playback");
+
+        Switch show_beat_numbers_switch {
           valign: center;
         }
       }
-      
+
       Adw.ActionRow {
         title: _("Flash on Beat");
-        subtitle: _("Flash the beat indicator on each beat");
-        
-        Gtk.Switch flash_on_beat_switch {
+        subtitle: _("Flash the beat indicator circle on each beat");
+
+        Switch flash_on_beat_switch {
           valign: center;
-          active: true;
         }
       }
-      
+
       Adw.ActionRow {
-        title: _("Different Color for Downbeat");
-        subtitle: _("Use different color for first beat of measure");
-        
-        Gtk.Switch downbeat_color_switch {
+        title: _("Highlight Downbeats");
+        subtitle: _("Use different color for downbeat (first beat of bar)");
+
+        Switch downbeat_color_switch {
           valign: center;
-          active: true;
         }
       }
     }
