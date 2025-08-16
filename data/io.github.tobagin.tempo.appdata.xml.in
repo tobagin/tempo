@@ -8,15 +8,15 @@
   
   <description>
     <p>
-      Tempo is a reliable metronome application designed for musicians of all levels. 
-      Built with modern GTK4 and Libadwaita, it provides accurate timing and a 
-      distraction-free user experience perfect for music practice.
+      Tempo is a modern, feature-rich metronome application designed for musicians of all levels. 
+      Built with GTK4 and Libadwaita using Blueprint UI templates, it provides precise timing, 
+      comprehensive keyboard shortcuts, and a beautiful animated beat indicator.
     </p>
     <p>
-      Key features include customizable tempo (40-240 BPM), multiple time signatures, 
-      visual beat indicators with downbeat accents, tap tempo functionality, and 
-      keyboard shortcuts for quick control. The high-precision timing engine with 
-      drift compensation ensures professional-grade accuracy.
+      Key features include GStreamer audio integration with distinct beat/downbeat sounds, 
+      customizable tempo (40-240 BPM), multiple time signatures, animated Cairo-based visual 
+      indicators with pulse effects, comprehensive preferences dialog, tap tempo functionality, 
+      and full keyboard control. The high-precision timing engine ensures professional accuracy.
     </p>
   </description>
   
@@ -83,6 +83,24 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.1.1" date="2025-08-16">
+      <description>
+        <p>Major update: Complete Vala metronome with comprehensive improvements</p>
+        <ul>
+          <li>Complete Python to Vala conversion for better performance and integration</li>
+          <li>GStreamer audio integration with distinct beat and downbeat sounds</li>
+          <li>Blueprint UI templates with modern GTK4/Libadwaita design</li>
+          <li>Animated beat indicator with Cairo-based pulse effects and perfect sync</li>
+          <li>Comprehensive keyboard shortcuts for full application control</li>
+          <li>Enhanced preferences dialog with Audio, Behavior, and Visual settings</li>
+          <li>Multi-language support with Italian and Turkish translations</li>
+          <li>Improved timing engine with microsecond precision</li>
+          <li>Larger beat indicator with dramatic glow effects</li>
+          <li>Fixed beat sequence to proper 1-2-3-4 display</li>
+          <li>Proper translator credits in about dialog</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.8" date="2025-01-15">
       <description>
         <p>Enable proper file picker portal integration</p>
