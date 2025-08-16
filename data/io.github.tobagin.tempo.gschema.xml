@@ -45,6 +45,64 @@
       <description>Whether to use custom click sounds</description>
     </key>
     
+    <key name="high-sound-path" type="s">
+      <default>""</default>
+      <summary>High sound file path</summary>
+      <description>Path to custom high/accent sound file</description>
+    </key>
+    
+    <key name="low-sound-path" type="s">
+      <default>""</default>
+      <summary>Low sound file path</summary>
+      <description>Path to custom low/regular sound file</description>
+    </key>
+    
+    <!-- Behavior Settings -->
+    <key name="tap-sensitivity" type="i">
+      <range min="100" max="2000"/>
+      <default>600</default>
+      <summary>Tap tempo sensitivity</summary>
+      <description>Time window for tap tempo detection in milliseconds</description>
+    </key>
+    
+    <key name="start-on-launch" type="b">
+      <default>false</default>
+      <summary>Start on launch</summary>
+      <description>Whether to start the metronome automatically when app launches</description>
+    </key>
+    
+    <key name="keep-on-top" type="b">
+      <default>false</default>
+      <summary>Keep window on top</summary>
+      <description>Whether to keep the main window always on top</description>
+    </key>
+    
+    <!-- Visual Settings -->
+    <key name="theme" type="i">
+      <range min="0" max="2"/>
+      <default>0</default>
+      <summary>Theme selection</summary>
+      <description>Selected theme: 0=Auto, 1=Light, 2=Dark</description>
+    </key>
+    
+    <key name="show-beat-numbers" type="b">
+      <default>true</default>
+      <summary>Show beat numbers</summary>
+      <description>Whether to show beat numbers on the beat indicator</description>
+    </key>
+    
+    <key name="flash-on-beat" type="b">
+      <default>true</default>
+      <summary>Flash on beat</summary>
+      <description>Whether the beat indicator should flash/pulse on each beat</description>
+    </key>
+    
+    <key name="downbeat-color" type="b">
+      <default>true</default>
+      <summary>Downbeat color highlighting</summary>
+      <description>Whether to use different color for downbeats (first beat of measure)</description>
+    </key>
+    
     <!-- Window Settings -->
     <key name="window-width" type="i">
       <default>400</default>
