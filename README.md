@@ -18,15 +18,31 @@ Tempo is a simple, reliable, and aesthetically pleasing metronome application bu
 
 ## Features
 
+### Core Functionality
 - **Precise Timing**: Sub-millisecond accuracy with drift-free timing engine
 - **Customizable Tempo**: Set BPM from 40 to 240 using slider, stepper, or tap tempo
 - **Time Signature Control**: Support for common time signatures (2/4, 3/4, 4/4, 6/8, etc.)
-- **Visual Beat Indicator**: Clear visual feedback synchronized with audio
-- **Accented Downbeats**: Distinct sound for the first beat of each measure
+- **Visual Beat Indicator**: Animated beat indicator with Cairo-based pulse effects
+- **Accented Downbeats**: Distinct sounds for regular beats and downbeats
 - **Low-Latency Audio**: Optimized GStreamer pipeline for minimal audio delay
-- **Modern UI**: Clean, adaptive interface following GNOME design principles
-- **Keyboard Shortcuts**: Spacebar to start/stop, arrow keys for tempo adjustment
-- **Settings Persistence**: Automatically saves your preferred settings
+
+### User Interface
+- **Modern UI**: Blueprint-based GTK4/Libadwaita design following GNOME HIG
+- **Responsive Design**: Adaptive interface that works on different screen sizes
+- **Beat Visualization**: Large, animated beat indicator with dramatic pulse glow effects
+- **Synchronized Feedback**: Perfect sync between audio and visual beat indicators
+
+### User Experience
+- **Comprehensive Keyboard Shortcuts**: Full control via keyboard
+  - Space/Enter: Start/Stop playback
+  - Arrow keys: Tempo adjustment (±1 or ±10 BPM with Shift)
+  - Number keys (2-9): Quick time signature changes
+  - F1: Help dialog with all shortcuts
+- **Preferences Dialog**: Comprehensive settings with three categories:
+  - **Audio**: Volume control, sound selection
+  - **Behavior**: Auto-start, keyboard shortcuts toggle
+  - **Visual**: Beat indicator style, color themes
+- **Settings Persistence**: All preferences saved automatically via GSettings
 
 ## Installation
 
@@ -42,25 +58,26 @@ flatpak install flathub io.github.tobagin.tempo
 
 #### Prerequisites
 
-- Python 3.8 or newer
-- GTK4 development libraries
-- Libadwaita development libraries
-- GStreamer development libraries
-- Meson build system
-- Blueprint compiler
+- Vala compiler (valac 0.56 or newer)
+- GTK4 development libraries (4.10+)
+- Libadwaita development libraries (1.5+)
+- GStreamer development libraries (1.18+)
+- Meson build system (0.59+)
+- Blueprint compiler (0.18+)
 
 On Ubuntu/Debian:
 ```bash
-sudo apt install python3-dev libgtk-4-dev libadwaita-1-dev \
+sudo apt install valac libgtk-4-dev libadwaita-1-dev \
     libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+    libgstreamer-plugins-good1.0-dev libgstreamer-audio1.0-dev \
     meson blueprint-compiler
 ```
 
 On Fedora:
 ```bash
-sudo dnf install python3-devel gtk4-devel libadwaita-devel \
+sudo dnf install vala gtk4-devel libadwaita-devel \
     gstreamer1-devel gstreamer1-plugins-base-devel \
-    meson blueprint-compiler
+    gstreamer1-plugins-good meson blueprint-compiler
 ```
 
 #### Build Instructions
@@ -102,10 +119,22 @@ flatpak run io.github.tobagin.tempo
 
 ### Keyboard Shortcuts
 
-- `Spacebar`: Start/stop metronome
-- `T`: Tap tempo
+**Playback Control:**
+- `Spacebar` or `Enter`: Start/stop metronome
+- `T`: Tap tempo (tap repeatedly to set tempo)
+
+**Tempo Adjustment:**
 - `↑`: Increase tempo by 1 BPM
-- `↓`: Decrease tempo by 1 BPM
+- `↓`: Decrease tempo by 1 BPM  
+- `Shift+↑`: Increase tempo by 10 BPM
+- `Shift+↓`: Decrease tempo by 10 BPM
+
+**Time Signature:**
+- `2`-`9`: Set beats per measure (2/4, 3/4, 4/4, etc.)
+
+**Application:**
+- `F1`: Show help dialog with all shortcuts
+- `Ctrl+,`: Open preferences
 - `Ctrl+Q`: Quit application
 
 ### Visual Feedback
@@ -121,10 +150,11 @@ The beat indicator shows:
 
 Tempo is built with modern technologies:
 
+- **Language**: Vala - compiles to efficient C code with GObject integration
 - **Frontend**: GTK4 with Libadwaita for native Linux integration
 - **UI Definition**: Blueprint markup language for clean, maintainable UI
 - **Audio Engine**: GStreamer with optimized low-latency pipeline
-- **Timing Engine**: High-precision threading with drift compensation
+- **Timing Engine**: High-precision GLib timing with drift compensation
 - **Build System**: Meson for cross-platform building
 - **Packaging**: Flatpak for universal Linux distribution
 
@@ -132,11 +162,11 @@ Tempo is built with modern technologies:
 
 The metronome engine uses several techniques to ensure accuracy:
 
-- **Absolute time references** prevent cumulative drift
-- **High-resolution performance counter** (time.perf_counter)
-- **Compensation for system delays** and sleep interruptions
-- **Separate timing thread** to avoid GUI blocking
-- **Buffer management** for consistent audio latency
+- **Absolute time references** prevent cumulative drift using GLib.get_monotonic_time()
+- **High-resolution timing** with microsecond precision
+- **Compensation for system delays** and scheduling interruptions  
+- **Separate timing thread** using GLib.Thread to avoid UI blocking
+- **GStreamer audio buffer management** for consistent low-latency output
 
 ## Development
 
@@ -144,42 +174,47 @@ The metronome engine uses several techniques to ensure accuracy:
 
 ```
 tempo/
-├── data/           # UI files, icons, sounds, schemas
-├── src/            # Python source code
-├── tests/          # Unit tests
-├── packaging/      # Flatpak manifests
-├── po/             # Translations
+├── data/           # UI Blueprint files, GSettings schemas, sounds
+│   ├── ui/         # Blueprint UI templates (.blp files)
+│   ├── sounds/     # Audio files for beat sounds
+│   └── style.css   # Custom GTK/CSS styling
+├── src/            # Vala source code (.vala files)
+│   ├── main.vala           # Application entry point
+│   ├── main_window.vala    # Main window with beat indicator
+│   ├── metronome_engine.vala   # Core timing and audio engine
+│   └── preferences_dialog.vala # Settings UI
+├── tests/          # Unit tests (currently minimal due to GStreamer deps)
+├── packaging/      # Flatpak manifests for local/production builds
+├── po/             # Translation files (Italian, Turkish, more welcome!)
 ├── meson.build     # Build configuration
-└── build.sh        # Convenience build script
+└── build.sh        # Convenience build script for development
 ```
 
 ### Running Tests
 
 ```bash
-# Run all tests
-pytest tests/ -v
+# Build and run tests (note: limited due to GStreamer dependencies)
+meson test -C builddir
 
-# Run with coverage
-pytest tests/ -v --cov=src --cov-report=html
-
-# Run specific test file
-pytest tests/test_metronome.py -v
+# For manual testing, build and run the application:
+./build.sh --dev --install
+flatpak run io.github.tobagin.tempo
 ```
 
 ### Code Style
 
-The project uses:
-- **Ruff** for linting and formatting
-- **MyPy** for type checking
-- **Black** for code formatting
+The project follows Vala coding conventions:
+- **CamelCase** for class names and public methods
+- **snake_case** for private methods and variables
+- **4-space indentation** for consistency
+- **Explicit type annotations** where helpful for clarity
 
 ```bash
-# Check code style
-ruff check src/ tests/
-mypy src/ --strict
+# Format Vala code (if using vala-lint or similar)
+uncrustify -c vala.cfg --replace src/*.vala
 
-# Auto-fix issues
-ruff check src/ tests/ --fix
+# Check build without installing
+meson compile -C builddir
 ```
 
 ### Contributing
