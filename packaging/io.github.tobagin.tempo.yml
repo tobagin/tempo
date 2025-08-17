@@ -45,5 +45,4 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/Tempo.git
-        tag: v1.1.4
-        commit: b6ffe9580238c101c3e9709525c28b5aa99e8d45
+        commit: f55832b212d60e7fcf5dd5637335431928f0cafa
