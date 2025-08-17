@@ -44,6 +44,6 @@ modules:
     buildsystem: meson
     sources:
       - type: git
-        url: https://github.com/tobagin/Tempo.git
+        url: https://github.com/tobagin/tempo.git
         tag: v1.1.2
-        commit: 0e27ee3d3281c1dcdf67e21b4400428efaebae9f
+        commit: 146513ac23601572c417865118f87e38f1fa8f7e
