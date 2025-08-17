@@ -80,7 +80,6 @@ public class TempoApplication : Adw.Application {
         
         // Translator credits
         about_dialog.translator_credits = _("Italian: Albano Battistella (github.com/albanobattistella)\nTurkish: Erdem Uygun (github.com/erdemuygun)");
-        
         if (main_window != null) {
             about_dialog.present(main_window);
         }
