@@ -1,0 +1,17 @@
+# Files that contain translatable strings
+# List one file per line
+
+# Vala source files
+src/main.vala
+src/main_window.vala
+src/metronome_engine.vala
+src/preferences_dialog.vala
+src/tap_tempo.vala
+
+# Blueprint UI files
+data/ui/main_window.blp
+data/ui/preferences_dialog.blp
+
+# Desktop and metadata files
+data/io.github.tobagin.tempo.desktop.in
+data/io.github.tobagin.tempo.appdata.xml.in

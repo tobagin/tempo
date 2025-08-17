@@ -106,7 +106,7 @@ public class MetronomeEngine : GLib.Object {
     public void set_tempo(int new_bpm) throws MetronomeError {
         if (new_bpm < 40 || new_bpm > 240) {
             throw new MetronomeError.INVALID_BPM(
-                "BPM must be between 40 and 240, got %d".printf(new_bpm)
+                _("BPM must be between 40 and 240, got %d").printf(new_bpm)
             );
         }
         
@@ -124,13 +124,13 @@ public class MetronomeEngine : GLib.Object {
     public void set_time_signature(int numerator, int denominator) throws MetronomeError {
         if (numerator < 1 || numerator > 16) {
             throw new MetronomeError.INVALID_TIME_SIGNATURE(
-                "Time signature numerator must be 1-16, got %d".printf(numerator)
+                _("Time signature numerator must be 1-16, got %d").printf(numerator)
             );
         }
         
         if (!(denominator == 2 || denominator == 4 || denominator == 8 || denominator == 16)) {
             throw new MetronomeError.INVALID_TIME_SIGNATURE(
-                "Time signature denominator must be 2, 4, 8, or 16, got %d".printf(denominator)
+                _("Time signature denominator must be 2, 4, 8, or 16, got %d").printf(denominator)
             );
         }
         

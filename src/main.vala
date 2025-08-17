@@ -66,16 +66,16 @@ public class TempoApplication : Adw.Application {
         var about_dialog = new Adw.AboutDialog();
         about_dialog.application_name = _("Tempo");
         about_dialog.application_icon = "io.github.tobagin.tempo";
-        about_dialog.developer_name = _("Tempo Development Team");
+        about_dialog.developer_name = _("Thiago Fernandes");
         about_dialog.version = "1.1.2";
         about_dialog.website = "https://github.com/tobagin/Tempo";
         about_dialog.issue_url = "https://github.com/tobagin/Tempo/issues";
-        about_dialog.copyright = _("Copyright © 2024 Tempo Development Team");
+        about_dialog.copyright = _("Copyright © 2025 Thiago Fernandes");
         about_dialog.license_type = License.GPL_3_0;
         
         about_dialog.comments = _("A precise and professional metronome application");
         about_dialog.set_developers({
-            _("Tempo Development Team"),
+            _("Thiago Fernandes"),
         });
         
         // Translator credits

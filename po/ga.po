@@ -1,7 +1,7 @@
-# Italian translations for tempo package.
-# Copyright (C) 2025 tempo contributors
+# Irish (Gaelic) translations for tempo package.
+# Copyright (C) 2025 Thiago Fernandes
 # This file is distributed under the same license as the tempo package.
-# Albano Battistella <albanobattistella@gmail.com>, 2025.
+# Thiago Fernandes <tobagin@github.com>, 2025.
 #
 msgid ""
 msgstr ""
@@ -9,16 +9,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 11:20+0100\n"
 "PO-Revision-Date: 2025-08-17 11:30+0100\n"
-"Last-Translator: Albano Battistella <albanobattistella@gmail.com>\n"
-"Language-Team: Italian\n"
-"Language: it\n"
+"Last-Translator: Claude AI <noreply@anthropic.com>\n"
+"Language-Team: Irish (Gaelic)\n"
+"Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/main.vala:67 data/ui/main_window.blp:13
 msgid "Tempo"
-msgstr "Tempo"
+msgstr "Luas"
 
 #: src/main.vala:69 src/main.vala:78
 #: data/io.github.tobagin.tempo.appdata.xml.in:82
@@ -27,11 +27,11 @@ msgstr "Thiago Fernandes"
 
 #: src/main.vala:73
 msgid "Copyright © 2025 Thiago Fernandes"
-msgstr "Copyright © 2025 Thiago Fernandes"
+msgstr "Cóipcheart © 2025 Thiago Fernandes"
 
 #: src/main.vala:76
 msgid "A precise and professional metronome application"
-msgstr "Un'applicazione metronomo precisa e professionale"
+msgstr "Feidhmchlár meadrónaim beacht agus gairmiúil"
 
 #. Translator credits
 #: src/main.vala:82
@@ -39,24 +39,25 @@ msgid ""
 "Italian: Albano Battistella (github.com/albanobattistella)\n"
 "Turkish: Erdem Uygun (github.com/erdemuygun)"
 msgstr ""
-"Italiano: Albano Battistella (github.com/albanobattistella)\n"
-"Turco: Erdem Uygun (github.com/erdemuygun)"
+"Iodáilis: Albano Battistella (github.com/albanobattistella)\n"
+"Tuircis: Erdem Uygun (github.com/erdemuygun)\n"
+"Gaeilge: Claude AI"
 
 #: src/main_window.vala:179 data/ui/main_window.blp:148
 msgid "Start"
-msgstr "Avvia"
+msgstr "Tosaigh"
 
 #: src/main_window.vala:184
 msgid "Stop"
-msgstr "Ferma"
+msgstr "Stad"
 
 #: src/main_window.vala:352
 msgid "Keyboard Shortcuts"
-msgstr "Scorciatoie da Tastiera"
+msgstr "Aicearraí Méarchláir"
 
 #: src/main_window.vala:353
 msgid "Quick reference for keyboard shortcuts"
-msgstr "Riferimento rapido per le scorciatoie da tastiera"
+msgstr "Tagairt thapa d'aicearraí méarchláir"
 
 #: src/main_window.vala:355
 msgid ""
@@ -79,61 +80,61 @@ msgid ""
 "<b>Help:</b>\n"
 "• <b>F1</b> - Show this help"
 msgstr ""
-"<b>Controllo Riproduzione:</b>\n"
-"• <b>Barra Spaziatrice</b> - Avvia/Ferma metronomo\n"
-"• <b>Escape</b> - Ferma metronomo\n"
-"• <b>T</b> - Tap tempo\n"
+"<b>Rialú Seinnte:</b>\n"
+"• <b>Spásbharra</b> - Tosaigh/Stad meadrónam\n"
+"• <b>Escape</b> - Stad meadrónam\n"
+"• <b>T</b> - Cnag luas\n"
 "\n"
-"<b>Regolazione Tempo:</b>\n"
-"• <b>Freccia ↑/↓</b> - Regola tempo (±1 BPM)\n"
-"• <b>Freccia ←/→</b> - Regola tempo (±1 BPM)\n"
-"• <b>Shift + Frecce</b> - Regola tempo (±10 BPM)\n"
-"• <b>+/-</b> - Regola tempo (±5 BPM)\n"
-"• <b>Shift + +/-</b> - Regola tempo (±10 BPM)\n"
+"<b>Coigeartú Luais:</b>\n"
+"• <b>Saighead ↑/↓</b> - Coigeartaigh luas (±1 BPM)\n"
+"• <b>Saighead ←/→</b> - Coigeartaigh luas (±1 BPM)\n"
+"• <b>Shift + Saigheada</b> - Coigeartaigh luas (±10 BPM)\n"
+"• <b>+/-</b> - Coigeartaigh luas (±5 BPM)\n"
+"• <b>Shift + +/-</b> - Coigeartaigh luas (±10 BPM)\n"
 "\n"
-"<b>Indicazione del Tempo:</b>\n"
-"• <b>Ctrl + 1-9</b> - Imposta battute per barra\n"
-"• <b>Ctrl + R</b> - Reset contatore battute\n"
+"<b>Síniú Ama:</b>\n"
+"• <b>Ctrl + 1-9</b> - Socraigh buillí in aghaidh na barra\n"
+"• <b>Ctrl + R</b> - Athshocraigh comhaireamh buillí\n"
 "\n"
-"<b>Aiuto:</b>\n"
-"• <b>F1</b> - Mostra questo aiuto"
+"<b>Cabhair:</b>\n"
+"• <b>F1</b> - Taispeáin an chabhair seo"
 
 #: src/main_window.vala:376
 msgid "OK"
-msgstr "OK"
+msgstr "Ceart go leor"
 
 #: src/metronome_engine.vala:109
 #, c-format
 msgid "BPM must be between 40 and 240, got %d"
-msgstr "Il BPM deve essere tra 40 e 240, ricevuto %d"
+msgstr "Caithfidh BPM a bheith idir 40 agus 240, fuarthas %d"
 
 #: src/metronome_engine.vala:127
 #, c-format
 msgid "Time signature numerator must be 1-16, got %d"
-msgstr "Il numeratore dell'indicazione del tempo deve essere 1-16, ricevuto %d"
+msgstr "Caithfidh uimhreoir síniú ama a bheith 1-16, fuarthas %d"
 
 #: src/metronome_engine.vala:133
 #, c-format
 msgid "Time signature denominator must be 2, 4, 8, or 16, got %d"
-msgstr "Il denominatore dell'indicazione del tempo deve essere 2, 4, 8 o 16, ricevuto %d"
+msgstr "Caithfidh ainmneoir síniú ama a bheith 2, 4, 8, nó 16, fuarthas %d"
 
 #. TODO: Implement file chooser
 #: src/preferences_dialog.vala:118 src/preferences_dialog.vala:123
 msgid "Sound file chooser not yet implemented"
-msgstr "Selettore file audio non ancora implementato"
+msgstr "Níl roghnóir comhaid fuaime curtha i bhfeidhm fós"
 
 #. TODO: Implement modern file chooser API
 #: src/preferences_dialog.vala:171
 msgid "File chooser needs modern GTK4 implementation"
-msgstr "Il selettore file necessita di un'implementazione GTK4 moderna"
+msgstr "Teastaíonn cur i bhfeidhm nua-aimseartha GTK4 ó roghnóir comhaid"
 
 #: data/ui/main_window.blp:14
 msgid "Metronome"
-msgstr "Metronomo"
+msgstr "Meadrónam"
 
 #: data/ui/main_window.blp:21
 msgid "Main Menu"
-msgstr "Menu Principale"
+msgstr "Príomhroghchlár"
 
 #: data/ui/main_window.blp:50 data/io.github.tobagin.tempo.appdata.xml.in:63
 msgid "BPM"
@@ -141,195 +142,195 @@ msgstr "BPM"
 
 #: data/ui/main_window.blp:85
 msgid "Time Signature"
-msgstr "Indicazione del Tempo"
+msgstr "Síniú Ama"
 
 #: data/ui/main_window.blp:134 data/ui/preferences_dialog.blp:178
 msgid "Beat Indicator"
-msgstr "Indicatore del Ritmo"
+msgstr "Táscaire Buille"
 
 #: data/ui/main_window.blp:156 data/ui/preferences_dialog.blp:104
 msgid "Tap Tempo"
-msgstr "Tocca Tempo"
+msgstr "Cnag Luas"
 
 #: data/ui/main_window.blp:160
 msgid "Tap repeatedly to set tempo"
-msgstr "Tocca ripetutamente per impostare il tempo"
+msgstr "Cnag arís agus arís eile chun luas a shocrú"
 
 #: data/ui/main_window.blp:170 data/ui/preferences_dialog.blp:5
 msgid "Preferences"
-msgstr "Preferenze"
+msgstr "Sainroghanna"
 
 #: data/ui/main_window.blp:177
 msgid "About Tempo"
-msgstr "Informazioni su Tempo"
+msgstr "Faoi Luas"
 
 #: data/ui/main_window.blp:182
 msgid "Quit"
-msgstr "Esci"
+msgstr "Scoir"
 
 #: data/ui/preferences_dialog.blp:9
 msgid "Audio"
-msgstr "Audio"
+msgstr "Fuaim"
 
 #: data/ui/preferences_dialog.blp:13
 msgid "Volume"
-msgstr "Volume"
+msgstr "Toirt"
 
 #: data/ui/preferences_dialog.blp:14
 msgid "Adjust click and accent volume levels"
-msgstr "Regola i livelli di volume dei click e degli accenti"
+msgstr "Coigeartaigh leibhéil toirte cliceála agus béime"
 
 #: data/ui/preferences_dialog.blp:17
 msgid "Click Volume"
-msgstr "Volume Click"
+msgstr "Toirt Cliceála"
 
 #: data/ui/preferences_dialog.blp:18
 msgid "Volume for regular metronome clicks"
-msgstr "Volume per i click regolari del metronomo"
+msgstr "Toirt do chliceálacha rialta meadrónaiim"
 
 #: data/ui/preferences_dialog.blp:38
 msgid "Accent Volume"
-msgstr "Volume Accento"
+msgstr "Toirt Béime"
 
 #: data/ui/preferences_dialog.blp:39
 msgid "Volume for downbeat accent clicks"
-msgstr "Volume per i click di accento del downbeat"
+msgstr "Toirt do chliceálacha béime síosbuille"
 
 #: data/ui/preferences_dialog.blp:60
 msgid "Custom Sounds"
-msgstr "Suoni Personalizzati"
+msgstr "Fuaimeanna Saincheaptha"
 
 #: data/ui/preferences_dialog.blp:61
 msgid "Use custom audio files for metronome sounds"
-msgstr "Usa file audio personalizzati per i suoni del metronomo"
+msgstr "Úsáid comhaid fhuaime shaincheaptha d'fhuaimeanna meadrónaiim"
 
 #: data/ui/preferences_dialog.blp:64
 msgid "Use Custom Sounds"
-msgstr "Usa Suoni Personalizzati"
+msgstr "Úsáid Fuaimeanna Saincheaptha"
 
 #: data/ui/preferences_dialog.blp:65
 msgid "Replace default click sounds with custom audio files"
-msgstr "Sostituisce i suoni click predefiniti con file audio personalizzati"
+msgstr "Cuir comhaid fhuaime shaincheaptha in ionad fuaimeanna cliceála réamhshocraithe"
 
 #: data/ui/preferences_dialog.blp:74
 msgid "High Sound (Accent)"
-msgstr "Suono Acuto (Accento)"
+msgstr "Fuaim Ard (Béim)"
 
 #: data/ui/preferences_dialog.blp:75
 msgid "Audio file for downbeat accent clicks"
-msgstr "File audio per i click di accento del downbeat"
+msgstr "Comhad fuaime do chliceálacha béime síosbuille"
 
 #: data/ui/preferences_dialog.blp:79 data/ui/preferences_dialog.blp:91
 msgid "Choose File..."
-msgstr "Scegli File..."
+msgstr "Roghnaigh Comhad..."
 
 #: data/ui/preferences_dialog.blp:86
 msgid "Low Sound (Regular)"
-msgstr "Suono Grave (Regolare)"
+msgstr "Fuaim Íseal (Rialta)"
 
 #: data/ui/preferences_dialog.blp:87
 msgid "Audio file for regular metronome clicks"
-msgstr "File audio per i click regolari del metronomo"
+msgstr "Comhad fuaime do chliceálacha rialta meadrónaiim"
 
 #: data/ui/preferences_dialog.blp:100
 msgid "Behavior"
-msgstr "Comportamento"
+msgstr "Iompar"
 
 #: data/ui/preferences_dialog.blp:105
 msgid "Configure tap tempo sensitivity and behavior"
-msgstr "Configura la sensibilità e il comportamento del tap tempo"
+msgstr "Cumraigh íogaireacht agus iompar cnag luas"
 
 #: data/ui/preferences_dialog.blp:108
 msgid "Tap Sensitivity"
-msgstr "Sensibilità Tap"
+msgstr "Íogaireacht Cnag"
 
 #: data/ui/preferences_dialog.blp:109
 msgid "Milliseconds tolerance for tap tempo detection"
-msgstr "Tolleranza in millisecondi per il rilevamento del tap tempo"
+msgstr "Lamháltas milleasoicindí d'aitheantas cnag luas"
 
 #: data/ui/preferences_dialog.blp:126
 msgid "Window Behavior"
-msgstr "Comportamento Finestra"
+msgstr "Iompar Fuinneoige"
 
 #: data/ui/preferences_dialog.blp:127
 msgid "Configure application window behavior"
-msgstr "Configura il comportamento della finestra dell'applicazione"
+msgstr "Cumraigh iompar fuinneoige feidhmchláir"
 
 #: data/ui/preferences_dialog.blp:130
 msgid "Start Playing on Launch"
-msgstr "Avvia Riproduzione all'Avvio"
+msgstr "Tosaigh ag Seinm ar Lainseáil"
 
 #: data/ui/preferences_dialog.blp:131
 msgid "Automatically start the metronome when the app opens"
-msgstr "Avvia automaticamente il metronomo quando l'app si apre"
+msgstr "Tosaigh an meadrónam go huathoibríoch nuair a osclaíonn an aip"
 
 #: data/ui/preferences_dialog.blp:140
 msgid "Keep Window on Top"
-msgstr "Mantieni Finestra in Primo Piano"
+msgstr "Coinnigh Fuinneog ar Barr"
 
 #: data/ui/preferences_dialog.blp:141
 msgid "Keep the metronome window above other applications"
-msgstr "Mantiene la finestra del metronomo sopra le altre applicazioni"
+msgstr "Coinnigh fuinneog an mheadrónaiim os cionn feidhmchlár eile"
 
 #: data/ui/preferences_dialog.blp:152
 msgid "Visual"
-msgstr "Visuale"
+msgstr "Radharc"
 
 #: data/ui/preferences_dialog.blp:156
 msgid "Theme"
-msgstr "Tema"
+msgstr "Téama"
 
 #: data/ui/preferences_dialog.blp:157
 msgid "Choose the application appearance theme"
-msgstr "Scegli il tema di aspetto dell'applicazione"
+msgstr "Roghnaigh téama cuma an fheidhmchláir"
 
 #: data/ui/preferences_dialog.blp:160
 msgid "Application Theme"
-msgstr "Tema Applicazione"
+msgstr "Téama Feidhmchláir"
 
 #: data/ui/preferences_dialog.blp:161
 msgid "Select light, dark, or system theme"
-msgstr "Seleziona tema chiaro, scuro o di sistema"
+msgstr "Roghnaigh téama éadrom, dorcha, nó córais"
 
 #: data/ui/preferences_dialog.blp:167
 msgid "Follow System"
-msgstr "Segui Sistema"
+msgstr "Lean Córas"
 
 #: data/ui/preferences_dialog.blp:168
 msgid "Light"
-msgstr "Chiaro"
+msgstr "Éadrom"
 
 #: data/ui/preferences_dialog.blp:169
 msgid "Dark"
-msgstr "Scuro"
+msgstr "Dorcha"
 
 #: data/ui/preferences_dialog.blp:179
 msgid "Configure visual beat indicator settings"
-msgstr "Configura le impostazioni dell'indicatore visivo del ritmo"
+msgstr "Cumraigh socruithe táscaire buille radhairc"
 
 #: data/ui/preferences_dialog.blp:182
 msgid "Show Beat Numbers"
-msgstr "Mostra Numeri Battute"
+msgstr "Taispeáin Uimhreacha Buille"
 
 #: data/ui/preferences_dialog.blp:183
 msgid "Display the current beat number during playback"
-msgstr "Visualizza il numero della battuta corrente durante la riproduzione"
+msgstr "Taispeáin uimhir na buille reatha le linn seinnte"
 
 #: data/ui/preferences_dialog.blp:192
 msgid "Flash on Beat"
-msgstr "Lampeggio su Battuta"
+msgstr "Splanc ar Bhuille"
 
 #: data/ui/preferences_dialog.blp:193
 msgid "Flash the beat indicator circle on each beat"
-msgstr "Fa lampeggiare il cerchio dell'indicatore del ritmo ad ogni battuta"
+msgstr "Splanc ciorcal táscaire na buille ar gach buille"
 
 #: data/ui/preferences_dialog.blp:202
 msgid "Highlight Downbeats"
-msgstr "Evidenzia Downbeat"
+msgstr "Aibhsigh Síosbuillí"
 
 #: data/ui/preferences_dialog.blp:203
 msgid "Use different color for downbeat (first beat of bar)"
-msgstr "Usa un colore diverso per il downbeat (prima battuta della barra)"
+msgstr "Úsáid dath difriúil don síosbuille (céad bhuille na barra)"
 
 #: data/io.github.tobagin.tempo.desktop.in:2
 #: data/io.github.tobagin.tempo.appdata.xml.in:6
@@ -338,7 +339,7 @@ msgstr "@PROJECT_NAME@"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:7
 msgid "A modern metronome for musicians"
-msgstr "Un metronomo moderno per musicisti"
+msgstr "Meadrónam nua-aimseartha do cheoltóirí"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:10
 msgid ""
@@ -347,10 +348,10 @@ msgid ""
 "it provides precise timing, comprehensive keyboard shortcuts, and a "
 "beautiful animated beat indicator."
 msgstr ""
-"Tempo è un'applicazione metronomo moderna e ricca di funzionalità progettata "
-"per musicisti di tutti i livelli. Costruita con GTK4 e Libadwaita usando "
-"template UI Blueprint, fornisce temporizzazione precisa, scorciatoie da "
-"tastiera complete e un bellissimo indicatore del ritmo animato."
+"Is feidhmchlár meadrónaiim nua-aimseartha saibhir gné é Luas a dearadh do "
+"cheoltóirí de gach leibhéal. Tógtha le GTK4 agus Libadwaita ag úsáid "
+"teimpléid UI Blueprint, soláthraíonn sé uainiú beacht, aicearraí "
+"cuimsitheacha méarchláir, agus táscaire buille bríomhar álainn."
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:15
 msgid ""
@@ -360,299 +361,299 @@ msgid ""
 "dialog, tap tempo functionality, and full keyboard control. The high-"
 "precision timing engine ensures professional accuracy."
 msgstr ""
-"Le caratteristiche principali includono integrazione audio GStreamer con "
-"suoni distinti di battuta/downbeat, tempo personalizzabile (40-240 BPM), "
-"indicazioni del tempo multiple, indicatori visivi animati basati su Cairo "
-"con effetti di pulsazione, finestra di preferenze complete, funzionalità tap "
-"tempo e controllo completo da tastiera. Il motore di temporizzazione ad alta "
-"precisione garantisce accuratezza professionale."
+"Áirítear ar na príomhghnéithe comhtháthú fuaime GStreamer le fuaimeanna "
+"ar leith buille/síosbuille, luas inchoigeartaithe (40-240 BPM), sínithe "
+"ama iolracha, táscairí radhairc bríomhara bunaithe ar Cairo le héifeachtaí "
+"cuisle, dialóg sainroghanna cuimsitheach, feidhmiúlacht cnag luas, agus "
+"rialú iomlán méarchláir. Cinntíonn an t-inneall uainithe ardbeachtas "
+"cruinneas gairmiúil."
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:28
 msgid "Main window showing tempo controls and beat indicator"
-msgstr "Finestra principale che mostra i controlli del tempo e l'indicatore del ritmo"
+msgstr "Príomhfhuinneog ag taispeáint rialacha luas agus táscaire buille"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:32
 msgid "General preferences with audio and behavior settings"
-msgstr "Preferenze generali con impostazioni audio e comportamento"
+msgstr "Sainroghanna ginearálta le socruithe fuaime agus iompair"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:36
 msgid "Visual preferences with theme selection and beat indicator options"
-msgstr "Preferenze visive con selezione del tema e opzioni dell'indicatore del ritmo"
+msgstr "Sainroghanna radhairc le roghnú téama agus roghanna táscaire buille"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:40
 msgid "About dialog showing application information"
-msgstr "Finestra Informazioni che mostra le informazioni dell'applicazione"
+msgstr "Dialóg faoi ag taispeáint eolas feidhmchláir"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:56
 msgid "metronome"
-msgstr "metronomo"
+msgstr "meadrónam"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:57
 msgid "music"
-msgstr "musica"
+msgstr "ceol"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:58
 msgid "tempo"
-msgstr "tempo"
+msgstr "luas"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:59
 msgid "timing"
-msgstr "temporizzazione"
+msgstr "uainiú"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:60
 msgid "practice"
-msgstr "pratica"
+msgstr "cleachtadh"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:61
 msgid "rhythm"
-msgstr "ritmo"
+msgstr "rithim"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:62
 msgid "beat"
-msgstr "battuta"
+msgstr "buille"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:88
 msgid "Feature consolidation and stability improvements"
-msgstr "Consolidamento funzionalità e miglioramenti di stabilità"
+msgstr "Comhdhlúthú gnéithe agus feabhsúcháin cobhsaíochta"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:90
 msgid "Merged comprehensive improvements from feature branches"
-msgstr "Fusione miglioramenti comprensivi dai rami funzionalità"
+msgstr "Cumascadh feabhsúcháin chuimsitheacha ó bhrainse gnéithe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:91
 msgid "Consolidated Blueprint UI template enhancements"
-msgstr "Consolidamento miglioramenti template UI Blueprint"
+msgstr "Feabhsúcháin teimpléid UI Blueprint comhdhlúite"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:92
 msgid "Integrated custom sound support capabilities"
-msgstr "Integrazione capacità supporto suoni personalizzati"
+msgstr "Cumais tacaíochta fuaime shaincheaptha comhtháite"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:93
 msgid "Improved code organization and maintainability"
-msgstr "Migliorata organizzazione del codice e manutenibilità"
+msgstr "Eagraíocht cóid agus inchothabháil feabhsaithe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:94
 msgid "Enhanced build system stability"
-msgstr "Migliorata stabilità del sistema di build"
+msgstr "Cobhsaíocht córas tógála feabhsaithe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:100
 msgid "Major update: Complete Vala metronome with comprehensive improvements"
-msgstr "Aggiornamento maggiore: Metronomo Vala completo con miglioramenti comprensivi"
+msgstr "Nuashonrú mór: Meadrónam Vala iomlán le feabhsúcháin chuimsitheacha"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:102
 msgid ""
 "Complete Python to Vala conversion for better performance and integration"
 msgstr ""
-"Conversione completa da Python a Vala per migliori prestazioni e integrazione"
+"Tiontú iomlán Python go Vala d'fheidhmíocht agus comhtháthú níos fearr"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:103
 msgid "GStreamer audio integration with distinct beat and downbeat sounds"
-msgstr "Integrazione audio GStreamer con suoni distinti di battuta e downbeat"
+msgstr "Comhtháthú fuaime GStreamer le fuaimeanna ar leith buille agus síosbuille"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:104
 msgid "Blueprint UI templates with modern GTK4/Libadwaita design"
-msgstr "Template UI Blueprint con design moderno GTK4/Libadwaita"
+msgstr "Teimpléid UI Blueprint le dearadh nua-aimseartha GTK4/Libadwaita"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:105
 msgid "Animated beat indicator with Cairo-based pulse effects and perfect sync"
-msgstr "Indicatore del ritmo animato con effetti di pulsazione basati su Cairo e sincronizzazione perfetta"
+msgstr "Táscaire buille bríomhar le héifeachtaí cuisle bunaithe ar Cairo agus sioncronú foirfe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:106
 msgid "Comprehensive keyboard shortcuts for full application control"
-msgstr "Scorciatoie da tastiera complete per il controllo completo dell'applicazione"
+msgstr "Aicearraí cuimsitheacha méarchláir do rialú iomlán feidhmchláir"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:107
 msgid "Enhanced preferences dialog with Audio, Behavior, and Visual settings"
-msgstr "Finestra preferenze migliorata con impostazioni Audio, Comportamento e Visive"
+msgstr "Dialóg sainroghanna feabhsaithe le socruithe Fuaime, Iompair, agus Radhairc"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:108
 msgid "Multi-language support with Italian and Turkish translations"
-msgstr "Supporto multi-linguaggio con traduzioni italiana e turca"
+msgstr "Tacaíocht ilteanga le haistriúcháin Iodálise agus Tuircise"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:109
 msgid "Improved timing engine with microsecond precision"
-msgstr "Motore di temporizzazione migliorato con precisione al microsecondo"
+msgstr "Inneall uainithe feabhsaithe le beachtas micreashoisc"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:110
 msgid "Larger beat indicator with dramatic glow effects"
-msgstr "Indicatore del ritmo più grande con effetti di bagliore drammatici"
+msgstr "Táscaire buille níos mó le héifeachtaí glow dramaúla"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:111
 msgid "Fixed beat sequence to proper 1-2-3-4 display"
-msgstr "Corretta sequenza delle battute per visualizzazione corretta 1-2-3-4"
+msgstr "Seicheamh buille ceartaithe go taispeáint cheart 1-2-3-4"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:112
 msgid "Proper translator credits in about dialog"
-msgstr "Crediti traduttori corretti nella finestra informazioni"
+msgstr "Creidiúintí aistritheora cearta i ndialóg faoi"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:118
 msgid "Enable proper file picker portal integration"
-msgstr "Abilita integrazione corretta del portale selettore file"
+msgstr "Cumasaigh comhtháthú cuí portaile piocaire comhaid"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:120
 msgid "Updated file chooser to use modern Gtk.FileDialog API"
-msgstr "Aggiornato selettore file per usare API Gtk.FileDialog moderna"
+msgstr "Roghnóir comhaid nuashonraithe chun API nua-aimseartha Gtk.FileDialog a úsáid"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:121
 msgid "File picker now properly uses desktop environment portals"
-msgstr "Il selettore file ora usa correttamente i portali dell'ambiente desktop"
+msgstr "Úsáideann piocaire comhaid anois portaile timpeallachta deisce i gceart"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:122
 msgid "Improved security through sandboxed file access"
-msgstr "Sicurezza migliorata attraverso accesso file in sandbox"
+msgstr "Slándáil feabhsaithe trí rochtain comhaid gaineamhbhosca"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:123
 msgid "Removed redundant portal permissions from Flatpak manifest"
-msgstr "Rimossi permessi portale ridondanti dal manifesto Flatpak"
+msgstr "Ceadanna portaile iomarcacha bainte ó fhorbairt Flatpak"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:129
 msgid "Clean up version references and fix author information"
-msgstr "Pulizia riferimenti versione e correzione informazioni autore"
+msgstr "Glan suas tagairtí leagan agus ceartaigh eolas údar"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:131
 msgid "Updated all version references to use current version consistently"
-msgstr "Aggiornati tutti i riferimenti versione per usare la versione corrente consistentemente"
+msgstr "Nuashonraigh gach tagairt leagan chun leagan reatha a úsáid go comhsheasmhach"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:132
 msgid "Fixed author information to use correct name throughout codebase"
-msgstr "Corrette informazioni autore per usare il nome corretto in tutto il codice"
+msgstr "Eolas údar ceartaithe chun ainm ceart a úsáid ar fud na códbhunach"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:133
 msgid "Ensured only metainfo retains version history as intended"
-msgstr "Assicurato che solo metainfo mantenga la cronologia versione come previsto"
+msgstr "Cinntithe nach gcoimeádann ach meiteafaisnéis stair leagan mar a beartaíodh"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:139
 msgid "Add file picker portal support"
-msgstr "Aggiunto supporto portale selettore file"
+msgstr "Cuir tacaíocht portaile piocaire comhaid leis"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:141
 msgid "Added proper file picker portal permissions to Flatpak manifest"
-msgstr "Aggiunti permessi portale selettore file corretti al manifesto Flatpak"
+msgstr "Ceadanna cuí portaile piocaire comhaid curtha le forbairt Flatpak"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:142
 msgid "Improved security by using sandboxed file access"
-msgstr "Sicurezza migliorata usando accesso file in sandbox"
+msgstr "Slándáil feabhsaithe trí rochtain comhaid gaineamhbhosca a úsáid"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:143
 msgid "Enhanced compatibility with desktop file managers"
-msgstr "Compatibilità migliorata con i gestori file desktop"
+msgstr "Comhoiriúnacht fheabhsaithe le bainisteoirí comhaid deisce"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:149
 msgid "Fix desktop file executable reference"
-msgstr "Corretto riferimento eseguibile file desktop"
+msgstr "Ceartaigh tagairt infheidhmithe comhaid deisce"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:151
 msgid ""
 "Fixed desktop file to use correct executable name 'tempo' instead of "
 "application ID"
 msgstr ""
-"Corretto file desktop per usare il nome eseguibile corretto 'tempo' invece "
-"dell'ID applicazione"
+"Comhad deisce ceartaithe chun ainm infheidhmithe ceart 'luas' a úsáid in "
+"ionad ID feidhmchláir"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:152
 msgid "Resolved application launch issues from desktop environment"
-msgstr "Risolti problemi di avvio applicazione dall'ambiente desktop"
+msgstr "Saincheisteanna lainseála feidhmchláir réitithe ó thimpeallacht deisce"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:153
 msgid "Improved desktop integration and launcher compatibility"
-msgstr "Migliorata integrazione desktop e compatibilità launcher"
+msgstr "Comhtháthú deisce agus comhoiriúnacht lainseálaí feabhsaithe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:159
 msgid "Improved metadata quality for better Flathub presentation"
-msgstr "Migliorata qualità metadati per migliore presentazione Flathub"
+msgstr "Cáilíocht meiteashonraí feabhsaithe d'láithriú Flathub níos fearr"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:161
 msgid "Streamlined description to be more concise and user-focused"
-msgstr "Descrizione semplificata per essere più concisa e focalizzata sull'utente"
+msgstr "Cur síos sruthlínithe chun a bheith níos achomair agus dírithe ar úsáideoir"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:162
 msgid "Enhanced readability following Flathub quality guidelines"
-msgstr "Leggibilità migliorata seguendo le linee guida qualità Flathub"
+msgstr "Inléiteacht fheabhsaithe ag leanúint treoirlínte cáilíochta Flathub"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:163
 msgid "Removed redundant technical details for better clarity"
-msgstr "Rimossi dettagli tecnici ridondanti per maggiore chiarezza"
+msgstr "Sonraí teicniúla iomarcacha bainte le haghaidh soiléireachta níos fearr"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:169
 msgid "Fix AppStream control redefinition warning"
-msgstr "Corretto avviso ridefinizione controllo AppStream"
+msgstr "Ceartaigh rabhadh athshainiú rialála AppStream"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:171
 msgid "Removed duplicate keyboard control from recommends section"
-msgstr "Rimosso controllo tastiera duplicato dalla sezione raccomandazioni"
+msgstr "Rialú méarchláir dúblach bainte ó rannán moltaí"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:172
 msgid "Fixed AppStream validation warning about redefined relation items"
-msgstr "Corretto avviso validazione AppStream su elementi relazione ridefiniti"
+msgstr "Rabhadh bailíochtana AppStream ceartaithe faoi mhíreanna gaolmhara athshainithe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:178
 msgid "AppStream metadata validation fixes"
-msgstr "Correzioni validazione metadati AppStream"
+msgstr "Ceartúcháin bailíochtana meiteashonraí AppStream"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:180
 msgid "Fixed AppStream validation errors for Flathub submission"
-msgstr "Corretti errori validazione AppStream per invio Flathub"
+msgstr "Earráidí bailíochtana AppStream ceartaithe d'aighneacht Flathub"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:181
 msgid "Updated developer information and contact details"
-msgstr "Aggiornate informazioni sviluppatore e dettagli contatto"
+msgstr "Eolas forbróra agus sonraí teagmhála nuashonraithe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:182
 msgid "Removed inapplicable metadata fields"
-msgstr "Rimossi campi metadati non applicabili"
+msgstr "Réimsí meiteashonraí neamhinfheidhme bainte"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:183
 msgid "Added proper branding colors"
-msgstr "Aggiunti colori branding corretti"
+msgstr "Dathanna brandála cuí curtha leis"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:189
 msgid "Screenshots and metadata update"
-msgstr "Aggiornamento screenshot e metadati"
+msgstr "Nuashonrú gabhálacha scáileáin agus meiteashonraí"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:191
 msgid "Added application screenshots for better visibility"
-msgstr "Aggiunti screenshot applicazione per migliore visibilità"
+msgstr "Gabhálacha scáileáin feidhmchláir curtha leis le haghaidh infheictheachta níos fearr"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:192
 msgid "Updated metadata with comprehensive visual previews"
-msgstr "Aggiornati metadati con anteprime visive complete"
+msgstr "Meiteashonraí nuashonraithe le réamhbhreathnuithe radhairc chuimsitheacha"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:193
 msgid "Enhanced AppStream information for software centers"
-msgstr "Migliorate informazioni AppStream per centri software"
+msgstr "Eolas AppStream feabhsaithe d'ionaid bogearraí"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:199
 msgid "Initial release of Tempo metronome"
-msgstr "Rilascio iniziale del metronomo Tempo"
+msgstr "Scaoileadh tosaigh meadrónaim Luas"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:201
 msgid "Precise timing engine with drift compensation"
-msgstr "Motore di temporizzazione preciso con compensazione deriva"
+msgstr "Inneall uainithe beacht le cúiteamh sreafa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:202
 msgid "GTK4 and Libadwaita modern UI"
-msgstr "UI moderna GTK4 e Libadwaita"
+msgstr "UI nua-aimseartha GTK4 agus Libadwaita"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:203
 msgid "Customizable tempo and time signatures"
-msgstr "Tempo e indicazioni del tempo personalizzabili"
+msgstr "Luas agus sínithe ama inchoigeartaithe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:204
 msgid "Visual beat indicator with downbeat accents"
-msgstr "Indicatore visivo del ritmo con accenti downbeat"
+msgstr "Táscaire buille radhairc le béimeanna síosbuille"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:205
 msgid "Low-latency GStreamer audio"
-msgstr "Audio GStreamer a bassa latenza"
+msgstr "Fuaim GStreamer íseal-fhoillithe"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:206
 msgid "Tap tempo functionality"
-msgstr "Funzionalità tap tempo"
+msgstr "Feidhmiúlacht cnag luas"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:207
 msgid "Keyboard shortcuts"
-msgstr "Scorciatoie da tastiera"
+msgstr "Aicearraí méarchláir"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:208
 msgid "Settings persistence"
-msgstr "Persistenza impostazioni"
+msgstr "Buanseasmhacht socruithe"

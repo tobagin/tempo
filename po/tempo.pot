@@ -6,41 +6,625 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: tempo 1.1.1\n"
+"Project-Id-Version: tempo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-01 12:00+0000\n"
+"POT-Creation-Date: 2025-08-17 12:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/main_window.py:100
+#: src/main.vala:67 data/ui/main_window.blp:13
 msgid "Tempo"
 msgstr ""
 
-#: src/main_window.py:150
-msgid "BPM"
+#: src/main.vala:69 src/main.vala:78
+#: data/io.github.tobagin.tempo.appdata.xml.in:82
+msgid "Thiago Fernandes"
 msgstr ""
 
-#: src/main_window.py:200
+#: src/main.vala:73
+msgid "Copyright © 2025 Thiago Fernandes"
+msgstr ""
+
+#: src/main.vala:76
+msgid "A precise and professional metronome application"
+msgstr ""
+
+#. Translator credits
+#: src/main.vala:82
+msgid ""
+"Italian: Albano Battistella (github.com/albanobattistella)\n"
+"Turkish: Erdem Uygun (github.com/erdemuygun)"
+msgstr ""
+
+#: src/main_window.vala:179 data/ui/main_window.blp:148
 msgid "Start"
 msgstr ""
 
-#: src/main_window.py:201
+#: src/main_window.vala:184
 msgid "Stop"
 msgstr ""
 
-#: src/main_window.py:250
-msgid "Tap Tempo"
+#: src/main_window.vala:352
+msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: src/main_window.py:300
+#: src/main_window.vala:353
+msgid "Quick reference for keyboard shortcuts"
+msgstr ""
+
+#: src/main_window.vala:355
+msgid ""
+"<b>Playback Control:</b>\n"
+"• <b>Spacebar</b> - Start/Stop metronome\n"
+"• <b>Escape</b> - Stop metronome\n"
+"• <b>T</b> - Tap tempo\n"
+"\n"
+"<b>Tempo Adjustment:</b>\n"
+"• <b>↑/↓ Arrow</b> - Adjust tempo (±1 BPM)\n"
+"• <b>←/→ Arrow</b> - Adjust tempo (±1 BPM)\n"
+"• <b>Shift + Arrows</b> - Adjust tempo (±10 BPM)\n"
+"• <b>+/-</b> - Adjust tempo (±5 BPM)\n"
+"• <b>Shift + +/-</b> - Adjust tempo (±10 BPM)\n"
+"\n"
+"<b>Time Signature:</b>\n"
+"• <b>Ctrl + 1-9</b> - Set beats per bar\n"
+"• <b>Ctrl + R</b> - Reset beat counter\n"
+"\n"
+"<b>Help:</b>\n"
+"• <b>F1</b> - Show this help"
+msgstr ""
+
+#: src/main_window.vala:376
+msgid "OK"
+msgstr ""
+
+#: src/metronome_engine.vala:109
+#, c-format
+msgid "BPM must be between 40 and 240, got %d"
+msgstr ""
+
+#: src/metronome_engine.vala:127
+#, c-format
+msgid "Time signature numerator must be 1-16, got %d"
+msgstr ""
+
+#: src/metronome_engine.vala:133
+#, c-format
+msgid "Time signature denominator must be 2, 4, 8, or 16, got %d"
+msgstr ""
+
+#. TODO: Implement file chooser
+#: src/preferences_dialog.vala:118 src/preferences_dialog.vala:123
+msgid "Sound file chooser not yet implemented"
+msgstr ""
+
+#. TODO: Implement modern file chooser API
+#: src/preferences_dialog.vala:171
+msgid "File chooser needs modern GTK4 implementation"
+msgstr ""
+
+#: data/ui/main_window.blp:14
+msgid "Metronome"
+msgstr ""
+
+#: data/ui/main_window.blp:21
+msgid "Main Menu"
+msgstr ""
+
+#: data/ui/main_window.blp:50 data/io.github.tobagin.tempo.appdata.xml.in:63
+msgid "BPM"
+msgstr ""
+
+#: data/ui/main_window.blp:85
 msgid "Time Signature"
 msgstr ""
 
-#: src/main_window.py:350
+#: data/ui/main_window.blp:134 data/ui/preferences_dialog.blp:178
 msgid "Beat Indicator"
+msgstr ""
+
+#: data/ui/main_window.blp:156 data/ui/preferences_dialog.blp:104
+msgid "Tap Tempo"
+msgstr ""
+
+#: data/ui/main_window.blp:160
+msgid "Tap repeatedly to set tempo"
+msgstr ""
+
+#: data/ui/main_window.blp:170 data/ui/preferences_dialog.blp:5
+msgid "Preferences"
+msgstr ""
+
+#: data/ui/main_window.blp:177
+msgid "About Tempo"
+msgstr ""
+
+#: data/ui/main_window.blp:182
+msgid "Quit"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:9
+msgid "Audio"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:13
+msgid "Volume"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:14
+msgid "Adjust click and accent volume levels"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:17
+msgid "Click Volume"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:18
+msgid "Volume for regular metronome clicks"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:38
+msgid "Accent Volume"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:39
+msgid "Volume for downbeat accent clicks"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:60
+msgid "Custom Sounds"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:61
+msgid "Use custom audio files for metronome sounds"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:64
+msgid "Use Custom Sounds"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:65
+msgid "Replace default click sounds with custom audio files"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:74
+msgid "High Sound (Accent)"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:75
+msgid "Audio file for downbeat accent clicks"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:79 data/ui/preferences_dialog.blp:91
+msgid "Choose File..."
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:86
+msgid "Low Sound (Regular)"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:87
+msgid "Audio file for regular metronome clicks"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:100
+msgid "Behavior"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:105
+msgid "Configure tap tempo sensitivity and behavior"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:108
+msgid "Tap Sensitivity"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:109
+msgid "Milliseconds tolerance for tap tempo detection"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:126
+msgid "Window Behavior"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:127
+msgid "Configure application window behavior"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:130
+msgid "Start Playing on Launch"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:131
+msgid "Automatically start the metronome when the app opens"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:140
+msgid "Keep Window on Top"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:141
+msgid "Keep the metronome window above other applications"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:152
+msgid "Visual"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:156
+msgid "Theme"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:157
+msgid "Choose the application appearance theme"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:160
+msgid "Application Theme"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:161
+msgid "Select light, dark, or system theme"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:167
+msgid "Follow System"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:168
+msgid "Light"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:169
+msgid "Dark"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:179
+msgid "Configure visual beat indicator settings"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:182
+msgid "Show Beat Numbers"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:183
+msgid "Display the current beat number during playback"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:192
+msgid "Flash on Beat"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:193
+msgid "Flash the beat indicator circle on each beat"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:202
+msgid "Highlight Downbeats"
+msgstr ""
+
+#: data/ui/preferences_dialog.blp:203
+msgid "Use different color for downbeat (first beat of bar)"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.desktop.in:2
+#: data/io.github.tobagin.tempo.appdata.xml.in:6
+msgid "@PROJECT_NAME@"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:7
+msgid "A modern metronome for musicians"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:10
+msgid ""
+"Tempo is a modern, feature-rich metronome application designed for musicians "
+"of all levels. Built with GTK4 and Libadwaita using Blueprint UI templates, "
+"it provides precise timing, comprehensive keyboard shortcuts, and a "
+"beautiful animated beat indicator."
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:15
+msgid ""
+"Key features include GStreamer audio integration with distinct beat/downbeat "
+"sounds, customizable tempo (40-240 BPM), multiple time signatures, animated "
+"Cairo-based visual indicators with pulse effects, comprehensive preferences "
+"dialog, tap tempo functionality, and full keyboard control. The high-"
+"precision timing engine ensures professional accuracy."
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:28
+msgid "Main window showing tempo controls and beat indicator"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:32
+msgid "General preferences with audio and behavior settings"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:36
+msgid "Visual preferences with theme selection and beat indicator options"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:40
+msgid "About dialog showing application information"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:56
+msgid "metronome"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:57
+msgid "music"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:58
+msgid "tempo"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:59
+msgid "timing"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:60
+msgid "practice"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:61
+msgid "rhythm"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:62
+msgid "beat"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:87
+msgid "Complete translation support with 7 new languages"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:101
+msgid "Feature consolidation and stability improvements"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:103
+msgid "Merged comprehensive improvements from feature branches"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:104
+msgid "Consolidated Blueprint UI template enhancements"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:105
+msgid "Integrated custom sound support capabilities"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:106
+msgid "Improved code organization and maintainability"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:107
+msgid "Enhanced build system stability"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:113
+msgid "Major update: Complete Vala metronome with comprehensive improvements"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:115
+msgid ""
+"Complete Python to Vala conversion for better performance and integration"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:116
+msgid "GStreamer audio integration with distinct beat and downbeat sounds"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:117
+msgid "Blueprint UI templates with modern GTK4/Libadwaita design"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:118
+msgid "Animated beat indicator with Cairo-based pulse effects and perfect sync"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:119
+msgid "Comprehensive keyboard shortcuts for full application control"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:120
+msgid "Enhanced preferences dialog with Audio, Behavior, and Visual settings"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:121
+msgid "Multi-language support with Italian and Turkish translations"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:122
+msgid "Improved timing engine with microsecond precision"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:123
+msgid "Larger beat indicator with dramatic glow effects"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:124
+msgid "Fixed beat sequence to proper 1-2-3-4 display"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:125
+msgid "Proper translator credits in about dialog"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:131
+msgid "Enable proper file picker portal integration"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:133
+msgid "Updated file chooser to use modern Gtk.FileDialog API"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:134
+msgid "File picker now properly uses desktop environment portals"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:135
+msgid "Improved security through sandboxed file access"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:136
+msgid "Removed redundant portal permissions from Flatpak manifest"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:142
+msgid "Clean up version references and fix author information"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:144
+msgid "Updated all version references to use current version consistently"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:145
+msgid "Fixed author information to use correct name throughout codebase"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:146
+msgid "Ensured only metainfo retains version history as intended"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:152
+msgid "Add file picker portal support"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:154
+msgid "Added proper file picker portal permissions to Flatpak manifest"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:155
+msgid "Improved security by using sandboxed file access"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:156
+msgid "Enhanced compatibility with desktop file managers"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:162
+msgid "Fix desktop file executable reference"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:164
+msgid ""
+"Fixed desktop file to use correct executable name 'tempo' instead of "
+"application ID"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:165
+msgid "Resolved application launch issues from desktop environment"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:166
+msgid "Improved desktop integration and launcher compatibility"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:172
+msgid "Improved metadata quality for better Flathub presentation"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:174
+msgid "Streamlined description to be more concise and user-focused"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:175
+msgid "Enhanced readability following Flathub quality guidelines"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:176
+msgid "Removed redundant technical details for better clarity"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:182
+msgid "Fix AppStream control redefinition warning"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:184
+msgid "Removed duplicate keyboard control from recommends section"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:185
+msgid "Fixed AppStream validation warning about redefined relation items"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:191
+msgid "AppStream metadata validation fixes"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:193
+msgid "Fixed AppStream validation errors for Flathub submission"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:194
+msgid "Updated developer information and contact details"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:195
+msgid "Removed inapplicable metadata fields"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:196
+msgid "Added proper branding colors"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:202
+msgid "Screenshots and metadata update"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:204
+msgid "Added application screenshots for better visibility"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:205
+msgid "Updated metadata with comprehensive visual previews"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:206
+msgid "Enhanced AppStream information for software centers"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:212
+msgid "Initial release of Tempo metronome"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:214
+msgid "Precise timing engine with drift compensation"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:215
+msgid "GTK4 and Libadwaita modern UI"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:216
+msgid "Customizable tempo and time signatures"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:217
+msgid "Visual beat indicator with downbeat accents"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:218
+msgid "Low-latency GStreamer audio"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:219
+msgid "Tap tempo functionality"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:220
+msgid "Keyboard shortcuts"
+msgstr ""
+
+#: data/io.github.tobagin.tempo.appdata.xml.in:221
+msgid "Settings persistence"
 msgstr ""

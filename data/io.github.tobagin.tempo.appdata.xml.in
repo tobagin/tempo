@@ -4,15 +4,15 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <name>@PROJECT_NAME@</name>
-  <summary>A modern metronome for musicians</summary>
+  <summary translatable="yes">A modern metronome for musicians</summary>
   
   <description>
-    <p>
+    <p translatable="yes">
       Tempo is a modern, feature-rich metronome application designed for musicians of all levels. 
       Built with GTK4 and Libadwaita using Blueprint UI templates, it provides precise timing, 
       comprehensive keyboard shortcuts, and a beautiful animated beat indicator.
     </p>
-    <p>
+    <p translatable="yes">
       Key features include GStreamer audio integration with distinct beat/downbeat sounds, 
       customizable tempo (40-240 BPM), multiple time signatures, animated Cairo-based visual 
       indicators with pulse effects, comprehensive preferences dialog, tap tempo functionality, 
@@ -25,19 +25,19 @@
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/main-window.png</image>
-      <caption>Main window showing tempo controls and beat indicator</caption>
+      <caption translatable="yes">Main window showing tempo controls and beat indicator</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preference-general.png</image>
-      <caption>General preferences with audio and behavior settings</caption>
+      <caption translatable="yes">General preferences with audio and behavior settings</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preferences-visual.png</image>
-      <caption>Visual preferences with theme selection and beat indicator options</caption>
+      <caption translatable="yes">Visual preferences with theme selection and beat indicator options</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/about-dialog.png</image>
-      <caption>About dialog showing application information</caption>
+      <caption translatable="yes">About dialog showing application information</caption>
     </screenshot>
   </screenshots>
   
@@ -83,6 +83,19 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.1.3" date="2025-08-17">
+      <description translatable="yes">Complete translation support with 7 new languages</description>
+      <ul>
+        <li translatable="yes">Added comprehensive translations for Portuguese (Brazil and Portugal)</li>
+        <li translatable="yes">Added Spanish translation with proper musical terminology</li>
+        <li translatable="yes">Added Irish (Gaelic) translation</li>
+        <li translatable="yes">Added Māori translation</li>
+        <li translatable="yes">Completed Italian translation coverage</li>
+        <li translatable="yes">Enhanced Turkish translation completeness</li>
+        <li translatable="yes">Updated translation infrastructure and build system</li>
+        <li translatable="yes">All UI elements, preferences, and help text now fully translatable</li>
+      </ul>
+    </release>
     <release version="1.1.2" date="2025-08-17">
       <description>
         <p>Feature consolidation and stability improvements</p>

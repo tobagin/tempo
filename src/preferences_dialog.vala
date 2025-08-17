@@ -115,12 +115,12 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         
         high_sound_button.clicked.connect(() => {
             // TODO: Implement file chooser
-            warning("Sound file chooser not yet implemented");
+            warning(_("Sound file chooser not yet implemented"));
         });
         
         low_sound_button.clicked.connect(() => {
             // TODO: Implement file chooser
-            warning("Sound file chooser not yet implemented");
+            warning(_("Sound file chooser not yet implemented"));
         });
         
         // Behavior settings
@@ -168,7 +168,7 @@ public class PreferencesDialog : Adw.PreferencesDialog {
      */
     private void choose_sound_file(bool is_high_sound) {
         // TODO: Implement modern file chooser API
-        warning("File chooser needs modern GTK4 implementation");
+        warning(_("File chooser needs modern GTK4 implementation"));
         /*
         var file_chooser = new FileChooserDialog(
             is_high_sound ? _("Choose High Sound") : _("Choose Low Sound"),

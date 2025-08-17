@@ -1,7 +1,7 @@
-# Italian translations for tempo package.
-# Copyright (C) 2025 tempo contributors
+# Māori translations for tempo package.
+# Copyright (C) 2025 Thiago Fernandes
 # This file is distributed under the same license as the tempo package.
-# Albano Battistella <albanobattistella@gmail.com>, 2025.
+# Thiago Fernandes <tobagin@github.com>, 2025.
 #
 msgid ""
 msgstr ""
@@ -9,16 +9,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-17 11:20+0100\n"
 "PO-Revision-Date: 2025-08-17 11:30+0100\n"
-"Last-Translator: Albano Battistella <albanobattistella@gmail.com>\n"
-"Language-Team: Italian\n"
-"Language: it\n"
+"Last-Translator: Claude AI <noreply@anthropic.com>\n"
+"Language-Team: Māori\n"
+"Language: mi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/main.vala:67 data/ui/main_window.blp:13
 msgid "Tempo"
-msgstr "Tempo"
+msgstr "Taima"
 
 #: src/main.vala:69 src/main.vala:78
 #: data/io.github.tobagin.tempo.appdata.xml.in:82
@@ -27,11 +27,11 @@ msgstr "Thiago Fernandes"
 
 #: src/main.vala:73
 msgid "Copyright © 2025 Thiago Fernandes"
-msgstr "Copyright © 2025 Thiago Fernandes"
+msgstr "Manatārua © 2025 Thiago Fernandes"
 
 #: src/main.vala:76
 msgid "A precise and professional metronome application"
-msgstr "Un'applicazione metronomo precisa e professionale"
+msgstr "He taupānga īriti ngaio me te tika"
 
 #. Translator credits
 #: src/main.vala:82
@@ -39,24 +39,25 @@ msgid ""
 "Italian: Albano Battistella (github.com/albanobattistella)\n"
 "Turkish: Erdem Uygun (github.com/erdemuygun)"
 msgstr ""
-"Italiano: Albano Battistella (github.com/albanobattistella)\n"
-"Turco: Erdem Uygun (github.com/erdemuygun)"
+"Ītariana: Albano Battistella (github.com/albanobattistella)\n"
+"Tākī: Erdem Uygun (github.com/erdemuygun)\n"
+"Te Reo Māori: Claude AI"
 
 #: src/main_window.vala:179 data/ui/main_window.blp:148
 msgid "Start"
-msgstr "Avvia"
+msgstr "Tīmata"
 
 #: src/main_window.vala:184
 msgid "Stop"
-msgstr "Ferma"
+msgstr "Mutu"
 
 #: src/main_window.vala:352
 msgid "Keyboard Shortcuts"
-msgstr "Scorciatoie da Tastiera"
+msgstr "Ara Poto Papāpātuhi"
 
 #: src/main_window.vala:353
 msgid "Quick reference for keyboard shortcuts"
-msgstr "Riferimento rapido per le scorciatoie da tastiera"
+msgstr "Tohutoro tere mō ngā ara poto papāpātuhi"
 
 #: src/main_window.vala:355
 msgid ""
@@ -79,61 +80,61 @@ msgid ""
 "<b>Help:</b>\n"
 "• <b>F1</b> - Show this help"
 msgstr ""
-"<b>Controllo Riproduzione:</b>\n"
-"• <b>Barra Spaziatrice</b> - Avvia/Ferma metronomo\n"
-"• <b>Escape</b> - Ferma metronomo\n"
-"• <b>T</b> - Tap tempo\n"
+"<b>Whakahaere Whakatangi:</b>\n"
+"• <b>Pae Mokowā</b> - Tīmata/Mutu īriti\n"
+"• <b>Escape</b> - Mutu īriti\n"
+"• <b>T</b> - Patu taima\n"
 "\n"
-"<b>Regolazione Tempo:</b>\n"
-"• <b>Freccia ↑/↓</b> - Regola tempo (±1 BPM)\n"
-"• <b>Freccia ←/→</b> - Regola tempo (±1 BPM)\n"
-"• <b>Shift + Frecce</b> - Regola tempo (±10 BPM)\n"
-"• <b>+/-</b> - Regola tempo (±5 BPM)\n"
-"• <b>Shift + +/-</b> - Regola tempo (±10 BPM)\n"
+"<b>Whakarerekē Taima:</b>\n"
+"• <b>Kōpere ↑/↓</b> - Whakarerekē taima (±1 BPM)\n"
+"• <b>Kōpere ←/→</b> - Whakarerekē taima (±1 BPM)\n"
+"• <b>Shift + Ngā Kōpere</b> - Whakarerekē taima (±10 BPM)\n"
+"• <b>+/-</b> - Whakarerekē taima (±5 BPM)\n"
+"• <b>Shift + +/-</b> - Whakarerekē taima (±10 BPM)\n"
 "\n"
-"<b>Indicazione del Tempo:</b>\n"
-"• <b>Ctrl + 1-9</b> - Imposta battute per barra\n"
-"• <b>Ctrl + R</b> - Reset contatore battute\n"
+"<b>Tohu Taima:</b>\n"
+"• <b>Ctrl + 1-9</b> - Whakatakoto ngā papa ki ia raina\n"
+"• <b>Ctrl + R</b> - Tauhou tatau papa\n"
 "\n"
-"<b>Aiuto:</b>\n"
-"• <b>F1</b> - Mostra questo aiuto"
+"<b>Āwhina:</b>\n"
+"• <b>F1</b> - Whakaatu tēnei āwhina"
 
 #: src/main_window.vala:376
 msgid "OK"
-msgstr "OK"
+msgstr "Pai"
 
 #: src/metronome_engine.vala:109
 #, c-format
 msgid "BPM must be between 40 and 240, got %d"
-msgstr "Il BPM deve essere tra 40 e 240, ricevuto %d"
+msgstr "Me noho a BPM i waenga i a 40 me 240, i riro %d"
 
 #: src/metronome_engine.vala:127
 #, c-format
 msgid "Time signature numerator must be 1-16, got %d"
-msgstr "Il numeratore dell'indicazione del tempo deve essere 1-16, ricevuto %d"
+msgstr "Me noho te kaitātai tohu taima 1-16, i riro %d"
 
 #: src/metronome_engine.vala:133
 #, c-format
 msgid "Time signature denominator must be 2, 4, 8, or 16, got %d"
-msgstr "Il denominatore dell'indicazione del tempo deve essere 2, 4, 8 o 16, ricevuto %d"
+msgstr "Me noho te kaiwhakawehe tohu taima 2, 4, 8, rānei 16, i riro %d"
 
 #. TODO: Implement file chooser
 #: src/preferences_dialog.vala:118 src/preferences_dialog.vala:123
 msgid "Sound file chooser not yet implemented"
-msgstr "Selettore file audio non ancora implementato"
+msgstr "Kāore anō te kaiwhiriwhiri kōnae oro kia whakatinanahia"
 
 #. TODO: Implement modern file chooser API
 #: src/preferences_dialog.vala:171
 msgid "File chooser needs modern GTK4 implementation"
-msgstr "Il selettore file necessita di un'implementazione GTK4 moderna"
+msgstr "He whakatinanahanga GTK4 hou te hiahia o te kaiwhiriwhiri kōnae"
 
 #: data/ui/main_window.blp:14
 msgid "Metronome"
-msgstr "Metronomo"
+msgstr "Īriti"
 
 #: data/ui/main_window.blp:21
 msgid "Main Menu"
-msgstr "Menu Principale"
+msgstr "Tahua Matua"
 
 #: data/ui/main_window.blp:50 data/io.github.tobagin.tempo.appdata.xml.in:63
 msgid "BPM"
@@ -141,195 +142,195 @@ msgstr "BPM"
 
 #: data/ui/main_window.blp:85
 msgid "Time Signature"
-msgstr "Indicazione del Tempo"
+msgstr "Tohu Taima"
 
 #: data/ui/main_window.blp:134 data/ui/preferences_dialog.blp:178
 msgid "Beat Indicator"
-msgstr "Indicatore del Ritmo"
+msgstr "Tohu Papa"
 
 #: data/ui/main_window.blp:156 data/ui/preferences_dialog.blp:104
 msgid "Tap Tempo"
-msgstr "Tocca Tempo"
+msgstr "Patu Taima"
 
 #: data/ui/main_window.blp:160
 msgid "Tap repeatedly to set tempo"
-msgstr "Tocca ripetutamente per impostare il tempo"
+msgstr "Patu auau hoki ai ki te whakatakoto taima"
 
 #: data/ui/main_window.blp:170 data/ui/preferences_dialog.blp:5
 msgid "Preferences"
-msgstr "Preferenze"
+msgstr "Ngā Manakohanga"
 
 #: data/ui/main_window.blp:177
 msgid "About Tempo"
-msgstr "Informazioni su Tempo"
+msgstr "Mō Taima"
 
 #: data/ui/main_window.blp:182
 msgid "Quit"
-msgstr "Esci"
+msgstr "Wehe"
 
 #: data/ui/preferences_dialog.blp:9
 msgid "Audio"
-msgstr "Audio"
+msgstr "Oro"
 
 #: data/ui/preferences_dialog.blp:13
 msgid "Volume"
-msgstr "Volume"
+msgstr "Raumati"
 
 #: data/ui/preferences_dialog.blp:14
 msgid "Adjust click and accent volume levels"
-msgstr "Regola i livelli di volume dei click e degli accenti"
+msgstr "Whakarerekē ngā taumata raumati patopato me te whakakorikori"
 
 #: data/ui/preferences_dialog.blp:17
 msgid "Click Volume"
-msgstr "Volume Click"
+msgstr "Raumati Patopato"
 
 #: data/ui/preferences_dialog.blp:18
 msgid "Volume for regular metronome clicks"
-msgstr "Volume per i click regolari del metronomo"
+msgstr "Raumati mō ngā patopato ritenga īriti"
 
 #: data/ui/preferences_dialog.blp:38
 msgid "Accent Volume"
-msgstr "Volume Accento"
+msgstr "Raumati Whakakorikori"
 
 #: data/ui/preferences_dialog.blp:39
 msgid "Volume for downbeat accent clicks"
-msgstr "Volume per i click di accento del downbeat"
+msgstr "Raumati mō ngā patopato whakakorikori papa raro"
 
 #: data/ui/preferences_dialog.blp:60
 msgid "Custom Sounds"
-msgstr "Suoni Personalizzati"
+msgstr "Ngā Oro Ritenga"
 
 #: data/ui/preferences_dialog.blp:61
 msgid "Use custom audio files for metronome sounds"
-msgstr "Usa file audio personalizzati per i suoni del metronomo"
+msgstr "Whakamahi kōnae oro ritenga mō ngā oro īriti"
 
 #: data/ui/preferences_dialog.blp:64
 msgid "Use Custom Sounds"
-msgstr "Usa Suoni Personalizzati"
+msgstr "Whakamahi Oro Ritenga"
 
 #: data/ui/preferences_dialog.blp:65
 msgid "Replace default click sounds with custom audio files"
-msgstr "Sostituisce i suoni click predefiniti con file audio personalizzati"
+msgstr "Whakakapi ngā oro patopato taunoa ki ngā kōnae oro ritenga"
 
 #: data/ui/preferences_dialog.blp:74
 msgid "High Sound (Accent)"
-msgstr "Suono Acuto (Accento)"
+msgstr "Oro Tiketike (Whakakorikori)"
 
 #: data/ui/preferences_dialog.blp:75
 msgid "Audio file for downbeat accent clicks"
-msgstr "File audio per i click di accento del downbeat"
+msgstr "Kōnae oro mō ngā patopato whakakorikori papa raro"
 
 #: data/ui/preferences_dialog.blp:79 data/ui/preferences_dialog.blp:91
 msgid "Choose File..."
-msgstr "Scegli File..."
+msgstr "Kōwhiri Kōnae..."
 
 #: data/ui/preferences_dialog.blp:86
 msgid "Low Sound (Regular)"
-msgstr "Suono Grave (Regolare)"
+msgstr "Oro Raro (Ritenga)"
 
 #: data/ui/preferences_dialog.blp:87
 msgid "Audio file for regular metronome clicks"
-msgstr "File audio per i click regolari del metronomo"
+msgstr "Kōnae oro mō ngā patopato ritenga īriti"
 
 #: data/ui/preferences_dialog.blp:100
 msgid "Behavior"
-msgstr "Comportamento"
+msgstr "Whakahaere"
 
 #: data/ui/preferences_dialog.blp:105
 msgid "Configure tap tempo sensitivity and behavior"
-msgstr "Configura la sensibilità e il comportamento del tap tempo"
+msgstr "Whiriwhiri ngā māhaki me te whakahaere patu taima"
 
 #: data/ui/preferences_dialog.blp:108
 msgid "Tap Sensitivity"
-msgstr "Sensibilità Tap"
+msgstr "Māhaki Patu"
 
 #: data/ui/preferences_dialog.blp:109
 msgid "Milliseconds tolerance for tap tempo detection"
-msgstr "Tolleranza in millisecondi per il rilevamento del tap tempo"
+msgstr "Whakangawari mirihēkana mō te kitea o te patu taima"
 
 #: data/ui/preferences_dialog.blp:126
 msgid "Window Behavior"
-msgstr "Comportamento Finestra"
+msgstr "Whakahaere Matapihi"
 
 #: data/ui/preferences_dialog.blp:127
 msgid "Configure application window behavior"
-msgstr "Configura il comportamento della finestra dell'applicazione"
+msgstr "Whiriwhiri whakahaere matapihi taupānga"
 
 #: data/ui/preferences_dialog.blp:130
 msgid "Start Playing on Launch"
-msgstr "Avvia Riproduzione all'Avvio"
+msgstr "Tīmata Whakatangi i te Whakarewa"
 
 #: data/ui/preferences_dialog.blp:131
 msgid "Automatically start the metronome when the app opens"
-msgstr "Avvia automaticamente il metronomo quando l'app si apre"
+msgstr "Tīmata aunoa te īriti i a puare ai te taupānga"
 
 #: data/ui/preferences_dialog.blp:140
 msgid "Keep Window on Top"
-msgstr "Mantieni Finestra in Primo Piano"
+msgstr "Puritia te Matapihi ki Runga"
 
 #: data/ui/preferences_dialog.blp:141
 msgid "Keep the metronome window above other applications"
-msgstr "Mantiene la finestra del metronomo sopra le altre applicazioni"
+msgstr "Puritia te matapihi īriti ki runga i ētehi atu taupānga"
 
 #: data/ui/preferences_dialog.blp:152
 msgid "Visual"
-msgstr "Visuale"
+msgstr "Atahua"
 
 #: data/ui/preferences_dialog.blp:156
 msgid "Theme"
-msgstr "Tema"
+msgstr "Kaupapa"
 
 #: data/ui/preferences_dialog.blp:157
 msgid "Choose the application appearance theme"
-msgstr "Scegli il tema di aspetto dell'applicazione"
+msgstr "Kōwhiri te kaupapa mata taupānga"
 
 #: data/ui/preferences_dialog.blp:160
 msgid "Application Theme"
-msgstr "Tema Applicazione"
+msgstr "Kaupapa Taupānga"
 
 #: data/ui/preferences_dialog.blp:161
 msgid "Select light, dark, or system theme"
-msgstr "Seleziona tema chiaro, scuro o di sistema"
+msgstr "Kōwhiri kaupapa māmā, ā, rānei pūnaha"
 
 #: data/ui/preferences_dialog.blp:167
 msgid "Follow System"
-msgstr "Segui Sistema"
+msgstr "Whai Pūnaha"
 
 #: data/ui/preferences_dialog.blp:168
 msgid "Light"
-msgstr "Chiaro"
+msgstr "Māmā"
 
 #: data/ui/preferences_dialog.blp:169
 msgid "Dark"
-msgstr "Scuro"
+msgstr "Ā"
 
 #: data/ui/preferences_dialog.blp:179
 msgid "Configure visual beat indicator settings"
-msgstr "Configura le impostazioni dell'indicatore visivo del ritmo"
+msgstr "Whiriwhiri ngā whiringa tohu papa atahua"
 
 #: data/ui/preferences_dialog.blp:182
 msgid "Show Beat Numbers"
-msgstr "Mostra Numeri Battute"
+msgstr "Whakaatu Ngā Nama Papa"
 
 #: data/ui/preferences_dialog.blp:183
 msgid "Display the current beat number during playback"
-msgstr "Visualizza il numero della battuta corrente durante la riproduzione"
+msgstr "Whakaatu te nama papa o nāianei i te wā whakatangi"
 
 #: data/ui/preferences_dialog.blp:192
 msgid "Flash on Beat"
-msgstr "Lampeggio su Battuta"
+msgstr "Kōrama i te Papa"
 
 #: data/ui/preferences_dialog.blp:193
 msgid "Flash the beat indicator circle on each beat"
-msgstr "Fa lampeggiare il cerchio dell'indicatore del ritmo ad ogni battuta"
+msgstr "Kōrama te porowhita tohu papa i ia papa"
 
 #: data/ui/preferences_dialog.blp:202
 msgid "Highlight Downbeats"
-msgstr "Evidenzia Downbeat"
+msgstr "Whakamiramira Ngā Papa Raro"
 
 #: data/ui/preferences_dialog.blp:203
 msgid "Use different color for downbeat (first beat of bar)"
-msgstr "Usa un colore diverso per il downbeat (prima battuta della barra)"
+msgstr "Whakamahi tae rerekē mō te papa raro (papa tuatahi o te raina)"
 
 #: data/io.github.tobagin.tempo.desktop.in:2
 #: data/io.github.tobagin.tempo.appdata.xml.in:6
@@ -338,7 +339,7 @@ msgstr "@PROJECT_NAME@"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:7
 msgid "A modern metronome for musicians"
-msgstr "Un metronomo moderno per musicisti"
+msgstr "He īriti hou mō ngā kaiwhakatangi puoro"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:10
 msgid ""
@@ -347,10 +348,10 @@ msgid ""
 "it provides precise timing, comprehensive keyboard shortcuts, and a "
 "beautiful animated beat indicator."
 msgstr ""
-"Tempo è un'applicazione metronomo moderna e ricca di funzionalità progettata "
-"per musicisti di tutti i livelli. Costruita con GTK4 e Libadwaita usando "
-"template UI Blueprint, fornisce temporizzazione precisa, scorciatoie da "
-"tastiera complete e un bellissimo indicatore del ritmo animato."
+"He taupānga īriti hou, āhuatanga-maha a Taima i hangaia mō ngā kaiwhakatangi "
+"puoro o ngā taumata katoa. I hangaia ki te GTK4 me Libadwaita mā te whakamahi "
+"i ngā tauira Blueprint UI, he taima tika, ngā ara poto papāpātuhi whānui, "
+"me tētahi tohu papa atahua whakakorikori ka whakaratohia."
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:15
 msgid ""
@@ -360,299 +361,298 @@ msgid ""
 "dialog, tap tempo functionality, and full keyboard control. The high-"
 "precision timing engine ensures professional accuracy."
 msgstr ""
-"Le caratteristiche principali includono integrazione audio GStreamer con "
-"suoni distinti di battuta/downbeat, tempo personalizzabile (40-240 BPM), "
-"indicazioni del tempo multiple, indicatori visivi animati basati su Cairo "
-"con effetti di pulsazione, finestra di preferenze complete, funzionalità tap "
-"tempo e controllo completo da tastiera. Il motore di temporizzazione ad alta "
-"precisione garantisce accuratezza professionale."
+"Ko ngā āhuatanga matua ko te whakakotahi oro GStreamer me ngā oro papa/papa "
+"raro motuhake, taima whakarerekē (40-240 BPM), ngā tohu taima maha, ngā tohu "
+"atahua whakakorikori a Cairo me ngā hua kōpere, kōrero manakohanga whānui, "
+"mahi patu taima, me te whakahaere papāpātuhi katoa. Ko te miihini taima "
+"tika-teitei he whakaū tika ngaio."
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:28
 msgid "Main window showing tempo controls and beat indicator"
-msgstr "Finestra principale che mostra i controlli del tempo e l'indicatore del ritmo"
+msgstr "Matapihi matua e whakaatu ana ngā whakahaere taima me te tohu papa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:32
 msgid "General preferences with audio and behavior settings"
-msgstr "Preferenze generali con impostazioni audio e comportamento"
+msgstr "Ngā manakohanga whānui me ngā whiringa oro me te whakahaere"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:36
 msgid "Visual preferences with theme selection and beat indicator options"
-msgstr "Preferenze visive con selezione del tema e opzioni dell'indicatore del ritmo"
+msgstr "Ngā manakohanga atahua me te kōwhiri kaupapa me ngā kōwhiringa tohu papa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:40
 msgid "About dialog showing application information"
-msgstr "Finestra Informazioni che mostra le informazioni dell'applicazione"
+msgstr "Kōrero mō e whakaatu ana ngā kōrero taupānga"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:56
 msgid "metronome"
-msgstr "metronomo"
+msgstr "īriti"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:57
 msgid "music"
-msgstr "musica"
+msgstr "puoro"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:58
 msgid "tempo"
-msgstr "tempo"
+msgstr "taima"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:59
 msgid "timing"
-msgstr "temporizzazione"
+msgstr "taima"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:60
 msgid "practice"
-msgstr "pratica"
+msgstr "whakangāwari"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:61
 msgid "rhythm"
-msgstr "ritmo"
+msgstr "rite"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:62
 msgid "beat"
-msgstr "battuta"
+msgstr "papa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:88
 msgid "Feature consolidation and stability improvements"
-msgstr "Consolidamento funzionalità e miglioramenti di stabilità"
+msgstr "Whakakotahi āhuatanga me ngā whakapai tūmau"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:90
 msgid "Merged comprehensive improvements from feature branches"
-msgstr "Fusione miglioramenti comprensivi dai rami funzionalità"
+msgstr "I whakakotahi ngā whakapai whānui mai i ngā peka āhuatanga"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:91
 msgid "Consolidated Blueprint UI template enhancements"
-msgstr "Consolidamento miglioramenti template UI Blueprint"
+msgstr "Ngā whakapai tauira Blueprint UI kua whakakotahi"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:92
 msgid "Integrated custom sound support capabilities"
-msgstr "Integrazione capacità supporto suoni personalizzati"
+msgstr "Ngā rawa tautoko oro ritenga kua whakakotahi"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:93
 msgid "Improved code organization and maintainability"
-msgstr "Migliorata organizzazione del codice e manutenibilità"
+msgstr "Whakarōpū waehere me te tiaki pai ake"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:94
 msgid "Enhanced build system stability"
-msgstr "Migliorata stabilità del sistema di build"
+msgstr "Tūmau pūnaha hanga whakapai"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:100
 msgid "Major update: Complete Vala metronome with comprehensive improvements"
-msgstr "Aggiornamento maggiore: Metronomo Vala completo con miglioramenti comprensivi"
+msgstr "Whakahōu nui: Īriti Vala oti me ngā whakapai whānui"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:102
 msgid ""
 "Complete Python to Vala conversion for better performance and integration"
 msgstr ""
-"Conversione completa da Python a Vala per migliori prestazioni e integrazione"
+"Huringa katoa Python ki Vala mō te mahi me te whakakotahi pai ake"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:103
 msgid "GStreamer audio integration with distinct beat and downbeat sounds"
-msgstr "Integrazione audio GStreamer con suoni distinti di battuta e downbeat"
+msgstr "Whakakotahi oro GStreamer me ngā oro papa me papa raro motuhake"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:104
 msgid "Blueprint UI templates with modern GTK4/Libadwaita design"
-msgstr "Template UI Blueprint con design moderno GTK4/Libadwaita"
+msgstr "Ngā tauira Blueprint UI me te hoahoa GTK4/Libadwaita hou"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:105
 msgid "Animated beat indicator with Cairo-based pulse effects and perfect sync"
-msgstr "Indicatore del ritmo animato con effetti di pulsazione basati su Cairo e sincronizzazione perfetta"
+msgstr "Tohu papa whakakorikori me ngā hua kōpere a Cairo me te tukutahi tino pai"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:106
 msgid "Comprehensive keyboard shortcuts for full application control"
-msgstr "Scorciatoie da tastiera complete per il controllo completo dell'applicazione"
+msgstr "Ngā ara poto papāpātuhi whānui mō te whakahaere taupānga katoa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:107
 msgid "Enhanced preferences dialog with Audio, Behavior, and Visual settings"
-msgstr "Finestra preferenze migliorata con impostazioni Audio, Comportamento e Visive"
+msgstr "Kōrero manakohanga whakapai me ngā whiringa Oro, Whakahaere, me Atahua"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:108
 msgid "Multi-language support with Italian and Turkish translations"
-msgstr "Supporto multi-linguaggio con traduzioni italiana e turca"
+msgstr "Tautoko reo-maha me ngā whakamāoritanga Ītariana me Tākī"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:109
 msgid "Improved timing engine with microsecond precision"
-msgstr "Motore di temporizzazione migliorato con precisione al microsecondo"
+msgstr "Miihini taima whakapai me te tika maikarohēkana"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:110
 msgid "Larger beat indicator with dramatic glow effects"
-msgstr "Indicatore del ritmo più grande con effetti di bagliore drammatici"
+msgstr "Tohu papa rahi ake me ngā hua kōrama whakaāhua"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:111
 msgid "Fixed beat sequence to proper 1-2-3-4 display"
-msgstr "Corretta sequenza delle battute per visualizzazione corretta 1-2-3-4"
+msgstr "Raina papa whakatika ki te whakaatu tika 1-2-3-4"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:112
 msgid "Proper translator credits in about dialog"
-msgstr "Crediti traduttori corretti nella finestra informazioni"
+msgstr "Ngā mihi kaiwhakamāori tika i te kōrero mō"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:118
 msgid "Enable proper file picker portal integration"
-msgstr "Abilita integrazione corretta del portale selettore file"
+msgstr "Whakaāhei whakakotahi tika o te tomokanga kaiwhiriwhiri kōnae"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:120
 msgid "Updated file chooser to use modern Gtk.FileDialog API"
-msgstr "Aggiornato selettore file per usare API Gtk.FileDialog moderna"
+msgstr "Kaiwhiriwhiri kōnae whakahōu ki te whakamahi API Gtk.FileDialog hou"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:121
 msgid "File picker now properly uses desktop environment portals"
-msgstr "Il selettore file ora usa correttamente i portali dell'ambiente desktop"
+msgstr "Ko te kaiwhiriwhiri kōnae ināianei he whakamahi tika i ngā tomokanga taiao papa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:122
 msgid "Improved security through sandboxed file access"
-msgstr "Sicurezza migliorata attraverso accesso file in sandbox"
+msgstr "Haumarutanga whakapai mā te uru kōnae oneone"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:123
 msgid "Removed redundant portal permissions from Flatpak manifest"
-msgstr "Rimossi permessi portale ridondanti dal manifesto Flatpak"
+msgstr "I tangohia ngā whakaaetanga tomokanga muhu mai i te whakamārama Flatpak"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:129
 msgid "Clean up version references and fix author information"
-msgstr "Pulizia riferimenti versione e correzione informazioni autore"
+msgstr "Horoia ngā tohutoro putanga me te whakatika kōrero kaituhi"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:131
 msgid "Updated all version references to use current version consistently"
-msgstr "Aggiornati tutti i riferimenti versione per usare la versione corrente consistentemente"
+msgstr "I whakahōu katoa ngā tohutoro putanga ki te whakamahi i te putanga o nāianei rite ai"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:132
 msgid "Fixed author information to use correct name throughout codebase"
-msgstr "Corrette informazioni autore per usare il nome corretto in tutto il codice"
+msgstr "Kōrero kaituhi whakatika ki te whakamahi ingoa tika i te taiao waehere katoa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:133
 msgid "Ensured only metainfo retains version history as intended"
-msgstr "Assicurato che solo metainfo mantenga la cronologia versione come previsto"
+msgstr "I whakaū kia puritia anake e te metainfo te hītori putanga i whakaarohia ai"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:139
 msgid "Add file picker portal support"
-msgstr "Aggiunto supporto portale selettore file"
+msgstr "Tāpiri tautoko tomokanga kaiwhiriwhiri kōnae"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:141
 msgid "Added proper file picker portal permissions to Flatpak manifest"
-msgstr "Aggiunti permessi portale selettore file corretti al manifesto Flatpak"
+msgstr "I tāpiri ngā whakaaetanga tomokanga kaiwhiriwhiri kōnae tika ki te whakamārama Flatpak"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:142
 msgid "Improved security by using sandboxed file access"
-msgstr "Sicurezza migliorata usando accesso file in sandbox"
+msgstr "Haumarutanga whakapai mā te whakamahi uru kōnae oneone"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:143
 msgid "Enhanced compatibility with desktop file managers"
-msgstr "Compatibilità migliorata con i gestori file desktop"
+msgstr "Whakapai ai te hāngai me ngā kaiwhakahaere kōnae papa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:149
 msgid "Fix desktop file executable reference"
-msgstr "Corretto riferimento eseguibile file desktop"
+msgstr "Whakatika tohutoro hāngaitanga kōnae papa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:151
 msgid ""
 "Fixed desktop file to use correct executable name 'tempo' instead of "
 "application ID"
 msgstr ""
-"Corretto file desktop per usare il nome eseguibile corretto 'tempo' invece "
-"dell'ID applicazione"
+"Kōnae papa whakatika ki te whakamahi ingoa hāngaitanga tika 'taima' kē ai "
+"i te ID taupānga"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:152
 msgid "Resolved application launch issues from desktop environment"
-msgstr "Risolti problemi di avvio applicazione dall'ambiente desktop"
+msgstr "I whakatau ngā raruraru whakarewa taupānga mai i te taiao papa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:153
 msgid "Improved desktop integration and launcher compatibility"
-msgstr "Migliorata integrazione desktop e compatibilità launcher"
+msgstr "Whakakotahi papa me te hāngaitanga kaiwhakārewa whakapai"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:159
 msgid "Improved metadata quality for better Flathub presentation"
-msgstr "Migliorata qualità metadati per migliore presentazione Flathub"
+msgstr "Kounga raraunga whakapai mō te whakaaturanga Flathub pai ake"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:161
 msgid "Streamlined description to be more concise and user-focused"
-msgstr "Descrizione semplificata per essere più concisa e focalizzata sull'utente"
+msgstr "Whakamāramatanga rere kia poto ake me te aro kaiwhakamahi"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:162
 msgid "Enhanced readability following Flathub quality guidelines"
-msgstr "Leggibilità migliorata seguendo le linee guida qualità Flathub"
+msgstr "Pānuitanga whakapai i te whai i ngā aratohu kounga Flathub"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:163
 msgid "Removed redundant technical details for better clarity"
-msgstr "Rimossi dettagli tecnici ridondanti per maggiore chiarezza"
+msgstr "I tangohia ngā taipitopito hangarau muhu mō te mārama pai ake"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:169
 msgid "Fix AppStream control redefinition warning"
-msgstr "Corretto avviso ridefinizione controllo AppStream"
+msgstr "Whakatika whakatūpato whakamārama anō whakahaere AppStream"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:171
 msgid "Removed duplicate keyboard control from recommends section"
-msgstr "Rimosso controllo tastiera duplicato dalla sezione raccomandazioni"
+msgstr "I tangohia te whakahaere papāpātuhi tārua mai i te wāhanga tūtohu"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:172
 msgid "Fixed AppStream validation warning about redefined relation items"
-msgstr "Corretto avviso validazione AppStream su elementi relazione ridefiniti"
+msgstr "Whakatūpato whakamana AppStream whakatika mō ngā mea taonga whakamārama anō"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:178
 msgid "AppStream metadata validation fixes"
-msgstr "Correzioni validazione metadati AppStream"
+msgstr "Ngā whakatika whakamana raraunga AppStream"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:180
 msgid "Fixed AppStream validation errors for Flathub submission"
-msgstr "Corretti errori validazione AppStream per invio Flathub"
+msgstr "Ngā hapa whakamana AppStream whakatika mō te tāpaetanga Flathub"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:181
 msgid "Updated developer information and contact details"
-msgstr "Aggiornate informazioni sviluppatore e dettagli contatto"
+msgstr "Kōrero kaiwhakawhanake me ngā taipitopito whakapā whakahōu"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:182
 msgid "Removed inapplicable metadata fields"
-msgstr "Rimossi campi metadati non applicabili"
+msgstr "I tangohia ngā mara raraunga kore hāngai"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:183
 msgid "Added proper branding colors"
-msgstr "Aggiunti colori branding corretti"
+msgstr "I tāpiri ngā tae waitohu tika"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:189
 msgid "Screenshots and metadata update"
-msgstr "Aggiornamento screenshot e metadati"
+msgstr "Ngā mata kōpae me te whakahōu raraunga"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:191
 msgid "Added application screenshots for better visibility"
-msgstr "Aggiunti screenshot applicazione per migliore visibilità"
+msgstr "I tāpiri ngā mata kōpae taupānga mō te kitea pai ake"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:192
 msgid "Updated metadata with comprehensive visual previews"
-msgstr "Aggiornati metadati con anteprime visive complete"
+msgstr "Raraunga whakahōu me ngā arokite atahua whānui"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:193
 msgid "Enhanced AppStream information for software centers"
-msgstr "Migliorate informazioni AppStream per centri software"
+msgstr "Kōrero AppStream whakapai mō ngā pokapū rorohiko"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:199
 msgid "Initial release of Tempo metronome"
-msgstr "Rilascio iniziale del metronomo Tempo"
+msgstr "Tukuna tuatahi o te īriti Taima"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:201
 msgid "Precise timing engine with drift compensation"
-msgstr "Motore di temporizzazione preciso con compensazione deriva"
+msgstr "Miihini taima tika me te utu kōpikopiko"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:202
 msgid "GTK4 and Libadwaita modern UI"
-msgstr "UI moderna GTK4 e Libadwaita"
+msgstr "UI hou GTK4 me Libadwaita"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:203
 msgid "Customizable tempo and time signatures"
-msgstr "Tempo e indicazioni del tempo personalizzabili"
+msgstr "Taima me ngā tohu taima whakarerekē"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:204
 msgid "Visual beat indicator with downbeat accents"
-msgstr "Indicatore visivo del ritmo con accenti downbeat"
+msgstr "Tohu papa atahua me ngā whakakorikori papa raro"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:205
 msgid "Low-latency GStreamer audio"
-msgstr "Audio GStreamer a bassa latenza"
+msgstr "Oro GStreamer iti-roa"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:206
 msgid "Tap tempo functionality"
-msgstr "Funzionalità tap tempo"
+msgstr "Mahi patu taima"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:207
 msgid "Keyboard shortcuts"
-msgstr "Scorciatoie da tastiera"
+msgstr "Ngā ara poto papāpātuhi"
 
 #: data/io.github.tobagin.tempo.appdata.xml.in:208
 msgid "Settings persistence"
-msgstr "Persistenza impostazioni"
+msgstr "Whiringa roa"
