@@ -51,8 +51,8 @@ public class TempoWindow : Adw.ApplicationWindow {
         // Listen for settings changes to update visuals
         settings.changed.connect(on_settings_changed);
         
-        // Apply initial keep-on-top setting when window is realized
-        this.realize.connect(() => {
+        // Apply initial settings when window is mapped
+        this.map.connect(() => {
             apply_keep_on_top_setting();
             apply_start_on_launch_setting();
         });
@@ -416,24 +416,16 @@ public class TempoWindow : Adw.ApplicationWindow {
     
     /**
      * Apply the keep-on-top window setting.
+     * Note: GTK4 doesn't expose set_keep_above in the public API.
+     * This is a placeholder for future implementation.
      */
     private void apply_keep_on_top_setting() {
         bool keep_on_top = settings.get_boolean("keep-on-top");
         
-        // Get the surface from the native interface
-        var native = this.get_native();
-        if (native != null) {
-            var surface = native.get_surface();
-            if (surface != null) {
-                if (keep_on_top) {
-                    // Make window stay on top
-                    surface.set_keep_above(true);
-                } else {
-                    // Allow normal window stacking
-                    surface.set_keep_above(false);
-                }
-            }
-        }
+        // TODO: GTK4 doesn't currently expose window keep-above functionality
+        // in the public API. This would need to be implemented at the 
+        // compositor/window manager level or using platform-specific code.
+        warning("Keep-on-top functionality not available in GTK4 public API");
     }
     
     /**
@@ -442,7 +434,7 @@ public class TempoWindow : Adw.ApplicationWindow {
     private void apply_start_on_launch_setting() {
         bool start_on_launch = settings.get_boolean("start-on-launch");
         
-        if (start_on_launch && !metronome_engine.is_playing) {
+        if (start_on_launch && !metronome_engine.is_running) {
             // Start the metronome automatically
             metronome_engine.start();
             play_button.label = _("Stop");

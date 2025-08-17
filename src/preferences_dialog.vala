@@ -213,7 +213,7 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         
         // Create audio file filter
         var audio_filter = new Gtk.FileFilter();
-        audio_filter.set_name(_("Audio Files"));
+        audio_filter.name = _("Audio Files");
         audio_filter.add_mime_type("audio/wav");
         audio_filter.add_mime_type("audio/x-wav");
         audio_filter.add_mime_type("audio/ogg");
@@ -230,15 +230,15 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         
         // Add "All Files" filter as fallback
         var all_filter = new Gtk.FileFilter();
-        all_filter.set_name(_("All Files"));
+        all_filter.name = _("All Files");
         all_filter.add_pattern("*");
         filter_list.append(all_filter);
         
         file_dialog.filters = filter_list;
         file_dialog.default_filter = audio_filter;
         
-        // Show the dialog asynchronously
-        file_dialog.open.begin(this, null, (obj, res) => {
+        // Show the dialog asynchronously  
+        file_dialog.open.begin(this.get_root() as Gtk.Window, null, (obj, res) => {
             try {
                 var file = file_dialog.open.end(res);
                 if (file != null) {
