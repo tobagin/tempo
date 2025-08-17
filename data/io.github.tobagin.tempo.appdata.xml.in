@@ -83,6 +83,17 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.1.7" date="2025-08-17">
+      <description>
+        <p>Final desktop file validation fixes</p>
+        <ul>
+          <li>Removed problematic translation keys from desktop file</li>
+          <li>Ensured clean desktop file validation for Flathub submission</li>
+          <li>Maintained all functionality while fixing translation issues</li>
+          <li>Ready for production Flatpak distribution</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.6" date="2025-08-17">
       <description>
         <p>Validation fixes for Flathub submission</p>
