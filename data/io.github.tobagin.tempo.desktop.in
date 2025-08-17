@@ -1,16 +1,13 @@
 [Desktop Entry]
 Name=@PROJECT_NAME@
 Comment=A modern metronome for musicians
-_Comment=A modern metronome for musicians
 GenericName=Metronome
-_GenericName=Metronome
 Exec=tempo
 Icon=@APPLICATION_ID@
 Terminal=false
 Type=Application
 Categories=AudioVideo;Audio;Music;
 Keywords=metronome;music;tempo;timing;practice;rhythm;beat;BPM;
-_Keywords=metronome;music;tempo;timing;practice;rhythm;beat;BPM;
 StartupNotify=true
 StartupWMClass=tempo
 MimeType=audio/x-tempo;
@@ -18,12 +15,10 @@ Actions=QuickStart;Preferences;
 
 [Desktop Action QuickStart]
 Name=Quick Start
-_Name=Quick Start
 Exec=tempo --start
 Icon=@APPLICATION_ID@
 
 [Desktop Action Preferences]
 Name=Preferences
-_Name=Preferences
 Exec=tempo --preferences
 Icon=preferences-system
