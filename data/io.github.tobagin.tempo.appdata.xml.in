@@ -83,6 +83,18 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.1.2" date="2025-08-17">
+      <description>
+        <p>Feature consolidation and stability improvements</p>
+        <ul>
+          <li>Merged comprehensive improvements from feature branches</li>
+          <li>Consolidated Blueprint UI template enhancements</li>
+          <li>Integrated custom sound support capabilities</li>
+          <li>Improved code organization and maintainability</li>
+          <li>Enhanced build system stability</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.1" date="2025-08-16">
       <description>
         <p>Major update: Complete Vala metronome with comprehensive improvements</p>
