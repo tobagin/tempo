@@ -83,6 +83,22 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.1.4" date="2025-08-17">
+      <description translatable="yes">Complete preferences implementation and enhanced functionality</description>
+      <ul>
+        <li translatable="yes">Implemented full custom sounds functionality with file chooser</li>
+        <li translatable="yes">Added GTK4 FileDialog with support for multiple audio formats (WAV, OGG, MP3, FLAC, AAC)</li>
+        <li translatable="yes">Custom sounds toggle now properly shows/hides file picker rows</li>
+        <li translatable="yes">Added test playback of selected custom sounds</li>
+        <li translatable="yes">Implemented right-click context menu to clear custom sounds</li>
+        <li translatable="yes">Fixed tap sensitivity range mismatch between UI and settings schema</li>
+        <li translatable="yes">Implemented keep-on-top window functionality using GTK4 surface API</li>
+        <li translatable="yes">Added start-on-launch functionality</li>
+        <li translatable="yes">Enhanced file validation and error handling for audio files</li>
+        <li translatable="yes">All preferences now properly connected to real-time UI updates</li>
+        <li translatable="yes">External settings changes are synchronized across application instances</li>
+      </ul>
+    </release>
     <release version="1.1.3" date="2025-08-17">
       <description translatable="yes">Complete translation support with 7 new languages</description>
       <ul>

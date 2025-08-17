@@ -50,6 +50,12 @@ public class TempoWindow : Adw.ApplicationWindow {
         
         // Listen for settings changes to update visuals
         settings.changed.connect(on_settings_changed);
+        
+        // Apply initial keep-on-top setting when window is realized
+        this.realize.connect(() => {
+            apply_keep_on_top_setting();
+            apply_start_on_launch_setting();
+        });
     }
     
     private void setup_ui() {
@@ -402,6 +408,44 @@ public class TempoWindow : Adw.ApplicationWindow {
                 // Redraw beat indicator with new settings
                 beat_indicator.queue_draw();
                 break;
+            case "keep-on-top":
+                apply_keep_on_top_setting();
+                break;
+        }
+    }
+    
+    /**
+     * Apply the keep-on-top window setting.
+     */
+    private void apply_keep_on_top_setting() {
+        bool keep_on_top = settings.get_boolean("keep-on-top");
+        
+        // Get the surface from the native interface
+        var native = this.get_native();
+        if (native != null) {
+            var surface = native.get_surface();
+            if (surface != null) {
+                if (keep_on_top) {
+                    // Make window stay on top
+                    surface.set_keep_above(true);
+                } else {
+                    // Allow normal window stacking
+                    surface.set_keep_above(false);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Apply the start-on-launch setting by starting metronome if enabled.
+     */
+    private void apply_start_on_launch_setting() {
+        bool start_on_launch = settings.get_boolean("start-on-launch");
+        
+        if (start_on_launch && !metronome_engine.is_playing) {
+            // Start the metronome automatically
+            metronome_engine.start();
+            play_button.label = _("Stop");
         }
     }
 

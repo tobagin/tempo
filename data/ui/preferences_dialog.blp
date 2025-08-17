@@ -70,9 +70,10 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         }
       }
 
-      Adw.ActionRow {
+      Adw.ActionRow high_sound_row {
         title: _("High Sound (Accent)");
         subtitle: _("Audio file for downbeat accent clicks");
+        sensitive: false;
 
         [suffix]
         Button high_sound_button {
@@ -82,9 +83,10 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         }
       }
 
-      Adw.ActionRow {
+      Adw.ActionRow low_sound_row {
         title: _("Low Sound (Regular)");
         subtitle: _("Audio file for regular metronome clicks");
+        sensitive: false;
 
         [suffix]
         Button low_sound_button {
@@ -111,11 +113,11 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         [suffix]
         SpinButton tap_sensitivity_spin {
           adjustment: Adjustment {
-            lower: 50.0;
-            upper: 500.0;
-            step-increment: 10.0;
-            page-increment: 50.0;
-            value: 100.0;
+            lower: 100.0;
+            upper: 2000.0;
+            step-increment: 50.0;
+            page-increment: 100.0;
+            value: 600.0;
           };
           valign: center;
         }
