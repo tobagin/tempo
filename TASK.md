@@ -35,6 +35,18 @@
     * Right-click context menu to clear custom sounds
     * External settings change synchronization
 
+### Version Bump to 1.1.4 and Release Management
+- **Date Added**: 2025-08-17
+- **Status**: Completed
+- **Description**: Successfully bumped version to 1.1.4 and completed release process
+- **Tasks Completed**:
+  - Updated version to 1.1.4 in meson.build and main.vala
+  - Added comprehensive 1.1.4 release notes to appdata.xml
+  - Committed all changes with detailed release message
+  - Created annotated v1.1.4 git tag
+  - Updated Flatpak production manifest with correct commit hash
+  - All version references now consistent across project
+
 ## Discovered During Work
 
 - Blueprint UI syntax requires compilation to .ui files during build
