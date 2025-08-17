@@ -83,13 +83,27 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.1.5" date="2025-08-17">
+      <description translatable="yes">GTK4 API compatibility fixes and portal integration</description>
+      <ul>
+        <li translatable="yes">Fixed GTK4 API compatibility issues for proper Flatpak building</li>
+        <li translatable="yes">Replaced deprecated FileFilter.set_name() with .name property</li>
+        <li translatable="yes">Fixed FileDialog parent window reference for proper portal integration</li>
+        <li translatable="yes">Implemented secure file picking using desktop portals (no broad filesystem access)</li>
+        <li translatable="yes">Replaced non-working surface.set_keep_above() with proper warning</li>
+        <li translatable="yes">Fixed window signal connections (realize → map signal)</li>
+        <li translatable="yes">Corrected metronome engine property references (is_playing → is_running)</li>
+        <li translatable="yes">Enhanced build system compatibility with GNOME runtime 48</li>
+        <li translatable="yes">Improved sandbox security with portal-based file access</li>
+      </ul>
+    </release>
     <release version="1.1.4" date="2025-08-17">
       <description translatable="yes">Complete preferences implementation and enhanced functionality</description>
       <ul>
         <li translatable="yes">Implemented full custom sounds functionality with file chooser</li>
         <li translatable="yes">Added GTK4 FileDialog with support for multiple audio formats (WAV, OGG, MP3, FLAC, AAC)</li>
         <li translatable="yes">Custom sounds toggle now properly shows/hides file picker rows</li>
-        <li translatable="yes">Added test playback of selected custom sounds</li>
+        <li translatable="yes">Added test playbook of selected custom sounds</li>
         <li translatable="yes">Implemented right-click context menu to clear custom sounds</li>
         <li translatable="yes">Fixed tap sensitivity range mismatch between UI and settings schema</li>
         <li translatable="yes">Implemented keep-on-top window functionality using GTK4 surface API</li>
