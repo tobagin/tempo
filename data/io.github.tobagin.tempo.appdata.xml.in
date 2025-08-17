@@ -83,48 +83,66 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.1.6" date="2025-08-17">
+      <description>
+        <p>Validation fixes for Flathub submission</p>
+        <ul>
+          <li>Fixed AppStream metadata validation errors in release descriptions</li>
+          <li>Fixed desktop file validation by adding required non-translated keys</li>
+          <li>Corrected release description format to use proper p and ul tags</li>
+          <li>Enhanced desktop actions with proper Name entries</li>
+          <li>Ensured compliance with desktop file specification</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.5" date="2025-08-17">
-      <description translatable="yes">GTK4 API compatibility fixes and portal integration</description>
-      <ul>
-        <li translatable="yes">Fixed GTK4 API compatibility issues for proper Flatpak building</li>
-        <li translatable="yes">Replaced deprecated FileFilter.set_name() with .name property</li>
-        <li translatable="yes">Fixed FileDialog parent window reference for proper portal integration</li>
-        <li translatable="yes">Implemented secure file picking using desktop portals (no broad filesystem access)</li>
-        <li translatable="yes">Replaced non-working surface.set_keep_above() with proper warning</li>
-        <li translatable="yes">Fixed window signal connections (realize → map signal)</li>
-        <li translatable="yes">Corrected metronome engine property references (is_playing → is_running)</li>
-        <li translatable="yes">Enhanced build system compatibility with GNOME runtime 48</li>
-        <li translatable="yes">Improved sandbox security with portal-based file access</li>
-      </ul>
+      <description>
+        <p>GTK4 API compatibility fixes and portal integration</p>
+        <ul>
+          <li>Fixed GTK4 API compatibility issues for proper Flatpak building</li>
+          <li>Replaced deprecated FileFilter.set_name() with .name property</li>
+          <li>Fixed FileDialog parent window reference for proper portal integration</li>
+          <li>Implemented secure file picking using desktop portals (no broad filesystem access)</li>
+          <li>Replaced non-working surface.set_keep_above() with proper warning</li>
+          <li>Fixed window signal connections (realize → map signal)</li>
+          <li>Corrected metronome engine property references (is_playing → is_running)</li>
+          <li>Enhanced build system compatibility with GNOME runtime 48</li>
+          <li>Improved sandbox security with portal-based file access</li>
+        </ul>
+      </description>
     </release>
     <release version="1.1.4" date="2025-08-17">
-      <description translatable="yes">Complete preferences implementation and enhanced functionality</description>
-      <ul>
-        <li translatable="yes">Implemented full custom sounds functionality with file chooser</li>
-        <li translatable="yes">Added GTK4 FileDialog with support for multiple audio formats (WAV, OGG, MP3, FLAC, AAC)</li>
-        <li translatable="yes">Custom sounds toggle now properly shows/hides file picker rows</li>
-        <li translatable="yes">Added test playbook of selected custom sounds</li>
-        <li translatable="yes">Implemented right-click context menu to clear custom sounds</li>
-        <li translatable="yes">Fixed tap sensitivity range mismatch between UI and settings schema</li>
-        <li translatable="yes">Implemented keep-on-top window functionality using GTK4 surface API</li>
-        <li translatable="yes">Added start-on-launch functionality</li>
-        <li translatable="yes">Enhanced file validation and error handling for audio files</li>
-        <li translatable="yes">All preferences now properly connected to real-time UI updates</li>
-        <li translatable="yes">External settings changes are synchronized across application instances</li>
-      </ul>
+      <description>
+        <p>Complete preferences implementation and enhanced functionality</p>
+        <ul>
+          <li>Implemented full custom sounds functionality with file chooser</li>
+          <li>Added GTK4 FileDialog with support for multiple audio formats (WAV, OGG, MP3, FLAC, AAC)</li>
+          <li>Custom sounds toggle now properly shows/hides file picker rows</li>
+          <li>Added test playback of selected custom sounds</li>
+          <li>Implemented right-click context menu to clear custom sounds</li>
+          <li>Fixed tap sensitivity range mismatch between UI and settings schema</li>
+          <li>Implemented keep-on-top window functionality using GTK4 surface API</li>
+          <li>Added start-on-launch functionality</li>
+          <li>Enhanced file validation and error handling for audio files</li>
+          <li>All preferences now properly connected to real-time UI updates</li>
+          <li>External settings changes are synchronized across application instances</li>
+        </ul>
+      </description>
     </release>
     <release version="1.1.3" date="2025-08-17">
-      <description translatable="yes">Complete translation support with 7 new languages</description>
-      <ul>
-        <li translatable="yes">Added comprehensive translations for Portuguese (Brazil and Portugal)</li>
-        <li translatable="yes">Added Spanish translation with proper musical terminology</li>
-        <li translatable="yes">Added Irish (Gaelic) translation</li>
-        <li translatable="yes">Added Māori translation</li>
-        <li translatable="yes">Completed Italian translation coverage</li>
-        <li translatable="yes">Enhanced Turkish translation completeness</li>
-        <li translatable="yes">Updated translation infrastructure and build system</li>
-        <li translatable="yes">All UI elements, preferences, and help text now fully translatable</li>
-      </ul>
+      <description>
+        <p>Complete translation support with 7 new languages</p>
+        <ul>
+          <li>Added comprehensive translations for Portuguese (Brazil and Portugal)</li>
+          <li>Added Spanish translation with proper musical terminology</li>
+          <li>Added Irish (Gaelic) translation</li>
+          <li>Added Māori translation</li>
+          <li>Completed Italian translation coverage</li>
+          <li>Enhanced Turkish translation completeness</li>
+          <li>Updated translation infrastructure and build system</li>
+          <li>All UI elements, preferences, and help text now fully translatable</li>
+        </ul>
+      </description>
     </release>
     <release version="1.1.2" date="2025-08-17">
       <description>
