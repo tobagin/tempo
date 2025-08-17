@@ -164,10 +164,11 @@ install_app() {
     if [ "$INSTALL" = true ]; then
         print_info "Installing $PROJECT_NAME..."
         
-        # Add local repo if not already added
-        if ! flatpak remote-list | grep -q "tempo-local"; then
-            flatpak remote-add --user --no-gpg-verify tempo-local "$REPO_DIR"
-        fi
+        # Remove any existing tempo-local remote to avoid conflicts
+        flatpak remote-delete --user tempo-local 2>/dev/null || true
+        
+        # Add local repo (using absolute path)
+        flatpak remote-add --user --no-gpg-verify tempo-local "$(pwd)/$REPO_DIR"
         
         # Install/update the application (force reinstall if already installed)
         if flatpak install -y --user --reinstall tempo-local "$APP_ID"; then

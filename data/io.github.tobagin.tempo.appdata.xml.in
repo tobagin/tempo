@@ -83,6 +83,17 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.1.8" date="2025-08-17">
+      <description>
+        <p>Fixed time signature denominator functionality</p>
+        <ul>
+          <li>Time signature denominators now properly affect beat timing</li>
+          <li>4/4, 4/8, 4/2, and 4/16 now have different beat speeds as expected</li>
+          <li>Improved beat duration calculation using both numerator and denominator</li>
+          <li>Enhanced musical accuracy for practice sessions</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.7" date="2025-08-17">
       <description>
         <p>Final desktop file validation fixes</p>

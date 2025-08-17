@@ -67,7 +67,7 @@ public class TempoApplication : Adw.Application {
         about_dialog.application_name = _("Tempo");
         about_dialog.application_icon = "io.github.tobagin.tempo";
         about_dialog.developer_name = _("Thiago Fernandes");
-        about_dialog.version = "1.1.7";
+        about_dialog.version = "1.1.8";
         about_dialog.website = "https://github.com/tobagin/Tempo";
         about_dialog.issue_url = "https://github.com/tobagin/Tempo/issues";
         about_dialog.copyright = _("Copyright © 2025 Thiago Fernandes");

@@ -51,11 +51,15 @@ public class MetronomeEngine : GLib.Object {
     public MetronomeEngine() {
         // Connect property change notifications
         this.notify["bpm"].connect(() => {
-            this.beat_duration = 60.0 / (double)bpm;
+            this.beat_duration = calculate_beat_duration();
+        });
+        
+        this.notify["beat_value"].connect(() => {
+            this.beat_duration = calculate_beat_duration();
         });
         
         // Initialize beat duration
-        this.beat_duration = 60.0 / (double)bpm;
+        this.beat_duration = calculate_beat_duration();
         
         // Initialize audio
         initialize_audio();
@@ -73,7 +77,7 @@ public class MetronomeEngine : GLib.Object {
         current_beat = 0;
         
         // Initialize timing
-        beat_duration = 60.0 / (double)bpm;
+        beat_duration = calculate_beat_duration();
         next_beat_time = GLib.get_monotonic_time() + (int64)(beat_duration * 1000000);
         
         // Start the timing loop
@@ -111,7 +115,7 @@ public class MetronomeEngine : GLib.Object {
         }
         
         bpm = new_bpm;
-        beat_duration = 60.0 / (double)bpm;
+        beat_duration = calculate_beat_duration();
     }
     
     /**
@@ -225,8 +229,8 @@ public class MetronomeEngine : GLib.Object {
         // Calculate next beat time (absolute time to prevent drift)
         next_beat_time += (int64)(beat_duration * 1000000);
         
-        // Update beat duration if tempo changed
-        double new_duration = 60.0 / (double)bpm;
+        // Update beat duration if tempo or time signature changed
+        double new_duration = calculate_beat_duration();
         if (Math.fabs(new_duration - beat_duration) > 0.001) { // 1ms tolerance
             beat_duration = new_duration;
         }
@@ -327,5 +331,24 @@ public class MetronomeEngine : GLib.Object {
         } catch (Error e) {
             warning("Error playing click sound: %s", e.message);
         }
+    }
+    
+    /**
+     * Calculate beat duration based on BPM and time signature denominator.
+     * 
+     * @return Beat duration in seconds
+     */
+    private double calculate_beat_duration() {
+        // Base duration for quarter note at given BPM
+        double quarter_note_duration = 60.0 / (double)bpm;
+        
+        // Adjust based on time signature denominator
+        // denominator = 4 means quarter note gets the beat (base case)
+        // denominator = 8 means eighth note gets the beat (half duration)
+        // denominator = 2 means half note gets the beat (double duration)
+        // denominator = 16 means sixteenth note gets the beat (quarter duration)
+        double multiplier = 4.0 / (double)beat_value;
+        
+        return quarter_note_duration * multiplier;
     }
 }

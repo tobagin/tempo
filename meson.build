@@ -1,5 +1,5 @@
 project('tempo', ['c', 'vala'],
-  version: '1.1.7',
+  version: '1.1.8',
   license: 'GPL3+',
   meson_version: '>= 0.59.0',
   default_options: [

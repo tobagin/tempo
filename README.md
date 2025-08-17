@@ -20,7 +20,7 @@ Tempo is a simple, reliable, and aesthetically pleasing metronome application bu
 
 - **Precise Timing**: Sub-millisecond accuracy with drift-free timing engine
 - **Customizable Tempo**: Set BPM from 40 to 240 using slider, stepper, or tap tempo
-- **Time Signature Control**: Support for common time signatures (2/4, 3/4, 4/4, 6/8, etc.)
+- **Time Signature Control**: Full support for time signatures with working denominators (4/4, 4/8, 4/2, 4/16, etc.)
 - **Visual Beat Indicator**: Clear visual feedback synchronized with audio
 - **Accented Downbeats**: Distinct sound for the first beat of each measure
 - **Low-Latency Audio**: Optimized GStreamer pipeline for minimal audio delay
@@ -232,6 +232,15 @@ This program is free software: you can redistribute it and/or modify it under th
 ## Contributing
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Recent Changes (v1.1.8)
+
+- **Fixed Time Signature Denominators**: Time signature denominators now properly affect beat timing
+  - 4/4 = quarter notes get the beat (normal speed)
+  - 4/8 = eighth notes get the beat (twice as fast)
+  - 4/2 = half notes get the beat (half speed)
+  - 4/16 = sixteenth notes get the beat (very fast)
+- **Enhanced Musical Accuracy**: Improved beat duration calculation for practice sessions
 
 ## Support
 
