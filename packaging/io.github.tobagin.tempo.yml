@@ -52,7 +52,7 @@ modules:
       - type: git
         url: https://github.com/tobagin/Tempo.git
         tag: v1.2.1
-        commit: c1249f802a1e041514e7a18d077ed911fe613346
+        commit: ab60751eafeb3538949b7af2263b35b7e21691e4
         x-checker-data:
           type: json
           url: https://api.github.com/repos/tobagin/Tempo/releases/latest
