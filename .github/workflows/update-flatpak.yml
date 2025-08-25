@@ -65,6 +65,9 @@ jobs:
         git config user.email "action@github.com"
         git config user.name "GitHub Action (Tempo Updates)"
         
+        # Delete the branch if it exists remotely
+        git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git --delete "$BRANCH_NAME" 2>/dev/null || true
+        
         git checkout -b "$BRANCH_NAME"
         
         # Copy the updated manifest
