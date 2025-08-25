@@ -1,4 +1,4 @@
-name: Create Flathub PR on Tag
+name: Update Flathub on Tag
 
 on:
   push:
@@ -56,7 +56,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.FLATHUB_TOKEN }}
       run: |
         FLATHUB_REPO="flathub/io.github.tobagin.tempo"
-        BRANCH_NAME="update-${{ steps.version.outputs.tag_name }}"
         
         echo "🔄 Cloning Flathub repository..."
         git clone https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git flathub-repo
@@ -65,12 +64,7 @@ jobs:
         git config user.email "action@github.com"
         git config user.name "GitHub Action (Tempo Updates)"
         
-        # Delete the branch if it exists remotely
-        git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git --delete "$BRANCH_NAME" 2>/dev/null || true
-        
-        git checkout -b "$BRANCH_NAME"
-        
-        # Copy the updated manifest
+        # Copy the updated manifest directly to main
         cp ../packaging/io.github.tobagin.tempo.yml ./io.github.tobagin.tempo.yml
         
         git add io.github.tobagin.tempo.yml
@@ -86,47 +80,12 @@ jobs:
         **Source:** https://github.com/tobagin/Tempo/releases/tag/${{ steps.version.outputs.tag_name }}
         
         ---
-        *This PR was automatically created by GitHub Actions*"
+        *This update was automatically created by GitHub Actions*"
         
-        git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git "$BRANCH_NAME"
+        git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git main
         
-        gh auth login --with-token <<< "$GITHUB_TOKEN"
-        
-        # Create PR with better error handling
-        if gh pr create \
-          --title "📦 Update Tempo to ${{ steps.version.outputs.tag_name }}" \
-          --body "🚀 **Automated update to ${{ steps.version.outputs.tag_name }}**
-
-        This PR updates the Flatpak manifest with the latest release from the upstream repository.
-
-        **Changes:**
-        - **Tag:** \`${{ steps.version.outputs.tag_name }}\`
-        - **Commit:** \`${{ steps.version.outputs.commit_hash }}\`
-        - **Release:** https://github.com/tobagin/Tempo/releases/tag/${{ steps.version.outputs.tag_name }}
-
-        **Automated Checks:**
-        - ✅ Manifest syntax validated
-        - ✅ Commit hash verified
-        - ✅ Tag references confirmed
-
-        ---
-        
-        **Test Build:**
-        The Flathub CI will automatically build and test this update once the PR is created.
-
-        **Merge Instructions:**
-        If the test build passes, this PR can be safely merged to publish the update to Flathub.
-
-        ---
-        *🤖 This PR was automatically created by [GitHub Actions](https://github.com/tobagin/Tempo/actions)*" \
-          --head "$BRANCH_NAME" \
-          --base "master" \
-          --repo "$FLATHUB_REPO"; then
-          echo "✅ Created PR: https://github.com/$FLATHUB_REPO/pulls"
-        else
-          echo "⚠️ PR creation failed, but branch was pushed successfully"
-          echo "📋 Manual PR can be created at: https://github.com/$FLATHUB_REPO/pull/new/$BRANCH_NAME"
-        fi
+        echo "✅ Updated Flathub repository directly: https://github.com/$FLATHUB_REPO"
+        echo "🚀 Flathub will automatically build and publish the update"
 
     - name: Summary
       if: always()
@@ -140,13 +99,13 @@ jobs:
         
         if [[ "${{ steps.check.outputs.manifest_ready }}" == "true" ]]; then
           echo "✅ **Manifest Ready:** Local Flatpak manifest found and validated" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **Flathub PR Created:** Pull request submitted to Flathub repository" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Flathub Updated:** Manifest pushed directly to Flathub main branch" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ **Manifest Missing:** Local manifest not found or invalid" >> $GITHUB_STEP_SUMMARY
         fi
         
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**Next Steps:**" >> $GITHUB_STEP_SUMMARY
-        echo "1. Monitor the Flathub PR for CI build status" >> $GITHUB_STEP_SUMMARY
-        echo "2. Once CI passes, the Flathub maintainers can merge the PR" >> $GITHUB_STEP_SUMMARY
-        echo "3. The new version will be published to Flathub automatically" >> $GITHUB_STEP_SUMMARY
+        echo "1. Flathub CI will automatically build and test the update" >> $GITHUB_STEP_SUMMARY
+        echo "2. If build passes, the new version will be published automatically" >> $GITHUB_STEP_SUMMARY
+        echo "3. Monitor at: https://github.com/flathub/io.github.tobagin.tempo" >> $GITHUB_STEP_SUMMARY
