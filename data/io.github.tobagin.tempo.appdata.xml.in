@@ -85,16 +85,18 @@
   <releases>
     <release version="1.2.1" date="2025-08-25">
       <description>
-        <p>GitHub Actions automation and UX improvements</p>
+        <p>Major automation overhaul and streamlined release process</p>
         <ul>
-          <li>Implemented automated Flatpak manifest updates via GitHub Actions</li>
-          <li>Added zero-maintenance releases with automatic Flathub PR creation</li>
-          <li>Replaced alert dialog with integrated about dialog for "What's New"</li>
-          <li>Simplified keyboard shortcuts dialog (removed blue card styling)</li>
-          <li>Added comprehensive automation documentation and validation scripts</li>
-          <li>Enhanced release workflow with external data checking</li>
-          <li>Improved user experience with automatic navigation to release notes</li>
-          <li>Added Flathub configuration and x-checker-data for dependency updates</li>
+          <li>Implemented fully automated Flatpak releases with zero manual intervention</li>
+          <li>GitHub Actions now push directly to Flathub main branch (no PR approval needed)</li>
+          <li>Replaced alert dialog with integrated about dialog for "What's New" feature</li>
+          <li>Added automatic about dialog navigation with tab+enter simulation</li>
+          <li>Simplified keyboard shortcuts dialog by removing blue card styling</li>
+          <li>Enhanced release workflow with comprehensive error handling</li>
+          <li>Removed unnecessary x-checker-data configuration for cleaner manifests</li>
+          <li>Added GSettings-based version tracking to prevent repeated notifications</li>
+          <li>Streamlined development workflow with automated tag-based deployments</li>
+          <li>Improved user experience with seamless release note integration</li>
         </ul>
       </description>
     </release>
