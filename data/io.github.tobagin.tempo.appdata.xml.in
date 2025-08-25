@@ -83,7 +83,23 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
-    <release version="@VERSION@" date="2025-08-25">
+    <release version="1.2.1" date="2025-08-25">
+      <description>
+        <p>GitHub Actions automation and UX improvements</p>
+        <ul>
+          <li>Implemented automated Flatpak manifest updates via GitHub Actions</li>
+          <li>Added zero-maintenance releases with automatic Flathub PR creation</li>
+          <li>Replaced alert dialog with integrated about dialog for "What's New"</li>
+          <li>Simplified keyboard shortcuts dialog (removed blue card styling)</li>
+          <li>Added comprehensive automation documentation and validation scripts</li>
+          <li>Enhanced release workflow with external data checking</li>
+          <li>Improved user experience with automatic navigation to release notes</li>
+          <li>Added Flathub configuration and x-checker-data for dependency updates</li>
+        </ul>
+      </description>
+    </release>
+    
+    <release version="1.2.0" date="2025-08-25">
       <description>
         <p>Major update with keyboard shortcuts dialog and improved development workflow</p>
         <ul>
