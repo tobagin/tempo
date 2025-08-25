@@ -59,7 +59,7 @@ jobs:
             content = f.read()
         
         # Pattern to match the tempo module source section
-        pattern = r'(- name: tempo.*?sources:\s*- type: git\s+url: https://github\.com/tobagin/Tempo\.git\s+tag: )v[\d.]+(.*?\s+commit: )[a-f0-9]+'
+        pattern = r'(- name: tempo.*?sources:\s*- type: git\s+url: https://github\.com/tobagin/Tempo\.git\s+tag: )v[\d.]+(\s+commit: )[a-f0-9]+'
         
         replacement = f'\\g<1>{tag_name}\\g<2>{commit_hash}'
         
@@ -106,7 +106,7 @@ jobs:
         BRANCH_NAME="update-${{ steps.version.outputs.tag_name }}"
         
         echo "🔄 Cloning Flathub repository..."
-        git clone https://github.com/$FLATHUB_REPO.git flathub-repo
+        git clone https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git flathub-repo
         cd flathub-repo
         
         git config user.email "action@github.com"
@@ -132,7 +132,7 @@ jobs:
         ---
         *This PR was automatically created by GitHub Actions*"
         
-        git push origin "$BRANCH_NAME"
+        git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git "$BRANCH_NAME"
         
         gh auth login --with-token <<< "$GITHUB_TOKEN"
         
