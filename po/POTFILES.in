@@ -14,4 +14,4 @@ data/ui/preferences_dialog.blp
 
 # Desktop and metadata files
 data/io.github.tobagin.tempo.desktop.in
-data/io.github.tobagin.tempo.appdata.xml.in
+data/io.github.tobagin.tempo.metainfo.xml.in

@@ -9,9 +9,9 @@ desktop_input = configure_file(
   }
 )
 
-appdata_input = configure_file(
-  input: 'io.github.tobagin.tempo.appdata.xml.in',
-  output: application_id + '.appdata.xml.in',
+metainfo_input = configure_file(
+  input: 'io.github.tobagin.tempo.metainfo.xml.in',
+  output: application_id + '.metainfo.xml.in',
   configuration: {
     'APPLICATION_ID': application_id,
     'PROJECT_NAME': project_name,
@@ -29,10 +29,10 @@ desktop_file = i18n.merge_file(
   install_dir: desktopdir
 )
 
-# AppData file
-appdata_file = i18n.merge_file(
-  input: appdata_input,
-  output: application_id + '.appdata.xml',
+# MetaInfo file
+metainfo_file = i18n.merge_file(
+  input: metainfo_input,
+  output: application_id + '.metainfo.xml',
   type: 'xml',
   po_dir: join_paths(meson.current_source_dir(), '..', 'po'),
   install: true,
