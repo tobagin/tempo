@@ -92,7 +92,8 @@ jobs:
         
         gh auth login --with-token <<< "$GITHUB_TOKEN"
         
-        gh pr create \
+        # Create PR with better error handling
+        if gh pr create \
           --title "📦 Update Tempo to ${{ steps.version.outputs.tag_name }}" \
           --body "🚀 **Automated update to ${{ steps.version.outputs.tag_name }}**
 
@@ -120,9 +121,12 @@ jobs:
         *🤖 This PR was automatically created by [GitHub Actions](https://github.com/tobagin/Tempo/actions)*" \
           --head "$BRANCH_NAME" \
           --base "master" \
-          --repo "$FLATHUB_REPO"
-        
-        echo "✅ Created PR: https://github.com/$FLATHUB_REPO/pulls"
+          --repo "$FLATHUB_REPO"; then
+          echo "✅ Created PR: https://github.com/$FLATHUB_REPO/pulls"
+        else
+          echo "⚠️ PR creation failed, but branch was pushed successfully"
+          echo "📋 Manual PR can be created at: https://github.com/$FLATHUB_REPO/pull/new/$BRANCH_NAME"
+        fi
 
     - name: Summary
       if: always()
