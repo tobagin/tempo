@@ -82,11 +82,13 @@ jobs:
         ---
         *This update was automatically created by GitHub Actions*"
         
-        # Create a temporary branch for the PR
+        # Create a temporary branch for the PR (required by GitHub)
         BRANCH_NAME="update-${{ steps.version.outputs.tag_name }}"
-        git checkout -b "$BRANCH_NAME"
         
-        # Push the branch
+        # Delete existing branch if it exists
+        git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git --delete "$BRANCH_NAME" 2>/dev/null || true
+        
+        git checkout -b "$BRANCH_NAME"
         git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git "$BRANCH_NAME"
         
         # Create PR using GitHub API
