@@ -7,7 +7,11 @@
 using Gtk;
 using Adw;
 
-[GtkTemplate (ui = "/io/github/tobagin/tempo/ui/main_window.ui")]
+#if DEVELOPMENT
+    [GtkTemplate (ui = "/io/github/tobagin/tempo/Devel/ui/main_window.ui")]
+#else
+    [GtkTemplate (ui = "/io/github/tobagin/tempo/ui/main_window.ui")]
+#endif
 public class TempoWindow : Adw.ApplicationWindow {
     
     // UI Elements from Blueprint template
@@ -27,6 +31,9 @@ public class TempoWindow : Adw.ApplicationWindow {
     // Preferences dialog
     private PreferencesDialog? preferences_dialog = null;
     
+    // Keyboard shortcuts dialog
+    private KeyboardShortcutsDialog? shortcuts_dialog = null;
+    
     // Settings for visual preferences
     private GLib.Settings settings;
     
@@ -39,7 +46,7 @@ public class TempoWindow : Adw.ApplicationWindow {
         Object(application: app);
         
         // Initialize settings
-        settings = new GLib.Settings("io.github.tobagin.tempo");
+        settings = new GLib.Settings(Config.APP_ID);
         
         // Initialize engines
         metronome_engine = new MetronomeEngine();
@@ -61,7 +68,7 @@ public class TempoWindow : Adw.ApplicationWindow {
     private void setup_ui() {
         // Load CSS styles using modern approach
         var css_provider = new CssProvider();
-        css_provider.load_from_resource("/io/github/tobagin/tempo/style.css");
+        css_provider.load_from_resource(Config.RESOURCE_PATH + "/style.css");
         
         // Add CSS provider to display using modern API
         var display = this.get_display() ?? Gdk.Display.get_default();
@@ -308,8 +315,8 @@ public class TempoWindow : Adw.ApplicationWindow {
                 break;
                 
             case Gdk.Key.F1:
-                // F1: Show help/shortcuts (placeholder for future)
-                show_shortcuts_help();
+                // F1: Show keyboard shortcuts dialog
+                show_keyboard_shortcuts();
                 return true;
                 
             case Gdk.Key.plus:
@@ -354,37 +361,6 @@ public class TempoWindow : Adw.ApplicationWindow {
         }
     }
     
-    private void show_shortcuts_help() {
-        var dialog = new Adw.AlertDialog(_("Keyboard Shortcuts"), 
-                                        _("Quick reference for keyboard shortcuts"));
-        
-        var shortcuts_text = _("""<b>Playback Control:</b>
-• <b>Spacebar</b> - Start/Stop metronome
-• <b>Escape</b> - Stop metronome
-• <b>T</b> - Tap tempo
-
-<b>Tempo Adjustment:</b>
-• <b>↑/↓ Arrow</b> - Adjust tempo (±1 BPM)
-• <b>←/→ Arrow</b> - Adjust tempo (±1 BPM)
-• <b>Shift + Arrows</b> - Adjust tempo (±10 BPM)
-• <b>+/-</b> - Adjust tempo (±5 BPM)
-• <b>Shift + +/-</b> - Adjust tempo (±10 BPM)
-
-<b>Time Signature:</b>
-• <b>Ctrl + 1-9</b> - Set beats per bar
-• <b>Ctrl + R</b> - Reset beat counter
-
-<b>Help:</b>
-• <b>F1</b> - Show this help""");
-        
-        dialog.set_body_use_markup(true);
-        dialog.set_body(shortcuts_text);
-        dialog.add_response("ok", _("OK"));
-        dialog.set_default_response("ok");
-        dialog.set_close_response("ok");
-        
-        dialog.present(this);
-    }
     
     /**
      * Show the preferences dialog.
@@ -394,6 +370,16 @@ public class TempoWindow : Adw.ApplicationWindow {
             preferences_dialog = new PreferencesDialog();
         }
         preferences_dialog.present(this);
+    }
+    
+    /**
+     * Show the keyboard shortcuts dialog.
+     */
+    public void show_keyboard_shortcuts() {
+        if (shortcuts_dialog == null) {
+            shortcuts_dialog = new KeyboardShortcutsDialog();
+        }
+        shortcuts_dialog.present(this);
     }
     
     /**

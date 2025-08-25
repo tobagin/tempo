@@ -83,6 +83,22 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="@VERSION@" date="2025-08-25">
+      <description>
+        <p>Major update with keyboard shortcuts dialog and improved development workflow</p>
+        <ul>
+          <li>Added comprehensive keyboard shortcuts dialog with all available shortcuts</li>
+          <li>Updated menu structure with proper keyboard accelerators</li>
+          <li>Implemented configuration system with development mode support</li>
+          <li>Enhanced about dialog with release notes, acknowledgments, and comprehensive credits</li>
+          <li>Added dynamic resource naming for development builds</li>
+          <li>Improved build system with proper app ID handling</li>
+          <li>Updated version management system as single source of truth</li>
+          <li>Added development flag consistency across all build tools</li>
+        </ul>
+      </description>
+    </release>
+    
     <release version="1.1.8" date="2025-08-17">
       <description>
         <p>Fixed time signature denominator functionality</p>

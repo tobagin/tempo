@@ -50,3 +50,4 @@
 - **Never hallucinate libraries or functions** – only use known, verified Python packages.
 - **Always confirm file paths and module names** exist before referencing them in code or tests.
 - **Never delete or overwrite existing code** unless explicitly instructed to or if part of a task from `TASK.md`.
+- to compile use ./scripts/build.sh for prod, and ./scripts/build.sh --dev for dev

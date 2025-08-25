@@ -259,3 +259,15 @@ scale trough {
   box-shadow: 0 12px 48px alpha(@accent_color, 0.15);
   transform: translateY(-2px);
 }
+
+/* Keyboard shortcuts dialog styling */
+.shortcut-label {
+  font-family: monospace;
+  font-weight: bold;
+  background: alpha(@accent_color, 0.1);
+  color: @accent_color;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid alpha(@accent_color, 0.3);
+  min-width: 60px;
+}

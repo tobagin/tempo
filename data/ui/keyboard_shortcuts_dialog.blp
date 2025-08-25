@@ -1,0 +1,180 @@
+using Gtk 4.0;
+using Adw 1;
+
+template $KeyboardShortcutsDialog : Adw.Dialog {
+  title: _("Keyboard Shortcuts");
+  content-width: 600;
+  content-height: 700;
+  
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      title-widget: Adw.WindowTitle {
+        title: _("Keyboard Shortcuts");
+      };
+    }
+    
+    ScrolledWindow {
+      vexpand: true;
+      
+      Adw.Clamp {
+        maximum-size: 600;
+        
+        Box {
+          orientation: vertical;
+          spacing: 0;
+          margin-top: 24;
+          margin-bottom: 24;
+          margin-start: 12;
+          margin-end: 12;
+          
+          // Playback Control Section
+          Adw.PreferencesGroup {
+            title: _("Playback Control");
+            
+            Adw.ActionRow {
+              title: _("Start/Stop metronome");
+              
+              [suffix]
+              Label {
+                label: _("Spacebar");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Stop metronome");
+              
+              [suffix]
+              Label {
+                label: _("Escape");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Tap tempo");
+              
+              [suffix]
+              Label {
+                label: _("T");
+              }
+            }
+          }
+          
+          // Tempo Adjustment Section
+          Adw.PreferencesGroup {
+            title: _("Tempo Adjustment");
+            
+            Adw.ActionRow {
+              title: _("Increase tempo (±1 BPM)");
+              
+              [suffix]
+              Label {
+                label: _("↑ / →");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Decrease tempo (±1 BPM)");
+              
+              [suffix]
+              Label {
+                label: _("↓ / ←");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Increase tempo (±10 BPM)");
+              
+              [suffix]
+              Label {
+                label: _("Shift + Arrows");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Increase tempo (±5 BPM)");
+              
+              [suffix]
+              Label {
+                label: _("+ / =");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Decrease tempo (±5 BPM)");
+              
+              [suffix]
+              Label {
+                label: _("- / _");
+              }
+            }
+          }
+          
+          // Time Signature Section
+          Adw.PreferencesGroup {
+            title: _("Time Signature");
+            
+            Adw.ActionRow {
+              title: _("Set beats per bar (1-9)");
+              
+              [suffix]
+              Label {
+                label: _("Ctrl + 1-9");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Reset beat counter");
+              
+              [suffix]
+              Label {
+                label: _("Ctrl + R");
+              }
+            }
+          }
+          
+          // Application Control Section
+          Adw.PreferencesGroup {
+            title: _("Application");
+            
+            Adw.ActionRow {
+              title: _("Open preferences");
+              
+              [suffix]
+              Label {
+                label: _("Ctrl + ,");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Show keyboard shortcuts");
+              
+              [suffix]
+              Label {
+                label: _("Ctrl + ?");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Show about dialog");
+              
+              [suffix]
+              Label {
+                label: _("F1");
+              }
+            }
+            
+            Adw.ActionRow {
+              title: _("Quit application");
+              
+              [suffix]
+              Label {
+                label: _("Ctrl + Q");
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

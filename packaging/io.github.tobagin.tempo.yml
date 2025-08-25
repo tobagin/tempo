@@ -38,6 +38,12 @@ modules:
         url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
         tag: v0.18.0
         commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/jwestman/blueprint-compiler/releases/latest
+          tag-query: .tag_name
+          version-query: $tag | sub("^v"; "")
+          timestamp-query: .published_at
         
   # Main application (PyGObject already included in GNOME Platform)
   - name: tempo
@@ -45,5 +51,11 @@ modules:
     sources:
       - type: git
         url: https://github.com/tobagin/Tempo.git
-        tag: v1.1.8
-        commit: 8f8ab3cf98a0e98efa7bd282ce8ec58086eec25c
+        tag: v1.2.0
+        commit: dba680d253aec2c9e168e5428065927075766016
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/tobagin/Tempo/releases/latest
+          tag-query: .tag_name
+          version-query: $tag | sub("^v"; "")
+          timestamp-query: .published_at

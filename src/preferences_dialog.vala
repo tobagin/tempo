@@ -9,7 +9,11 @@ using Gtk;
 using Adw;
 using Gst;
 
-[GtkTemplate (ui = "/io/github/tobagin/tempo/ui/preferences_dialog.ui")]
+#if DEVELOPMENT
+    [GtkTemplate (ui = "/io/github/tobagin/tempo/Devel/ui/preferences_dialog.ui")]
+#else
+    [GtkTemplate (ui = "/io/github/tobagin/tempo/ui/preferences_dialog.ui")]
+#endif
 public class PreferencesDialog : Adw.PreferencesDialog {
     
     // UI Elements from Blueprint template - Audio Settings
@@ -46,7 +50,7 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         GLib.Object();
         
         // Initialize settings
-        settings = new GLib.Settings("io.github.tobagin.tempo");
+        settings = new GLib.Settings(Config.APP_ID);
         
         // Load initial settings
         load_settings();

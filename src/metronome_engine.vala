@@ -248,7 +248,7 @@ public class MetronomeEngine : GLib.Object {
      */
     private void initialize_audio() {
         try {
-            settings = new GLib.Settings("io.github.tobagin.tempo");
+            settings = new GLib.Settings(Config.APP_ID);
             
             // Initialize GStreamer elements
             create_audio_players();

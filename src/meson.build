@@ -5,6 +5,8 @@ vala_sources = [
   'metronome_engine.vala',
   'tap_tempo.vala',
   'preferences_dialog.vala',
+  'keyboard_shortcuts_dialog.vala',
+  config_vala,  # Generated config.vala file
 ]
 
 # Create main Tempo executable
@@ -27,7 +29,7 @@ executable('tempo',
     '--pkg=gstreamer-1.0',
     '--pkg=gstreamer-audio-1.0',
     '--target-glib=2.76',
-  ],
+  ] + (development ? ['--define=DEVELOPMENT'] : []),
   c_args: [
     '-DGETTEXT_PACKAGE="tempo"',
     '-DLOCALEDIR="@0@"'.format(localedir),

@@ -1,5 +1,5 @@
 project('tempo', ['c', 'vala'],
-  version: '1.1.8',
+  version: '1.2.0',
   license: 'GPL3+',
   meson_version: '>= 0.59.0',
   default_options: [
@@ -9,9 +9,14 @@ project('tempo', ['c', 'vala'],
 )
 
 # Project metadata
-application_id = 'io.github.tobagin.tempo'
-project_name = 'Tempo'
+base_application_id = 'io.github.tobagin.tempo'
+base_project_name = 'Tempo'
 project_description = 'A modern metronome application for musicians'
+
+# Check if this is a development build
+development = get_option('development')
+application_id = development ? base_application_id + '.Devel' : base_application_id
+project_name = development ? base_project_name + ' (Devel)' : base_project_name
 
 # Import gnome module
 gnome = import('gnome')
@@ -40,6 +45,24 @@ conf.set('PROJECT_NAME', project_name)
 conf.set('VERSION', meson.project_version())
 conf.set('PKGDATA_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'tempo'))
 conf.set('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
+
+# Configuration for config.vala
+config_conf = configuration_data()
+config_conf.set('VERSION', meson.project_version())
+config_conf.set('GETTEXT_PACKAGE', 'tempo')
+config_conf.set('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
+config_conf.set('DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
+config_conf.set('APP_ID', application_id)
+config_conf.set('RESOURCE_PATH', '/' + application_id.replace('.', '/'))
+config_conf.set('PROJECT_NAME', project_name)
+config_conf.set('DEVELOPMENT', development.to_string())
+
+# Generate config.vala from config.vala.in
+config_vala = configure_file(
+  input: 'src/config.vala.in',
+  output: 'config.vala',
+  configuration: config_conf
+)
 
 # Directories
 prefix = get_option('prefix')

@@ -1,4 +1,4 @@
-app-id: io.github.tobagin.tempo
+app-id: io.github.tobagin.tempo.Devel
 runtime: org.gnome.Platform
 runtime-version: '48'
 sdk: org.gnome.Sdk
@@ -19,19 +19,18 @@ finish-args:
   - --filesystem=host
   - --talk-name=org.freedesktop.Flatpak
 
-# Temporarily disable cleanup to debug gresource issue
-# cleanup:
-#   - /include
-#   - /lib/pkgconfig  
-#   - /share/pkgconfig
-#   - /share/aclocal
-#   - /man
-#   - /share/man
-#   - /share/gtk-doc
-#   - /share/vala
-#   - /share/devhelp
-#   - '*.la'
-#   - '*.a'
+cleanup:
+  - /include
+  - /lib/pkgconfig  
+  - /share/pkgconfig
+  - /share/aclocal
+  - /man
+  - /share/man
+  - /share/gtk-doc
+  - /share/vala
+  - /share/devhelp
+  - '*.la'
+  - '*.a'
 
 modules:
   # Blueprint compiler (build-time only)
@@ -51,6 +50,8 @@ modules:
   # Main application
   - name: tempo
     buildsystem: meson
+    config-opts:
+      - -Ddevelopment=true
     sources:
       - type: dir
         path: ..

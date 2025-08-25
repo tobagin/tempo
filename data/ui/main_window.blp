@@ -174,10 +174,17 @@ menu primary_menu {
   
   section {
     item {
+      label: _("Keyboard Shortcuts");
+      action: "app.show-help-overlay";
+    }
+    
+    item {
       label: _("About Tempo");
       action: "app.about";
     }
-    
+  }
+  
+  section {
     item {
       label: _("Quit");
       action: "app.quit";

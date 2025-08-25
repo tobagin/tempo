@@ -17,7 +17,7 @@ public class TempoApplication : Adw.Application {
     
     public TempoApplication() {
         GLib.Object(
-            application_id: "io.github.tobagin.tempo",
+            application_id: Config.APP_ID,
             flags: ApplicationFlags.DEFAULT_FLAGS
         );
     }
@@ -36,6 +36,16 @@ public class TempoApplication : Adw.Application {
         }
         
         main_window.present();
+        
+        // Check if this is a new version and show release notes automatically
+        if (should_show_release_notes()) {
+            // Small delay to ensure main window is fully presented
+            Timeout.add(500, () => {
+                // Launch about dialog with automatic navigation to release notes
+                show_about_with_release_notes();
+                return false;
+            });
+        }
     }
     
     private void setup_actions() {
@@ -43,11 +53,19 @@ public class TempoApplication : Adw.Application {
         var preferences_action = new SimpleAction("preferences", null);
         preferences_action.activate.connect(on_preferences_action);
         this.add_action(preferences_action);
+        this.set_accels_for_action("app.preferences", {"<Control>comma"});
+        
+        // Keyboard shortcuts action
+        var shortcuts_action = new SimpleAction("show-help-overlay", null);
+        shortcuts_action.activate.connect(on_shortcuts_action);
+        this.add_action(shortcuts_action);
+        this.set_accels_for_action("app.show-help-overlay", {"<Control>question"});
         
         // About action
         var about_action = new SimpleAction("about", null);
         about_action.activate.connect(on_about_action);
         this.add_action(about_action);
+        this.set_accels_for_action("app.about", {"F1"});
         
         // Quit action
         var quit_action = new SimpleAction("quit", null);
@@ -62,26 +80,157 @@ public class TempoApplication : Adw.Application {
         }
     }
     
-    private void on_about_action() {
-        var about_dialog = new Adw.AboutDialog();
-        about_dialog.application_name = _("Tempo");
-        about_dialog.application_icon = "io.github.tobagin.tempo";
-        about_dialog.developer_name = _("Thiago Fernandes");
-        about_dialog.version = "1.1.8";
-        about_dialog.website = "https://github.com/tobagin/Tempo";
-        about_dialog.issue_url = "https://github.com/tobagin/Tempo/issues";
-        about_dialog.copyright = _("Copyright © 2025 Thiago Fernandes");
-        about_dialog.license_type = License.GPL_3_0;
-        
-        about_dialog.comments = _("A precise and professional metronome application");
-        about_dialog.set_developers({
-            _("Thiago Fernandes"),
-        });
-        
-        // Translator credits
-        about_dialog.translator_credits = _("Italian: Albano Battistella (github.com/albanobattistella)\nTurkish: Erdem Uygun (github.com/erdemuygun)");
+    private void on_shortcuts_action() {
         if (main_window != null) {
-            about_dialog.present(main_window);
+            main_window.show_keyboard_shortcuts();
+        }
+    }
+    
+    private void on_about_action() {
+        string[] developers = { "Thiago Fernandes" };
+        string[] designers = { "Thiago Fernandes" };
+        string[] artists = { "Thiago Fernandes" };
+        
+        string app_name = "Tempo";
+        string comments = "A modern metronome for musicians with precise timing and intuitive interface";
+        
+        if (Config.APP_ID.contains("Devel")) {
+            app_name = "Tempo (Development)";
+            comments = "A modern metronome for musicians with precise timing and intuitive interface (Development Version)";
+        }
+
+        var about = new Adw.AboutDialog() {
+            application_name = app_name,
+            application_icon = Config.APP_ID,
+            developer_name = "The Tempo Team",
+            version = Config.VERSION,
+            developers = developers,
+            designers = designers,
+            artists = artists,
+            license_type = Gtk.License.GPL_3_0,
+            website = "https://tobagin.github.io/apps/tempo/",
+            issue_url = "https://github.com/tobagin/Tempo/issues",
+            comments = comments
+        };
+
+        // Load and set release notes from appdata
+        try {
+            var appdata_path = Path.build_filename(Config.DATADIR, "metainfo", "%s.metainfo.xml".printf(Config.APP_ID));
+            var file = File.new_for_path(appdata_path);
+            
+            if (file.query_exists()) {
+                uint8[] contents;
+                file.load_contents(null, out contents, null);
+                string xml_content = (string) contents;
+                
+                // Parse the XML to find the release matching Config.VERSION
+                var parser = new Regex("<release version=\"%s\"[^>]*>(.*?)</release>".printf(Regex.escape_string(Config.VERSION)), 
+                                       RegexCompileFlags.DOTALL | RegexCompileFlags.MULTILINE);
+                MatchInfo match_info;
+                
+                if (parser.match(xml_content, 0, out match_info)) {
+                    string release_section = match_info.fetch(1);
+                    
+                    // Extract description content
+                    var desc_parser = new Regex("<description>(.*?)</description>", 
+                                                RegexCompileFlags.DOTALL | RegexCompileFlags.MULTILINE);
+                    MatchInfo desc_match;
+                    
+                    if (desc_parser.match(release_section, 0, out desc_match)) {
+                        string release_notes = desc_match.fetch(1).strip();
+                        about.set_release_notes(release_notes);
+                        about.set_release_notes_version(Config.VERSION);
+                    }
+                }
+            }
+        } catch (Error e) {
+            // If we can't load release notes from appdata, that's okay
+            warning("Could not load release notes from appdata: %s", e.message);
+        }
+
+        // Set copyright
+        about.set_copyright("© 2025 Thiago Fernandes");
+
+        // Add acknowledgement section
+        about.add_acknowledgement_section(
+            "Special Thanks",
+            {
+                "The GNOME Project",
+                "The GTK Project Team",
+                "GTK Contributors",
+                "LibAdwaita Contributors", 
+                "Vala Programming Language Team",
+                "GStreamer Team",
+                "Blueprint Compiler Team"
+            }
+        );
+
+        // Add translator credits
+        about.set_translator_credits("Italian: Albano Battistella (github.com/albanobattistella)\nTurkish: Erdem Uygun (github.com/erdemuygun)");
+        
+        // Add Source link
+        about.add_link("Source", "https://github.com/tobagin/Tempo");
+        
+        if (main_window != null) {
+            about.present(main_window);
+        }
+    }
+    
+    private void show_about_with_release_notes() {
+        // Open the about dialog first
+        on_about_action();
+        
+        // Wait for the dialog to appear, then navigate to release notes
+        Timeout.add(300, () => {
+            simulate_tab_navigation();
+            
+            // Simulate Enter key press after another delay to open release notes
+            Timeout.add(200, () => {
+                simulate_enter_activation();
+                return false;
+            });
+            return false;
+        });
+    }
+    
+    private bool should_show_release_notes() {
+        var settings = new GLib.Settings(Config.APP_ID);
+        string last_version = settings.get_string("last-version-shown");
+        string current_version = Config.VERSION;
+
+        // Show if this is the first run (empty last version) or version has changed
+        if (last_version == "" || last_version != current_version) {
+            settings.set_string("last-version-shown", current_version);
+            return true;
+        }
+        return false;
+    }
+    
+    private void simulate_tab_navigation() {
+        // Get the focused widget and try to move focus
+        var focused_widget = main_window.get_focus();
+        if (focused_widget != null) {
+            // Use grab_focus to move to the next focusable widget
+            var parent = focused_widget.get_parent();
+            if (parent != null) {
+                // Try to move focus to the next sibling
+                parent.child_focus(Gtk.DirectionType.TAB_FORWARD);
+            }
+        }
+    }
+    
+    private void simulate_enter_activation() {
+        // Get the currently focused widget and try to activate it
+        var focused_widget = main_window.get_focus();
+        if (focused_widget != null) {
+            // If it's a button, click it
+            if (focused_widget is Button) {
+                ((Button)focused_widget).activate();
+            }
+            // For other widgets, try to activate the default action
+            else {
+                focused_widget.activate_default();
+            }
         }
     }
     
