@@ -82,7 +82,7 @@ jobs:
         ---
         *This update was automatically created by GitHub Actions*"
         
-        git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git main
+        git push https://x-access-token:$GITHUB_TOKEN@github.com/$FLATHUB_REPO.git master
         
         echo "✅ Updated Flathub repository directly: https://github.com/$FLATHUB_REPO"
         echo "🚀 Flathub will automatically build and publish the update"
