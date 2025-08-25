@@ -1,4 +1,4 @@
-name: Update Flatpak Manifest on Tag
+name: Create Flathub PR on Tag
 
 on:
   push:
@@ -34,8 +34,8 @@ jobs:
         echo "🔍 Commit hash: $COMMIT_HASH"
         echo "📈 Version: $VERSION"
 
-    - name: Update Flatpak manifest
-      id: update
+    - name: Check manifest exists
+      id: check
       run: |
         MANIFEST_FILE="packaging/io.github.tobagin.tempo.yml"
         
@@ -44,61 +44,14 @@ jobs:
           exit 1
         fi
         
-        cp "$MANIFEST_FILE" "$MANIFEST_FILE.bak"
+        echo "✅ Local manifest found: $MANIFEST_FILE"
+        echo "📋 Current manifest tag and commit:"
+        grep -A 2 "tag:" "$MANIFEST_FILE" || echo "Tag not found in expected format"
         
-        # Update the main module section
-        python3 << 'EOF'
-        import re
-        import sys
-        
-        tag_name = "${{ steps.version.outputs.tag_name }}"
-        commit_hash = "${{ steps.version.outputs.commit_hash }}"
-        manifest_file = "packaging/io.github.tobagin.tempo.yml"
-        
-        with open(manifest_file, 'r') as f:
-            content = f.read()
-        
-        # Pattern to match the tempo module source section
-        pattern = r'(- name: tempo.*?sources:\s*- type: git\s+url: https://github\.com/tobagin/Tempo\.git\s+tag: )v[\d.]+(\s+commit: )[a-f0-9]+'
-        
-        replacement = f'\\g<1>{tag_name}\\g<2>{commit_hash}'
-        
-        updated_content = re.sub(pattern, replacement, content, flags=re.MULTILINE | re.DOTALL)
-        
-        if updated_content != content:
-            with open(manifest_file, 'w') as f:
-                f.write(updated_content)
-            print("✅ Successfully updated manifest")
-            sys.exit(0)
-        else:
-            print("❌ No changes made - pattern not found")
-            print("Current content preview:")
-            print(content[max(0, content.find('- name: tempo')):content.find('- name: tempo') + 500])
-            sys.exit(1)
-        EOF
-        
-        echo "📋 Updated manifest diff:"
-        diff -u "$MANIFEST_FILE.bak" "$MANIFEST_FILE" || true
-        
-        echo "manifest_updated=true" >> $GITHUB_OUTPUT
-
-    - name: Commit manifest changes
-      if: steps.update.outputs.manifest_updated == 'true'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        
-        git add packaging/io.github.tobagin.tempo.yml
-        git commit -m "📦 Update Flatpak manifest to ${{ steps.version.outputs.tag_name }}
-
-        - Updated tag to ${{ steps.version.outputs.tag_name }}
-        - Updated commit hash to ${{ steps.version.outputs.commit_hash }}
-        - Automated by GitHub Actions"
-        
-        git push origin HEAD:main
+        echo "manifest_ready=true" >> $GITHUB_OUTPUT
 
     - name: Create Flathub PR
-      if: steps.update.outputs.manifest_updated == 'true'
+      if: steps.check.outputs.manifest_ready == 'true'
       env:
         GITHUB_TOKEN: ${{ secrets.FLATHUB_TOKEN }}
       run: |
@@ -178,11 +131,11 @@ jobs:
         echo "**Version:** \`${{ steps.version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
-        if [[ "${{ steps.update.outputs.manifest_updated }}" == "true" ]]; then
-          echo "✅ **Manifest Updated:** Local Flatpak manifest updated and committed" >> $GITHUB_STEP_SUMMARY
+        if [[ "${{ steps.check.outputs.manifest_ready }}" == "true" ]]; then
+          echo "✅ **Manifest Ready:** Local Flatpak manifest found and validated" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Flathub PR Created:** Pull request submitted to Flathub repository" >> $GITHUB_STEP_SUMMARY
         else
-          echo "❌ **No Updates:** Manifest update failed or not needed" >> $GITHUB_STEP_SUMMARY
+          echo "❌ **Manifest Missing:** Local manifest not found or invalid" >> $GITHUB_STEP_SUMMARY
         fi
         
         echo "" >> $GITHUB_STEP_SUMMARY
