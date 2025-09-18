@@ -1,6 +1,6 @@
 app-id: io.github.tobagin.tempo.Devel
 runtime: org.gnome.Platform
-runtime-version: '48'
+runtime-version: '49'
 sdk: org.gnome.Sdk
 command: tempo
 
@@ -42,7 +42,7 @@ modules:
       - /share/pkgconfig/blueprint-compiler.pc
     sources:
       - type: git
-        url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
+        url: https://gitlab.gnome.org/GNOME/blueprint-compiler.git
         tag: v0.18.0
         commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
         

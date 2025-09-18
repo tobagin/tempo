@@ -35,9 +35,9 @@ modules:
     cleanup: ['*']
     sources:
       - type: git
-        url: https://gitlab.gnome.org/jwestman/blueprint-compiler.git
-        tag: v1.2.2
-        commit: c416c4752354c34d13b924a09f19dad90516f0a7
+        url: https://gitlab.gnome.org/GNOME/blueprint-compiler.git
+        tag: v0.18.0
+        commit: 07c9c9df9cd1b6b4454ecba21ee58211e9144a4b
         
   # Main application (PyGObject already included in GNOME Platform)
   - name: tempo
