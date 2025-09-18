@@ -44,7 +44,10 @@
   <url type="homepage">https://github.com/tobagin/tempo</url>
   <url type="bugtracker">https://github.com/tobagin/tempo/issues</url>
   <url type="help">https://github.com/tobagin/tempo/discussions</url>
-  
+  <url type="donation">https://github.com/sponsors/tobagin</url>
+  <url type="contact">https://github.com/tobagin</url>
+  <url type="contribute">https://github.com/tobagin/tempo</url>
+
   <categories>
     <category>Audio</category>
     <category>Music</category>
@@ -83,14 +86,25 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.2.3" date="2025-09-18">
+      <description>
+        <p>Runtime and metadata improvements</p>
+        <ul>
+          <li>Updated runtime version to GNOME 49 for latest platform features</li>
+          <li>Enhanced metainfo with additional application metadata items</li>
+          <li>Improved compatibility with latest GNOME runtime environment</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="1.2.2" date="2025-08-25">
       <description>
-        <p>Bug fixes and improvements</p>
+        <p>Build system fixes and AppStream modernization</p>
         <ul>
-          <li>Fixed issue with component rendering</li>
-          <li>Resolved crash on startup</li>
-          <li>Corrected display problems</li>
-          <li>Security vulnerability patch</li>
+          <li>Fixed manifest update to only target tempo module, preventing blueprint compiler issues</li>
+          <li>Migrated from appdata.xml to metainfo.xml following modern AppStream standards</li>
+          <li>Updated build system references to use metainfo naming convention</li>
+          <li>Corrected translation file references for new metainfo filename</li>
         </ul>
       </description>
     </release>
