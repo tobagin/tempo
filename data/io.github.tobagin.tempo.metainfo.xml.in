@@ -86,6 +86,17 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.2.4" date="2025-09-18">
+      <description>
+        <p>Manifest repository corrections</p>
+        <ul>
+          <li>Updated blueprint-compiler source to official GNOME repository</li>
+          <li>Fixed dependency URLs for better long-term reliability</li>
+          <li>Ensures compatibility with official upstream sources</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="1.2.3" date="2025-09-18">
       <description>
         <p>Runtime and metadata improvements</p>
