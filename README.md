@@ -18,6 +18,7 @@ Tempo is a simple, reliable, and aesthetically pleasing metronome application bu
 
 ## Features
 
+### Core Functionality
 - **Precise Timing**: Sub-millisecond accuracy with drift-free timing engine
 - **Customizable Tempo**: Set BPM from 40 to 240 using slider, stepper, or tap tempo
 - **Time Signature Control**: Full support for time signatures with working denominators (4/4, 4/8, 4/2, 4/16, etc.)
@@ -27,6 +28,24 @@ Tempo is a simple, reliable, and aesthetically pleasing metronome application bu
 - **Modern UI**: Clean, adaptive interface following GNOME design principles
 - **Keyboard Shortcuts**: Spacebar to start/stop, arrow keys for tempo adjustment
 - **Settings Persistence**: Automatically saves your preferred settings
+
+### Custom Sounds (NEW in 1.3.0)
+- **File Validation**: Comprehensive security checks for custom audio files
+  - 10MB file size limit to prevent memory issues
+  - MIME type validation (WAV, MP3, OGG, FLAC supported)
+  - Symlink resolution and validation
+  - GStreamer pre-validation before saving
+- **User-Friendly Errors**: Clear alert dialogs explain why files are rejected
+- **Safe Fallback**: Invalid files automatically revert to default sounds
+
+### Reliability (NEW in 1.3.0)
+- **Visual-Only Mode**: Continue using the metronome for visual timing even if audio fails
+- **Audio System Error Handling**: Clear feedback when audio issues occur
+- **Resource Protection**:
+  - Tap history limited to prevent memory exhaustion
+  - Beat indicator frame rate capped at 60 FPS
+  - Settings debounced to prevent update storms
+- **Input Validation**: All user inputs thoroughly validated for security
 
 ## Installation
 

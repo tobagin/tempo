@@ -41,6 +41,14 @@ public class TempoWindow : Adw.ApplicationWindow {
     private bool beat_active = false;
     private bool is_downbeat = false;
     private int current_beat_number = 1;
+
+    // Frame rate limiting for beat indicator (60 FPS = ~16.67ms per frame)
+    private const uint FRAME_INTERVAL_MS = 17; // ~60 FPS
+    private uint last_draw_time = 0;
+    private bool redraw_pending = false;
+
+    // Visual-only mode state
+    private bool visual_only_mode = false;
     
     public TempoWindow(Adw.Application app) {
         Object(application: app);
@@ -54,9 +62,12 @@ public class TempoWindow : Adw.ApplicationWindow {
         
         setup_ui();
         connect_signals();
-        
+
         // Listen for settings changes to update visuals
         settings.changed.connect(on_settings_changed);
+
+        // Listen for audio system failures
+        metronome_engine.audio_system_failed.connect(on_audio_system_failed);
         
         // Apply initial settings when window is mapped
         this.map.connect(() => {
@@ -217,20 +228,45 @@ public class TempoWindow : Adw.ApplicationWindow {
         // Update beat indicator state
         beat_active = true;
         is_downbeat = downbeat;
-        
+
         // Store the beat number to display (convert to 1-based beat-in-bar)
         var beat_info = metronome_engine.get_beat_info();
         current_beat_number = beat_info["beat_in_bar"].get_int32();
-        
-        // Trigger redraw of beat indicator
-        beat_indicator.queue_draw();
-        
+
+        // Trigger redraw with frame rate limiting
+        request_redraw();
+
         // Reset beat indicator after short delay
         Timeout.add(100, () => {
             beat_active = false;
-            beat_indicator.queue_draw();
+            request_redraw();
             return false;
         });
+    }
+
+    /**
+     * Request a redraw with frame rate limiting (60 FPS max).
+     */
+    private void request_redraw() {
+        uint current_time = (uint)(GLib.get_monotonic_time() / 1000); // Convert to milliseconds
+
+        // Check if enough time has passed since last draw
+        if (current_time - last_draw_time >= FRAME_INTERVAL_MS) {
+            beat_indicator.queue_draw();
+            last_draw_time = current_time;
+            redraw_pending = false;
+        } else if (!redraw_pending) {
+            // Schedule a delayed redraw
+            redraw_pending = true;
+            uint delay = FRAME_INTERVAL_MS - (current_time - last_draw_time);
+
+            Timeout.add(delay, () => {
+                beat_indicator.queue_draw();
+                last_draw_time = (uint)(GLib.get_monotonic_time() / 1000);
+                redraw_pending = false;
+                return false;
+            });
+        }
     }
     
     // Keyboard shortcuts setup
@@ -367,7 +403,7 @@ public class TempoWindow : Adw.ApplicationWindow {
      */
     public void show_preferences() {
         if (preferences_dialog == null) {
-            preferences_dialog = new PreferencesDialog();
+            preferences_dialog = new PreferencesDialog(metronome_engine);
         }
         preferences_dialog.present(this);
     }
@@ -398,6 +434,58 @@ public class TempoWindow : Adw.ApplicationWindow {
                 apply_keep_on_top_setting();
                 break;
         }
+    }
+
+    /**
+     * Handle audio system initialization failure.
+     *
+     * @param error_message The error message describing the failure
+     */
+    private void on_audio_system_failed(string error_message) {
+        // Create modal dialog
+        var dialog = new Adw.AlertDialog(
+            _("Audio System Unavailable"),
+            _("The audio system could not be initialized.\n\n%s\n\nYou can continue in visual-only mode where the beat indicator will still work, but no sound will be played.").printf(error_message)
+        );
+
+        dialog.add_response("quit", _("Exit Application"));
+        dialog.add_response("continue", _("Continue in Visual-Only Mode"));
+
+        dialog.set_response_appearance("continue", Adw.ResponseAppearance.SUGGESTED);
+        dialog.set_response_appearance("quit", Adw.ResponseAppearance.DESTRUCTIVE);
+
+        dialog.set_default_response("continue");
+        dialog.set_close_response("continue");
+
+        dialog.response.connect((response_id) => {
+            if (response_id == "quit") {
+                this.close();
+            } else {
+                // Enable visual-only mode
+                enable_visual_only_mode();
+            }
+        });
+
+        dialog.present(this);
+    }
+
+    /**
+     * Enable visual-only mode when audio system is unavailable.
+     */
+    private void enable_visual_only_mode() {
+        visual_only_mode = true;
+
+        // Show info banner about visual-only mode
+        var toast = new Adw.Toast(_("Running in visual-only mode"));
+        toast.timeout = 5;
+
+        // Note: Toast needs to be added to a ToastOverlay in the UI hierarchy
+        // For now, we'll just log it
+        message("Audio system unavailable - running in visual-only mode");
+
+        // Audio controls would be disabled here if they were exposed in the UI
+        // Currently audio settings are in PreferencesDialog which will handle
+        // this separately by checking metronome_engine.is_audio_available()
     }
     
     /**

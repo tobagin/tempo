@@ -9,21 +9,26 @@ using GLib;
 
 /**
  * Tap tempo calculator for determining BPM from user taps.
- * 
+ *
  * Uses a sliding window of tap intervals to calculate average BPM,
  * exactly matching the Python implementation behavior.
  */
 public class TapTempo : Object {
-    
+
     /**
      * Maximum number of taps to consider in the sliding window.
      */
     public int max_taps { get; construct; default = 8; }
-    
+
     /**
      * Timeout in seconds - taps older than this are removed.
      */
     public double timeout_seconds { get; construct; default = 2.0; }
+
+    /**
+     * Maximum history size to prevent memory exhaustion.
+     */
+    private const int MAX_HISTORY_SIZE = 100;
     
     /**
      * Array storing tap times in microseconds (GLib.get_monotonic_time format).
@@ -71,25 +76,33 @@ public class TapTempo : Object {
         
         // Add current tap
         tap_times.append_val(current_time);
-        
-        // Keep only recent taps (equivalent to Python slice [-max_taps:])
-        if (tap_times.length > max_taps) {
+
+        // Cap history at MAX_HISTORY_SIZE to prevent memory exhaustion
+        if (tap_times.length > MAX_HISTORY_SIZE) {
             var trimmed_times = new Array<int64>();
-            uint start_index = tap_times.length - max_taps;
+            uint start_index = tap_times.length - MAX_HISTORY_SIZE;
             for (uint i = start_index; i < tap_times.length; i++) {
                 trimmed_times.append_val(tap_times.index(i));
             }
             tap_times = trimmed_times;
         }
+
+        // Keep only recent taps for calculation (equivalent to Python slice [-max_taps:])
+        // Note: This only affects the BPM calculation, not the history storage
+        uint calculation_window = uint.min(tap_times.length, max_taps);
         
         // Need at least 2 taps to calculate BPM
         if (tap_times.length < 2) {
             return null;
         }
-        
+
         // Calculate intervals between taps (in seconds)
+        // Only use the most recent taps up to calculation_window
         var intervals = new Array<double>();
-        for (int i = 1; i < tap_times.length; i++) {
+        uint start_idx = tap_times.length > calculation_window ?
+                         tap_times.length - calculation_window : 0;
+
+        for (uint i = start_idx + 1; i < tap_times.length; i++) {
             // Convert microsecond interval to seconds
             double interval = (tap_times.index(i) - tap_times.index(i-1)) / 1000000.0;
             intervals.append_val(interval);

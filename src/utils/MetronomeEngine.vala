@@ -44,6 +44,9 @@ public class MetronomeEngine : GLib.Object {
     private Gst.Element? low_sound_player = null;
     private GLib.Settings? settings = null;
     private bool audio_initialized = false;
+
+    // Signal for audio initialization failure
+    public signal void audio_system_failed(string error_message);
     
     /**
      * Creates a new MetronomeEngine with default settings.
@@ -249,77 +252,92 @@ public class MetronomeEngine : GLib.Object {
     private void initialize_audio() {
         try {
             settings = new GLib.Settings(Config.APP_ID);
-            
+
             // Initialize GStreamer elements
-            create_audio_players();
-            audio_initialized = true;
+            bool success = create_audio_players();
+            if (success) {
+                audio_initialized = true;
+            } else {
+                audio_system_failed("Failed to create audio players. GStreamer elements could not be initialized.");
+            }
         } catch (Error e) {
             warning("Failed to initialize audio: %s", e.message);
+            audio_system_failed("Audio system initialization failed: %s".printf(e.message));
         }
+    }
+
+    /**
+     * Check if audio system is available.
+     *
+     * @return true if audio is initialized and working, false for visual-only mode
+     */
+    public bool is_audio_available() {
+        return audio_initialized;
     }
     
     /**
      * Create GStreamer playback elements.
+     *
+     * @return true if successful, false otherwise
      */
-    private void create_audio_players() {
+    private bool create_audio_players() {
         try {
             // Create players for high and low sounds
             high_sound_player = Gst.ElementFactory.make("playbin", "high_sound_player");
             low_sound_player = Gst.ElementFactory.make("playbin", "low_sound_player");
-            
+
             if (high_sound_player == null || low_sound_player == null) {
                 warning("Failed to create GStreamer playbin elements");
-                return;
+                return false;
             }
-            
-            // Set default sound URIs
+
+            // Set default sound URIs using safe File.get_uri() method
             string app_data_dir = "/app/share/tempo/sounds";
-            high_sound_player.set("uri", "file://" + app_data_dir + "/high.wav");
-            low_sound_player.set("uri", "file://" + app_data_dir + "/low.wav");
-            
+            var high_file = GLib.File.new_for_path(app_data_dir + "/high.wav");
+            var low_file = GLib.File.new_for_path(app_data_dir + "/low.wav");
+
+            high_sound_player.set("uri", high_file.get_uri());
+            low_sound_player.set("uri", low_file.get_uri());
+
+            return true;
+
         } catch (Error e) {
             warning("Error creating audio players: %s", e.message);
+            return false;
         }
     }
     
     /**
      * Play a click sound.
-     * 
+     *
      * @param is_downbeat Whether this is a downbeat (accent) or regular beat
      */
     private void play_click_sound(bool is_downbeat) {
         if (!audio_initialized || settings == null) {
             return;
         }
-        
+
         try {
             Gst.Element? player = is_downbeat ? high_sound_player : low_sound_player;
-            
+
             if (player == null) {
                 return;
             }
-            
-            // Check if using custom sounds
-            if (settings.get_boolean("use-custom-sounds")) {
-                string? custom_path = is_downbeat ? 
-                    settings.get_string("high-sound-path") : 
-                    settings.get_string("low-sound-path");
-                    
-                if (custom_path != null && custom_path != "") {
-                    player.set("uri", "file://" + custom_path);
-                }
-            }
-            
+
+            // Determine which sound URI to use
+            string sound_uri = get_sound_uri(is_downbeat);
+            player.set("uri", sound_uri);
+
             // Set volume
-            double volume = is_downbeat ? 
-                settings.get_double("accent-volume") : 
+            double volume = is_downbeat ?
+                settings.get_double("accent-volume") :
                 settings.get_double("click-volume");
             player.set("volume", volume);
-            
+
             // Reset to beginning and play
             player.set_state(Gst.State.NULL);
             player.set_state(Gst.State.PLAYING);
-            
+
             // Stop after short duration to prevent overlap
             Timeout.add(200, () => {
                 if (player != null) {
@@ -327,9 +345,90 @@ public class MetronomeEngine : GLib.Object {
                 }
                 return false;
             });
-            
+
         } catch (Error e) {
             warning("Error playing click sound: %s", e.message);
+        }
+    }
+
+    /**
+     * Get the appropriate sound URI based on settings and validation.
+     *
+     * @param is_downbeat Whether this is for high (accent) or low sound
+     * @return The URI string to use for playback
+     */
+    private string get_sound_uri(bool is_downbeat) {
+        string app_data_dir = "/app/share/tempo/sounds";
+        string default_sound = is_downbeat ? "high.wav" : "low.wav";
+        var default_file = GLib.File.new_for_path(app_data_dir + "/" + default_sound);
+        string default_uri = default_file.get_uri();
+
+        // If custom sounds are disabled, always use defaults
+        if (!settings.get_boolean("use-custom-sounds")) {
+            return default_uri;
+        }
+
+        // Get custom path from settings
+        string? custom_path = is_downbeat ?
+            settings.get_string("high-sound-path") :
+            settings.get_string("low-sound-path");
+
+        // If no custom path set, use default
+        if (custom_path == null || custom_path == "") {
+            return default_uri;
+        }
+
+        // Validate custom path
+        if (!validate_audio_path(custom_path)) {
+            warning("Invalid custom sound path, using default: %s", custom_path);
+
+            // Clear invalid path from settings
+            if (is_downbeat) {
+                settings.set_string("high-sound-path", "");
+            } else {
+                settings.set_string("low-sound-path", "");
+            }
+
+            return default_uri;
+        }
+
+        // Custom path is valid, use it
+        var custom_file = GLib.File.new_for_path(custom_path);
+        return custom_file.get_uri();
+    }
+
+    /**
+     * Validate an audio file path from settings.
+     *
+     * @param path The file path to validate
+     * @return true if valid, false otherwise
+     */
+    private bool validate_audio_path(string path) {
+        try {
+            var file = GLib.File.new_for_path(path);
+
+            // Check if file exists and is a regular file
+            if (!file.query_exists()) {
+                return false;
+            }
+
+            var file_type = file.query_file_type(FileQueryInfoFlags.NONE);
+            if (file_type != FileType.REGULAR) {
+                return false;
+            }
+
+            // Check file size (10MB limit)
+            FileInfo info = file.query_info("standard::size", FileQueryInfoFlags.NONE);
+            int64 size = info.get_size();
+            const int64 MAX_FILE_SIZE = 10 * 1024 * 1024;
+            if (size > MAX_FILE_SIZE) {
+                return false;
+            }
+
+            return true;
+
+        } catch (Error e) {
+            return false;
         }
     }
     

@@ -48,13 +48,13 @@
     <key name="high-sound-path" type="s">
       <default>""</default>
       <summary>High sound file path</summary>
-      <description>Path to custom high/accent sound file</description>
+      <description>Path to custom high/accent sound file (validated at runtime, max 4096 characters)</description>
     </key>
-    
+
     <key name="low-sound-path" type="s">
       <default>""</default>
       <summary>Low sound file path</summary>
-      <description>Path to custom low/regular sound file</description>
+      <description>Path to custom low/regular sound file (validated at runtime, max 4096 characters)</description>
     </key>
     
     <!-- Behavior Settings -->

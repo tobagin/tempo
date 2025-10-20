@@ -195,15 +195,82 @@ public class TempoApplication : Adw.Application {
     
     private bool should_show_release_notes() {
         var settings = new GLib.Settings(Config.APP_ID);
-        string last_version = settings.get_string("last-version-shown");
+        string last_version_raw = settings.get_string("last-version-shown");
         string current_version = Config.VERSION;
 
-        // Show if this is the first run (empty last version) or version has changed
-        if (last_version == "" || last_version != current_version) {
+        // Validate and sanitize the stored version string
+        string last_version = sanitize_version_string(last_version_raw);
+
+        // If sanitization failed or version invalid, treat as first run
+        if (last_version == "" || !is_valid_version(last_version)) {
+            settings.set_string("last-version-shown", current_version);
+            return true;
+        }
+
+        // Show if version has changed
+        if (last_version != current_version) {
             settings.set_string("last-version-shown", current_version);
             return true;
         }
         return false;
+    }
+
+    /**
+     * Sanitize a version string to ensure it's safe for comparison.
+     *
+     * @param version The version string to sanitize
+     * @return Sanitized version string or empty string if invalid
+     */
+    private string sanitize_version_string(string version) {
+        if (version == null || version == "") {
+            return "";
+        }
+
+        // Limit length to prevent abuse
+        if (version.length > 32) {
+            warning("Version string too long, treating as invalid: %s", version);
+            return "";
+        }
+
+        // Remove any potentially dangerous characters
+        // Keep only: digits, dots, hyphens, and alphanumeric (for pre-release tags)
+        var sanitized = new StringBuilder();
+        for (int i = 0; i < version.length; i++) {
+            unichar c = version.get_char(i);
+            if (c.isalnum() || c == '.' || c == '-') {
+                sanitized.append_unichar(c);
+            }
+        }
+
+        return sanitized.str;
+    }
+
+    /**
+     * Validate that a version string follows semver-like format.
+     *
+     * @param version The version string to validate
+     * @return true if valid, false otherwise
+     */
+    private bool is_valid_version(string version) {
+        if (version == null || version == "") {
+            return false;
+        }
+
+        // Basic semver validation: should start with digits and contain dots
+        // Examples: "1.2.3", "1.0.0-beta", "2.1.0"
+        if (!version[0].isdigit()) {
+            return false;
+        }
+
+        bool has_dot = false;
+        for (int i = 0; i < version.length; i++) {
+            if (version[i] == '.') {
+                has_dot = true;
+                break;
+            }
+        }
+
+        return has_dot;
     }
     
     private void simulate_tab_navigation() {

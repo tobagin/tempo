@@ -86,6 +86,28 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.3.0" date="2025-10-20">
+      <description>
+        <p>Major security update with comprehensive input validation and audio system improvements</p>
+        <ul>
+          <li>Comprehensive file validation: 10MB size limit, MIME type checking, symlink resolution</li>
+          <li>GStreamer pre-validation: Files tested before saving to prevent invalid audio playback</li>
+          <li>Audio system error handling with visual-only mode for graceful degradation</li>
+          <li>User-friendly alert dialogs with detailed error messages for file rejections</li>
+          <li>Safe URI construction preventing path injection vulnerabilities</li>
+          <li>Resource limiting: Tap history capped at 100 entries, 60 FPS beat indicator</li>
+          <li>Settings debouncing (100ms) to prevent rapid update storms</li>
+          <li>Version string sanitization for security</li>
+          <li>Runtime path validation with automatic fallback to default sounds</li>
+          <li>5-second timeout for audio file loading with proper error feedback</li>
+          <li>Custom sounds properly reset to defaults when toggle disabled</li>
+          <li>Enhanced MIME type support (audio/vnd.wave, audio/x-vorbis+ogg, etc.)</li>
+          <li>Thread-safe dialog presentation from GStreamer callbacks</li>
+          <li>Audio controls auto-disabled in visual-only mode</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="1.2.4" date="2025-09-18">
       <description>
         <p>Manifest repository corrections</p>
