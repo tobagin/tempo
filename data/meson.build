@@ -75,31 +75,13 @@ foreach ui_file : ui_files
   )
 endforeach
 
-# Install app icons in all sizes
-icon_sizes = ['16x16', '32x32', '48x48', '64x64', '128x128', '256x256', '512x512']
-foreach size : icon_sizes
-  install_data(
-    join_paths('icons', 'hicolor', size, 'apps', 'io.github.tobagin.tempo.png'),
-    rename: application_id + '.png',
-    install_dir: join_paths(icondir, 'hicolor', size, 'apps')
-  )
-endforeach
-
-# Install scalable icons
+# Install scalable app icon
 configure_file(
-  input: 'icons/io.github.tobagin.tempo.svg',
+  input: 'icons/hicolor/scalable/io.github.tobagin.tempo.svg',
   output: application_id + '.svg',
   copy: true,
   install: true,
   install_dir: join_paths(icondir, 'hicolor', 'scalable', 'apps')
-)
-
-configure_file(
-  input: 'icons/io.github.tobagin.tempo-symbolic.svg',
-  output: application_id + '-symbolic.svg',
-  copy: true,
-  install: true,
-  install_dir: join_paths(icondir, 'hicolor', 'symbolic', 'apps')
 )
 
 # Sound files
