@@ -1,6 +1,0 @@
-{
-  "only-arches": ["x86_64", "aarch64"],
-  "skip-arches": [],
-  "skip-appstream-check": false,
-  "build-runtime-deps": []
-}
