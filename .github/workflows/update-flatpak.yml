@@ -39,6 +39,10 @@ jobs:
       run: |
         MANIFEST_FILE="packaging/io.github.tobagin.tempo.yml"
 
+        # Switch to main branch to make changes there (not on detached HEAD)
+        git checkout main
+        git pull origin main
+
         if [[ ! -f "$MANIFEST_FILE" ]]; then
           echo "❌ Manifest file not found: $MANIFEST_FILE"
           exit 1
@@ -81,7 +85,7 @@ Automated update of packaging/io.github.tobagin.tempo.yml
 
 [skip ci]" || echo "No changes to commit"
 
-        git push origin HEAD:main || echo "Failed to push - may need to pull first"
+        git push origin main
 
         echo "manifest_ready=true" >> $GITHUB_OUTPUT
 
