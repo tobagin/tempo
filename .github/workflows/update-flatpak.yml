@@ -34,63 +34,24 @@ jobs:
         echo "🔍 Commit hash: $COMMIT_HASH"
         echo "📈 Version: $VERSION"
 
-    - name: Update local prod manifest
-      id: update_local
+    - name: Check manifest exists
+      id: check
       run: |
         MANIFEST_FILE="packaging/io.github.tobagin.tempo.yml"
-
-        # Switch to main branch to make changes there (not on detached HEAD)
-        git checkout main
-        git pull origin main
-
+        
         if [[ ! -f "$MANIFEST_FILE" ]]; then
           echo "❌ Manifest file not found: $MANIFEST_FILE"
           exit 1
         fi
-
+        
         echo "✅ Local manifest found: $MANIFEST_FILE"
-        echo "📋 Current manifest content:"
+        echo "📋 Current manifest tag and commit:"
         grep -A 2 "tag:" "$MANIFEST_FILE" || echo "Tag not found in expected format"
-
-        # Update the local prod manifest with new tag and commit
-        # Use a more robust sed approach with proper variable substitution
-        TAG_NAME="${{ steps.version.outputs.tag_name }}"
-        COMMIT_HASH="${{ steps.version.outputs.commit_hash }}"
-
-        # Update tag line in tempo module
-        sed -i "/- name: tempo/,/^$/s|tag: v.*|tag: $TAG_NAME|" "$MANIFEST_FILE"
-
-        # Update commit line in tempo module
-        sed -i "/- name: tempo/,/^$/s|commit: .*|commit: $COMMIT_HASH|" "$MANIFEST_FILE"
-
-        echo ""
-        echo "📝 Updated manifest with:"
-        echo "  Tag: $TAG_NAME"
-        echo "  Commit: $COMMIT_HASH"
-        echo ""
-        echo "📋 Updated manifest content:"
-        grep -A 2 "tag:" "$MANIFEST_FILE"
-
-        # Configure git for commit
-        git config user.email "action@github.com"
-        git config user.name "GitHub Action"
-
-        # Commit and push the updated manifest
-        git add "$MANIFEST_FILE"
-        git commit -m "chore: Update prod manifest to $TAG_NAME
-
-Automated update of packaging/io.github.tobagin.tempo.yml
-- Tag: $TAG_NAME
-- Commit: $COMMIT_HASH
-
-[skip ci]" || echo "No changes to commit"
-
-        git push origin main
-
+        
         echo "manifest_ready=true" >> $GITHUB_OUTPUT
 
     - name: Create Flathub PR
-      if: steps.update_local.outputs.manifest_ready == 'true'
+      if: steps.check.outputs.manifest_ready == 'true'
       env:
         GITHUB_TOKEN: ${{ secrets.FLATHUB_TOKEN }}
       run: |
@@ -103,15 +64,16 @@ Automated update of packaging/io.github.tobagin.tempo.yml
         git config user.email "action@github.com"
         git config user.name "GitHub Action (Tempo Updates)"
         
-        # Copy the manifest (already updated in previous step)
+        # Copy the manifest and update it with correct tag and commit
         cp ../packaging/io.github.tobagin.tempo.yml ./io.github.tobagin.tempo.yml
-
-        echo "📋 Copied updated manifest with:"
+        
+        # Update the manifest with the correct tag and commit hash (only for tempo module)
+        sed -i '/- name: tempo/,/^  - name:/{s/tag: v.*/tag: ${{ steps.version.outputs.tag_name }}/}' io.github.tobagin.tempo.yml
+        sed -i '/- name: tempo/,/^  - name:/{s/commit: .*/commit: ${{ steps.version.outputs.commit_hash }}/}' io.github.tobagin.tempo.yml
+        
+        echo "📋 Updated manifest with:"
         echo "  Tag: ${{ steps.version.outputs.tag_name }}"
         echo "  Commit: ${{ steps.version.outputs.commit_hash }}"
-        echo ""
-        echo "📋 Manifest content:"
-        grep -A 2 "tag:" io.github.tobagin.tempo.yml
         
         git add io.github.tobagin.tempo.yml
         git commit -m "Update to ${{ steps.version.outputs.tag_name }}
@@ -123,7 +85,7 @@ Automated update of packaging/io.github.tobagin.tempo.yml
         - Updated commit hash to ${{ steps.version.outputs.commit_hash }}
         - Automated update from upstream repository
         
-        **Source:** https://github.com/tobagin/Tempo/releases/tag/${{ steps.version.outputs.tag_name }}
+        **Source:** https://github.com/tobagin/tempo/releases/tag/${{ steps.version.outputs.tag_name }}
         
         ---
         *This update was automatically created by GitHub Actions*"
@@ -145,7 +107,7 @@ Automated update of packaging/io.github.tobagin.tempo.yml
         **Changes:**
         - **Tag:** \`${{ steps.version.outputs.tag_name }}\`
         - **Commit:** \`${{ steps.version.outputs.commit_hash }}\`
-        - **Release:** https://github.com/tobagin/Tempo/releases/tag/${{ steps.version.outputs.tag_name }}
+        - **Release:** https://github.com/tobagin/tempo/releases/tag/${{ steps.version.outputs.tag_name }}
 
         **Automated Checks:**
         - ✅ Manifest syntax validated
@@ -161,7 +123,7 @@ Automated update of packaging/io.github.tobagin.tempo.yml
         If the test build passes, this PR can be safely merged to publish the update to Flathub.
 
         ---
-        *🤖 This PR was automatically created by [GitHub Actions](https://github.com/tobagin/Tempo/actions)*"
+        *🤖 This PR was automatically created by [GitHub Actions](https://github.com/tobagin/tempo/actions)*"
         
         # Create JSON payload for API call
         PR_JSON=$(jq -n \
@@ -200,11 +162,11 @@ Automated update of packaging/io.github.tobagin.tempo.yml
         echo "**Version:** \`${{ steps.version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
-        if [[ "${{ steps.update_local.outputs.manifest_ready }}" == "true" ]]; then
-          echo "✅ **Local Manifest Updated:** Production manifest automatically updated and committed" >> $GITHUB_STEP_SUMMARY
+        if [[ "${{ steps.check.outputs.manifest_ready }}" == "true" ]]; then
+          echo "✅ **Manifest Ready:** Local Flatpak manifest found and validated" >> $GITHUB_STEP_SUMMARY
           echo "✅ **Flathub PR Created:** Pull request submitted to Flathub repository" >> $GITHUB_STEP_SUMMARY
         else
-          echo "❌ **Manifest Update Failed:** Local manifest not found or update failed" >> $GITHUB_STEP_SUMMARY
+          echo "❌ **Manifest Missing:** Local manifest not found or invalid" >> $GITHUB_STEP_SUMMARY
         fi
         
         echo "" >> $GITHUB_STEP_SUMMARY
