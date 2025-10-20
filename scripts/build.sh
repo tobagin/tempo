@@ -33,7 +33,7 @@ done
 
 # Set manifest based on build type
 if [ "$BUILD_TYPE" = "dev" ]; then
-    MANIFEST="packaging/io.github.tobagin.tempo.devel.yml"
+    MANIFEST="packaging/io.github.tobagin.tempo.Devel.yml"
     APP_ID="io.github.tobagin.tempo.Devel"
     echo -e "\033[0;34m[INFO]\033[0m Building development version"
 else

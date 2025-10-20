@@ -1,11 +1,11 @@
 # Vala source files for the main application
 vala_sources = [
-  'main.vala',
-  'main_window.vala',
-  'metronome_engine.vala',
-  'tap_tempo.vala',
-  'preferences_dialog.vala',
-  'keyboard_shortcuts_dialog.vala',
+  'Main.vala',
+  'windows/MainWindow.vala',
+  'dialogs/PreferencesDialog.vala',
+  'dialogs/KeyboardShortcutsDialog.vala',
+  'utils/MetronomeEngine.vala',
+  'utils/TapTempo.vala',
   config_vala,  # Generated config.vala file
 ]
 

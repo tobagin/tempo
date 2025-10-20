@@ -1,9 +1,9 @@
 # Vala test files and their dependencies
 vala_tests = {
   # Disabled tests that depend on GStreamer for now
-  # 'test_metronome_engine': ['metronome_engine.vala'],
-  'test_tap_tempo': ['tap_tempo.vala'],
-  # 'test_api_compatibility': ['metronome_engine.vala', 'tap_tempo.vala'],
+  # 'test_metronome_engine': ['utils/MetronomeEngine.vala'],
+  'test_tap_tempo': ['utils/TapTempo.vala'],
+  # 'test_api_compatibility': ['utils/MetronomeEngine.vala', 'utils/TapTempo.vala'],
 }
 
 # Build and run Vala tests

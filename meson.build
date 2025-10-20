@@ -57,10 +57,10 @@ config_conf.set('RESOURCE_PATH', '/' + application_id.replace('.', '/'))
 config_conf.set('PROJECT_NAME', project_name)
 config_conf.set('DEVELOPMENT', development.to_string())
 
-# Generate config.vala from config.vala.in
+# Generate Config.vala from Config.vala.in
 config_vala = configure_file(
-  input: 'src/config.vala.in',
-  output: 'config.vala',
+  input: 'src/Config.vala.in',
+  output: 'Config.vala',
   configuration: config_conf
 )
 
