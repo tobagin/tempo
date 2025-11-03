@@ -86,6 +86,24 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.4.0" date="2025-11-03">
+      <description>
+        <p>Sound type selection feature with multiple built-in sounds</p>
+        <ul>
+          <li>Multiple built-in sound types: Default, Woodblock, Metal, and Digital</li>
+          <li>Independent high/low sound type selection for maximum flexibility</li>
+          <li>Sound type dropdowns in Audio preferences above custom sound pickers</li>
+          <li>Smart precedence: custom sounds override sound types when enabled</li>
+          <li>Sound type dropdowns disabled when custom sounds are set for clarity</li>
+          <li>All sound files bundled in application resources (CC0 licensed, ~165KB total)</li>
+          <li>Automatic fallback to default sounds when sound type files are missing</li>
+          <li>Preferences dialog "Custom Sounds" section renamed to "Sound Selection"</li>
+          <li>Support for creative sound mixing (e.g., Woodblock high + Metal low)</li>
+          <li>Sound type changes take effect immediately without restart</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="1.3.0" date="2025-10-20">
       <description>
         <p>Major security update with comprehensive input validation and audio system improvements</p>

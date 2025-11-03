@@ -29,7 +29,17 @@ Tempo is a simple, reliable, and aesthetically pleasing metronome application bu
 - **Keyboard Shortcuts**: Spacebar to start/stop, arrow keys for tempo adjustment
 - **Settings Persistence**: Automatically saves your preferred settings
 
-### Custom Sounds (NEW in 1.3.0)
+### Sound Selection (NEW in 1.4.0)
+- **Built-in Sound Types**: Choose from multiple sound types without managing external files
+  - **Default**: Classic metronome click sounds
+  - **Woodblock**: Warm, percussive wood sounds (500ms)
+  - **Metal**: Bright, ringing bell-like sounds (350ms)
+  - **Digital**: Clean, electronic beeps (80-90ms)
+- **Independent High/Low Selection**: Mix and match sound types for creative combinations
+- **Smart Precedence**: Custom sounds override built-in types when enabled
+- **Visual Feedback**: Dropdowns automatically disable when custom sounds are active
+
+### Custom Sounds (1.3.0)
 - **File Validation**: Comprehensive security checks for custom audio files
   - 10MB file size limit to prevent memory issues
   - MIME type validation (WAV, MP3, OGG, FLAC supported)
