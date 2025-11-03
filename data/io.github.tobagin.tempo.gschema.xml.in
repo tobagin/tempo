@@ -56,7 +56,19 @@
       <summary>Low sound file path</summary>
       <description>Path to custom low/regular sound file (validated at runtime, max 4096 characters)</description>
     </key>
-    
+
+    <key name="high-sound-type" type="s">
+      <default>"default"</default>
+      <summary>High sound type</summary>
+      <description>Built-in sound type for high/accent sounds: "default", "woodblock", "metal", or "digital"</description>
+    </key>
+
+    <key name="low-sound-type" type="s">
+      <default>"default"</default>
+      <summary>Low sound type</summary>
+      <description>Built-in sound type for low/regular sounds: "default", "woodblock", "metal", or "digital"</description>
+    </key>
+
     <!-- Behavior Settings -->
     <key name="tap-sensitivity" type="i">
       <range min="100" max="2000"/>

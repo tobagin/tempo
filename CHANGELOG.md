@@ -5,6 +5,22 @@ All notable changes to Tempo will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Sound Type Selection**
+  - Multiple built-in sound types: Default, Woodblock, Metal, and Digital
+  - Independent high/low sound type selection for maximum flexibility
+  - Sound type dropdowns in Audio preferences above custom sound pickers
+  - Automatic fallback to default sounds when sound type files are missing
+  - Smart precedence: custom sounds override sound types when enabled
+  - Sound type dropdowns disabled when custom sounds are set for clarity
+  - All sound files bundled in application resources (no external downloads)
+
+### Changed
+- Preferences dialog "Custom Sounds" section renamed to "Sound Selection"
+- Custom sounds switch subtitle updated to clarify it replaces built-in sounds
+
 ## [1.3.0] - 2025-10-20
 
 ### Added

@@ -9,6 +9,12 @@
     <!-- Audio Files -->
     <file>sounds/high.wav</file>
     <file>sounds/low.wav</file>
+    <file>sounds/woodblock-high.wav</file>
+    <file>sounds/woodblock-low.wav</file>
+    <file>sounds/metal-high.wav</file>
+    <file>sounds/metal-low.wav</file>
+    <file>sounds/digital-high.wav</file>
+    <file>sounds/digital-low.wav</file>
     
     <!-- CSS Styles -->
     <file>style.css</file>

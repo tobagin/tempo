@@ -353,6 +353,7 @@ public class MetronomeEngine : GLib.Object {
 
     /**
      * Get the appropriate sound URI based on settings and validation.
+     * Priority: custom path (if enabled) > sound type > default
      *
      * @param is_downbeat Whether this is for high (accent) or low sound
      * @return The URI string to use for playback
@@ -363,38 +364,78 @@ public class MetronomeEngine : GLib.Object {
         var default_file = GLib.File.new_for_path(app_data_dir + "/" + default_sound);
         string default_uri = default_file.get_uri();
 
-        // If custom sounds are disabled, always use defaults
-        if (!settings.get_boolean("use-custom-sounds")) {
-            return default_uri;
-        }
+        // If custom sounds are enabled and path is set, use custom path
+        if (settings.get_boolean("use-custom-sounds")) {
+            string? custom_path = is_downbeat ?
+                settings.get_string("high-sound-path") :
+                settings.get_string("low-sound-path");
 
-        // Get custom path from settings
-        string? custom_path = is_downbeat ?
-            settings.get_string("high-sound-path") :
-            settings.get_string("low-sound-path");
-
-        // If no custom path set, use default
-        if (custom_path == null || custom_path == "") {
-            return default_uri;
-        }
-
-        // Validate custom path
-        if (!validate_audio_path(custom_path)) {
-            warning("Invalid custom sound path, using default: %s", custom_path);
-
-            // Clear invalid path from settings
-            if (is_downbeat) {
-                settings.set_string("high-sound-path", "");
-            } else {
-                settings.set_string("low-sound-path", "");
+            // If custom path is set, validate and use it
+            if (custom_path != null && custom_path != "") {
+                if (validate_audio_path(custom_path)) {
+                    var custom_file = GLib.File.new_for_path(custom_path);
+                    return custom_file.get_uri();
+                } else {
+                    warning("Invalid custom sound path, falling back to sound type: %s", custom_path);
+                    // Clear invalid path from settings
+                    if (is_downbeat) {
+                        settings.set_string("high-sound-path", "");
+                    } else {
+                        settings.set_string("low-sound-path", "");
+                    }
+                    // Fall through to sound type check
+                }
             }
-
-            return default_uri;
         }
 
-        // Custom path is valid, use it
-        var custom_file = GLib.File.new_for_path(custom_path);
-        return custom_file.get_uri();
+        // Use sound type setting (custom sounds disabled or no custom path set)
+        string sound_type = is_downbeat ?
+            settings.get_string("high-sound-type") :
+            settings.get_string("low-sound-type");
+
+        return get_sound_type_uri(sound_type, is_downbeat, default_uri);
+    }
+
+    /**
+     * Get the URI for a specific sound type.
+     *
+     * @param sound_type The sound type ("default", "woodblock", "metal", "digital")
+     * @param is_downbeat Whether this is for high (accent) or low sound
+     * @param fallback_uri The URI to use if sound type file is not found
+     * @return The URI string to use for playback
+     */
+    private string get_sound_type_uri(string sound_type, bool is_downbeat, string fallback_uri) {
+        string app_data_dir = "/app/share/tempo/sounds";
+        string beat_suffix = is_downbeat ? "high" : "low";
+
+        // Validate and sanitize sound type
+        string safe_type = sound_type.strip();
+        if (safe_type == "" || safe_type == "default") {
+            // Use default high.wav/low.wav
+            return fallback_uri;
+        }
+
+        // Map sound type to filename
+        string filename;
+        switch (safe_type) {
+            case "woodblock":
+            case "metal":
+            case "digital":
+                filename = "%s-%s.wav".printf(safe_type, beat_suffix);
+                break;
+            default:
+                warning("Unknown sound type '%s', falling back to default", safe_type);
+                return fallback_uri;
+        }
+
+        // Check if file exists
+        var sound_file = GLib.File.new_for_path(app_data_dir + "/" + filename);
+        if (!sound_file.query_exists()) {
+            warning("Sound type file not found: %s, falling back to default", filename);
+            return fallback_uri;
+        }
+
+        return sound_file.get_uri();
     }
 
     /**

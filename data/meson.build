@@ -88,6 +88,12 @@ configure_file(
 install_data(
   'sounds/high.wav',
   'sounds/low.wav',
+  'sounds/woodblock-high.wav',
+  'sounds/woodblock-low.wav',
+  'sounds/metal-high.wav',
+  'sounds/metal-low.wav',
+  'sounds/digital-high.wav',
+  'sounds/digital-low.wav',
   install_dir: join_paths(pkgdatadir, 'sounds')
 )
 

@@ -57,12 +57,48 @@ template $PreferencesDialog : Adw.PreferencesDialog {
     }
 
     Adw.PreferencesGroup {
-      title: _("Custom Sounds");
-      description: _("Use custom audio files for metronome sounds");
+      title: _("Sound Selection");
+      description: _("Choose built-in sounds or use custom audio files");
+
+      Adw.ActionRow {
+        title: _("High Sound Type (Accent)");
+        subtitle: _("Built-in sound for downbeat accent clicks");
+
+        [suffix]
+        DropDown high_sound_type_dropdown {
+          model: StringList {
+            strings [
+              _("Default"),
+              _("Woodblock"),
+              _("Metal"),
+              _("Digital")
+            ]
+          };
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Low Sound Type (Regular)");
+        subtitle: _("Built-in sound for regular metronome clicks");
+
+        [suffix]
+        DropDown low_sound_type_dropdown {
+          model: StringList {
+            strings [
+              _("Default"),
+              _("Woodblock"),
+              _("Metal"),
+              _("Digital")
+            ]
+          };
+          valign: center;
+        }
+      }
 
       Adw.ActionRow {
         title: _("Use Custom Sounds");
-        subtitle: _("Replace default click sounds with custom audio files");
+        subtitle: _("Replace built-in sounds with custom audio files");
 
         [suffix]
         Switch custom_sounds_switch {

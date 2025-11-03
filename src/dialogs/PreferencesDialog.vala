@@ -19,6 +19,8 @@ public class PreferencesDialog : Adw.PreferencesDialog {
     // UI Elements from Blueprint template - Audio Settings
     [GtkChild] private unowned Scale volume_scale;
     [GtkChild] private unowned Scale accent_volume_scale;
+    [GtkChild] private unowned DropDown high_sound_type_dropdown;
+    [GtkChild] private unowned DropDown low_sound_type_dropdown;
     [GtkChild] private unowned Switch custom_sounds_switch;
     [GtkChild] private unowned Adw.ActionRow high_sound_row;
     [GtkChild] private unowned Button high_sound_button;
@@ -92,20 +94,25 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         // Audio settings
         volume_scale.set_value(settings.get_double("click-volume"));
         accent_volume_scale.set_value(settings.get_double("accent-volume"));
+
+        // Load sound type settings
+        load_sound_type_dropdown(high_sound_type_dropdown, settings.get_string("high-sound-type"));
+        load_sound_type_dropdown(low_sound_type_dropdown, settings.get_string("low-sound-type"));
+
         custom_sounds_switch.set_active(settings.get_boolean("use-custom-sounds"));
-        
+
         // Update sound picker sensitivity based on custom sounds setting
         update_custom_sounds_sensitivity();
-        
+
         // Get custom sound paths if they exist
         high_sound_path = settings.get_string("high-sound-path");
         low_sound_path = settings.get_string("low-sound-path");
-        
+
         // Update button labels if custom paths are set
         if (high_sound_path != null && high_sound_path != "") {
             update_sound_button_label(high_sound_button, high_sound_path);
         }
-        
+
         if (low_sound_path != null && low_sound_path != "") {
             update_sound_button_label(low_sound_button, low_sound_path);
         }
@@ -134,7 +141,16 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         accent_volume_scale.value_changed.connect(() => {
             debounce_accent_volume_change();
         });
-        
+
+        // Sound type dropdowns
+        high_sound_type_dropdown.notify["selected"].connect(() => {
+            save_sound_type_dropdown(high_sound_type_dropdown, "high-sound-type");
+        });
+
+        low_sound_type_dropdown.notify["selected"].connect(() => {
+            save_sound_type_dropdown(low_sound_type_dropdown, "low-sound-type");
+        });
+
         custom_sounds_switch.state_set.connect((state) => {
             settings.set_boolean("use-custom-sounds", state);
             update_custom_sounds_sensitivity();
@@ -195,13 +211,21 @@ public class PreferencesDialog : Adw.PreferencesDialog {
      */
     private void on_external_settings_changed(string key) {
         switch (key) {
+            case "high-sound-type":
+                load_sound_type_dropdown(high_sound_type_dropdown, settings.get_string("high-sound-type"));
+                break;
+            case "low-sound-type":
+                load_sound_type_dropdown(low_sound_type_dropdown, settings.get_string("low-sound-type"));
+                break;
             case "high-sound-path":
                 high_sound_path = settings.get_string("high-sound-path");
                 update_sound_button_label(high_sound_button, high_sound_path);
+                update_custom_sounds_sensitivity();
                 break;
             case "low-sound-path":
                 low_sound_path = settings.get_string("low-sound-path");
                 update_sound_button_label(low_sound_button, low_sound_path);
+                update_custom_sounds_sensitivity();
                 break;
             case "use-custom-sounds":
                 custom_sounds_switch.set_active(settings.get_boolean("use-custom-sounds"));
@@ -257,12 +281,20 @@ public class PreferencesDialog : Adw.PreferencesDialog {
     }
 
     /**
-     * Update the sensitivity of custom sound picker rows based on the switch state.
+     * Update the sensitivity of custom sound picker rows and sound type dropdowns.
+     * When custom sounds are enabled and paths are set, disable sound type dropdowns.
      */
     private void update_custom_sounds_sensitivity() {
         bool use_custom = custom_sounds_switch.get_active();
         high_sound_row.set_sensitive(use_custom);
         low_sound_row.set_sensitive(use_custom);
+
+        // Disable sound type dropdown when custom sound is set
+        bool high_custom_set = use_custom && high_sound_path != null && high_sound_path != "";
+        bool low_custom_set = use_custom && low_sound_path != null && low_sound_path != "";
+
+        high_sound_type_dropdown.set_sensitive(!high_custom_set);
+        low_sound_type_dropdown.set_sensitive(!low_custom_set);
     }
     
     /**
@@ -431,6 +463,7 @@ public class PreferencesDialog : Adw.PreferencesDialog {
     
     /**
      * Reset a custom sound to default by clearing the path.
+     * Re-enables the corresponding sound type dropdown.
      */
     private void reset_custom_sound(bool is_high_sound) {
         if (is_high_sound) {
@@ -442,6 +475,9 @@ public class PreferencesDialog : Adw.PreferencesDialog {
             settings.set_string("low-sound-path", "");
             update_sound_button_label(low_sound_button, "");
         }
+
+        // Re-enable sound type dropdown after clearing custom sound
+        update_custom_sounds_sensitivity();
     }
     
     /**
@@ -603,7 +639,7 @@ public class PreferencesDialog : Adw.PreferencesDialog {
      */
     private void update_theme() {
         var style_manager = Adw.StyleManager.get_default();
-        
+
         switch (theme_dropdown.get_selected()) {
             case 0: // Auto
                 style_manager.color_scheme = Adw.ColorScheme.DEFAULT;
@@ -615,5 +651,61 @@ public class PreferencesDialog : Adw.PreferencesDialog {
                 style_manager.color_scheme = Adw.ColorScheme.FORCE_DARK;
                 break;
         }
+    }
+
+    /**
+     * Load sound type from settings into dropdown.
+     * Maps sound type string to dropdown index.
+     *
+     * @param dropdown The dropdown to update
+     * @param sound_type The sound type string from settings
+     */
+    private void load_sound_type_dropdown(DropDown dropdown, string sound_type) {
+        uint index = 0;
+        switch (sound_type) {
+            case "default":
+                index = 0;
+                break;
+            case "woodblock":
+                index = 1;
+                break;
+            case "metal":
+                index = 2;
+                break;
+            case "digital":
+                index = 3;
+                break;
+            default:
+                warning("Unknown sound type '%s', using default", sound_type);
+                index = 0;
+                break;
+        }
+        dropdown.set_selected(index);
+    }
+
+    /**
+     * Save sound type from dropdown to settings.
+     * Maps dropdown index to sound type string.
+     *
+     * @param dropdown The dropdown that changed
+     * @param settings_key The GSettings key to save to
+     */
+    private void save_sound_type_dropdown(DropDown dropdown, string settings_key) {
+        string sound_type = "default";
+        switch (dropdown.get_selected()) {
+            case 0:
+                sound_type = "default";
+                break;
+            case 1:
+                sound_type = "woodblock";
+                break;
+            case 2:
+                sound_type = "metal";
+                break;
+            case 3:
+                sound_type = "digital";
+                break;
+        }
+        settings.set_string(settings_key, sound_type);
     }
 }
