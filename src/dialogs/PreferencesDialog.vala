@@ -34,10 +34,34 @@ public class PreferencesDialog : Adw.PreferencesDialog {
     
     // UI Elements - Visual Settings
     [GtkChild] private unowned DropDown theme_dropdown;
+    [GtkChild] private unowned Adw.ComboRow visual_mode_row;
     [GtkChild] private unowned Switch show_beat_numbers_switch;
     [GtkChild] private unowned Switch flash_on_beat_switch;
     [GtkChild] private unowned Switch downbeat_color_switch;
-    
+
+    // UI Elements - Practice Timer Settings
+    [GtkChild] private unowned Switch timer_enabled_switch;
+    [GtkChild] private unowned Switch timer_show_switch;
+    [GtkChild] private unowned DropDown timer_mode_dropdown;
+    [GtkChild] private unowned SpinButton countdown_duration_spin;
+    [GtkChild] private unowned Switch timer_pause_with_metronome_switch;
+    [GtkChild] private unowned DropDown auto_stop_mode_dropdown;
+    [GtkChild] private unowned SpinButton auto_stop_value_spin;
+
+    // UI Elements - Mute Settings
+    [GtkChild] private unowned Switch mute_enabled_switch;
+    [GtkChild] private unowned Adw.ComboRow mute_pattern_row;
+    [GtkChild] private unowned Adw.PreferencesGroup every_nth_group;
+    [GtkChild] private unowned Adw.SpinRow mute_interval_spin;
+    [GtkChild] private unowned Adw.PreferencesGroup random_group;
+    [GtkChild] private unowned Scale mute_percentage_scale;
+    [GtkChild] private unowned Adw.PreferencesGroup specific_group;
+    [GtkChild] private unowned Adw.EntryRow mute_specific_beats_entry;
+    [GtkChild] private unowned Adw.PreferencesGroup progressive_group;
+    [GtkChild] private unowned Scale progressive_start_scale;
+    [GtkChild] private unowned Scale progressive_end_scale;
+    [GtkChild] private unowned Adw.SpinRow progressive_interval_spin;
+
     // GSettings object for persistent storage
     private GLib.Settings settings;
 
@@ -124,9 +148,32 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         
         // Load visual settings
         theme_dropdown.set_selected(settings.get_int("theme"));
+        load_visual_mode_dropdown();
         show_beat_numbers_switch.set_active(settings.get_boolean("show-beat-numbers"));
         flash_on_beat_switch.set_active(settings.get_boolean("flash-on-beat"));
         downbeat_color_switch.set_active(settings.get_boolean("downbeat-color"));
+
+        // Load practice timer settings
+        timer_enabled_switch.set_active(settings.get_boolean("timer-enabled"));
+        timer_show_switch.set_active(settings.get_boolean("timer-show-in-main-window"));
+        timer_mode_dropdown.set_selected(settings.get_int("timer-mode"));
+        countdown_duration_spin.set_value(settings.get_int("timer-countdown-duration"));
+        timer_pause_with_metronome_switch.set_active(settings.get_boolean("timer-pause-with-metronome"));
+        auto_stop_mode_dropdown.set_selected(settings.get_int("timer-auto-stop-mode"));
+        auto_stop_value_spin.set_value(settings.get_int("timer-auto-stop-value"));
+
+        // Load mute settings
+        mute_enabled_switch.set_active(settings.get_boolean("mute-enabled"));
+        load_mute_pattern_dropdown();
+        mute_interval_spin.set_value(settings.get_int("mute-interval"));
+        mute_percentage_scale.set_value(settings.get_double("mute-percentage"));
+        mute_specific_beats_entry.set_text(settings.get_string("mute-specific-beats"));
+        progressive_start_scale.set_value(settings.get_double("mute-progressive-start"));
+        progressive_end_scale.set_value(settings.get_double("mute-progressive-end"));
+        progressive_interval_spin.set_value(settings.get_int("mute-progressive-interval"));
+
+        // Update parameter group visibility based on pattern
+        update_mute_pattern_visibility();
     }
     
     /**
@@ -189,7 +236,11 @@ public class PreferencesDialog : Adw.PreferencesDialog {
             settings.set_int("theme", (int)theme_dropdown.get_selected());
             update_theme();
         });
-        
+
+        visual_mode_row.notify["selected"].connect(() => {
+            save_visual_mode();
+        });
+
         show_beat_numbers_switch.state_set.connect((state) => {
             settings.set_boolean("show-beat-numbers", state);
             return false;
@@ -203,6 +254,73 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         downbeat_color_switch.state_set.connect((state) => {
             settings.set_boolean("downbeat-color", state);
             return false;
+        });
+
+        // Practice Timer settings
+        timer_enabled_switch.state_set.connect((state) => {
+            settings.set_boolean("timer-enabled", state);
+            return false;
+        });
+
+        timer_show_switch.state_set.connect((state) => {
+            settings.set_boolean("timer-show-in-main-window", state);
+            return false;
+        });
+
+        timer_mode_dropdown.notify["selected"].connect(() => {
+            settings.set_int("timer-mode", (int)timer_mode_dropdown.get_selected());
+        });
+
+        countdown_duration_spin.value_changed.connect(() => {
+            settings.set_int("timer-countdown-duration", (int)countdown_duration_spin.get_value());
+        });
+
+        timer_pause_with_metronome_switch.state_set.connect((state) => {
+            settings.set_boolean("timer-pause-with-metronome", state);
+            return false;
+        });
+
+        auto_stop_mode_dropdown.notify["selected"].connect(() => {
+            settings.set_int("timer-auto-stop-mode", (int)auto_stop_mode_dropdown.get_selected());
+        });
+
+        auto_stop_value_spin.value_changed.connect(() => {
+            settings.set_int("timer-auto-stop-value", (int)auto_stop_value_spin.get_value());
+        });
+
+        // Mute settings
+        mute_enabled_switch.state_set.connect((state) => {
+            settings.set_boolean("mute-enabled", state);
+            return false;
+        });
+
+        mute_pattern_row.notify["selected"].connect(() => {
+            save_mute_pattern_type();
+            update_mute_pattern_visibility();
+        });
+
+        mute_interval_spin.notify["value"].connect(() => {
+            settings.set_int("mute-interval", (int)mute_interval_spin.get_value());
+        });
+
+        mute_percentage_scale.value_changed.connect(() => {
+            debounce_mute_percentage_change();
+        });
+
+        mute_specific_beats_entry.notify["text"].connect(() => {
+            settings.set_string("mute-specific-beats", mute_specific_beats_entry.get_text());
+        });
+
+        progressive_start_scale.value_changed.connect(() => {
+            debounce_progressive_start_change();
+        });
+
+        progressive_end_scale.value_changed.connect(() => {
+            debounce_progressive_end_change();
+        });
+
+        progressive_interval_spin.notify["value"].connect(() => {
+            settings.set_int("mute-progressive-interval", (int)progressive_interval_spin.get_value());
         });
     }
     
@@ -707,5 +825,199 @@ public class PreferencesDialog : Adw.PreferencesDialog {
                 break;
         }
         settings.set_string(settings_key, sound_type);
+    }
+
+    /**
+     * Load visual mode from settings into dropdown.
+     * Maps visual mode string to dropdown index.
+     */
+    private void load_visual_mode_dropdown() {
+        uint index = 0;
+        string visual_mode = settings.get_string("visual-mode");
+        switch (visual_mode) {
+            case "circle":
+                index = 0;
+                break;
+            case "pendulum":
+                index = 1;
+                break;
+            case "bar":
+                index = 2;
+                break;
+            case "ring":
+                index = 3;
+                break;
+            case "flash":
+                index = 4;
+                break;
+            default:
+                warning("Unknown visual mode '%s', using circle", visual_mode);
+                index = 0;
+                break;
+        }
+        visual_mode_row.set_selected(index);
+    }
+
+    /**
+     * Save visual mode from dropdown to settings.
+     * Maps dropdown index to visual mode string.
+     */
+    private void save_visual_mode() {
+        string visual_mode = "circle";
+        switch (visual_mode_row.get_selected()) {
+            case 0:
+                visual_mode = "circle";
+                break;
+            case 1:
+                visual_mode = "pendulum";
+                break;
+            case 2:
+                visual_mode = "bar";
+                break;
+            case 3:
+                visual_mode = "ring";
+                break;
+            case 4:
+                visual_mode = "flash";
+                break;
+        }
+        settings.set_string("visual-mode", visual_mode);
+    }
+
+    /**
+     * Load mute pattern dropdown from settings.
+     */
+    private void load_mute_pattern_dropdown() {
+        string pattern_type = settings.get_string("mute-pattern-type");
+        uint selected = 0;
+
+        switch (pattern_type) {
+            case "none":
+                selected = 0;
+                break;
+            case "every-nth":
+                selected = 1;
+                break;
+            case "random":
+                selected = 2;
+                break;
+            case "specific":
+                selected = 3;
+                break;
+            case "progressive":
+                selected = 4;
+                break;
+        }
+
+        mute_pattern_row.set_selected(selected);
+    }
+
+    /**
+     * Save mute pattern type from dropdown to settings.
+     */
+    private void save_mute_pattern_type() {
+        string pattern_type;
+
+        switch (mute_pattern_row.get_selected()) {
+            case 0:
+                pattern_type = "none";
+                break;
+            case 1:
+                pattern_type = "every-nth";
+                break;
+            case 2:
+                pattern_type = "random";
+                break;
+            case 3:
+                pattern_type = "specific";
+                break;
+            case 4:
+                pattern_type = "progressive";
+                break;
+            default:
+                pattern_type = "none";
+                break;
+        }
+
+        settings.set_string("mute-pattern-type", pattern_type);
+    }
+
+    /**
+     * Update visibility of pattern parameter groups based on selected pattern.
+     */
+    private void update_mute_pattern_visibility() {
+        uint selected = mute_pattern_row.get_selected();
+
+        // Hide all groups first
+        every_nth_group.set_visible(false);
+        random_group.set_visible(false);
+        specific_group.set_visible(false);
+        progressive_group.set_visible(false);
+
+        // Show the appropriate group
+        switch (selected) {
+            case 1: // Every Nth
+                every_nth_group.set_visible(true);
+                break;
+            case 2: // Random
+                random_group.set_visible(true);
+                break;
+            case 3: // Specific
+                specific_group.set_visible(true);
+                break;
+            case 4: // Progressive
+                progressive_group.set_visible(true);
+                break;
+        }
+    }
+
+    // Debounce timers for mute settings
+    private uint mute_percentage_debounce_timer = 0;
+    private uint progressive_start_debounce_timer = 0;
+    private uint progressive_end_debounce_timer = 0;
+
+    /**
+     * Debounce mute percentage scale changes.
+     */
+    private void debounce_mute_percentage_change() {
+        if (mute_percentage_debounce_timer != 0) {
+            Source.remove(mute_percentage_debounce_timer);
+        }
+
+        mute_percentage_debounce_timer = Timeout.add(100, () => {
+            settings.set_double("mute-percentage", mute_percentage_scale.get_value());
+            mute_percentage_debounce_timer = 0;
+            return false;
+        });
+    }
+
+    /**
+     * Debounce progressive start scale changes.
+     */
+    private void debounce_progressive_start_change() {
+        if (progressive_start_debounce_timer != 0) {
+            Source.remove(progressive_start_debounce_timer);
+        }
+
+        progressive_start_debounce_timer = Timeout.add(100, () => {
+            settings.set_double("mute-progressive-start", progressive_start_scale.get_value());
+            progressive_start_debounce_timer = 0;
+            return false;
+        });
+    }
+
+    /**
+     * Debounce progressive end scale changes.
+     */
+    private void debounce_progressive_end_change() {
+        if (progressive_end_debounce_timer != 0) {
+            Source.remove(progressive_end_debounce_timer);
+        }
+
+        progressive_end_debounce_timer = Timeout.add(100, () => {
+            settings.set_double("mute-progressive-end", progressive_end_scale.get_value());
+            progressive_end_debounce_timer = 0;
+            return false;
+        });
     }
 }

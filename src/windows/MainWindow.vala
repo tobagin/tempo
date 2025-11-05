@@ -7,6 +7,14 @@
 using Gtk;
 using Adw;
 
+/**
+ * Metronome operation modes
+ */
+public enum MetronomeMode {
+    SIMPLE_BEATS,    // Standard metronome with subdivisions
+    PATTERN          // Rhythm pattern playback
+}
+
 #if DEVELOPMENT
     [GtkTemplate (ui = "/io/github/tobagin/tempo/Devel/ui/main_window.ui")]
 #else
@@ -15,31 +23,73 @@ using Adw;
 public class TempoWindow : Adw.ApplicationWindow {
     
     // UI Elements from Blueprint template
+    [GtkChild] private unowned Adw.ViewStack view_stack;
+    [GtkChild] private unowned Adw.ViewSwitcherBar view_switcher_bar;
+
+    // Metronome tab widgets
     [GtkChild] private unowned Label tempo_label;
     [GtkChild] private unowned SpinButton tempo_spin;
     [GtkChild] private unowned Scale tempo_scale;
     [GtkChild] private unowned SpinButton beats_spin;
     [GtkChild] private unowned DropDown beat_value_dropdown;
+    [GtkChild] private unowned DropDown subdivision_dropdown;
     [GtkChild] private unowned DrawingArea beat_indicator;
     [GtkChild] private unowned Button play_button;
     [GtkChild] private unowned Button tap_button;
-    
+    [GtkChild] private unowned Box timer_box;
+    [GtkChild] private unowned Label timer_display;
+    [GtkChild] private unowned Label auto_stop_progress;
+
+    // Patterns tab widgets
+    [GtkChild] private unowned Label patterns_tempo_label;
+    [GtkChild] private unowned Scale patterns_tempo_scale;
+    [GtkChild] private unowned DropDown pattern_dropdown;
+    [GtkChild] private unowned Button pattern_edit_button;
+    [GtkChild] private unowned Label pattern_info_label;
+    [GtkChild] private unowned DrawingArea patterns_beat_indicator;
+    [GtkChild] private unowned Button patterns_play_button;
+
+    // Trainer tab widgets
+    [GtkChild] private unowned SpinButton trainer_start_spin;
+    [GtkChild] private unowned SpinButton trainer_target_spin;
+    [GtkChild] private unowned SpinButton trainer_increment_spin;
+    [GtkChild] private unowned SpinButton trainer_interval_spin;
+    [GtkChild] private unowned DropDown trainer_interval_type;
+    [GtkChild] private unowned Label trainer_status_label;
+    [GtkChild] private unowned DrawingArea trainer_beat_indicator;
+    [GtkChild] private unowned Button trainer_play_button;
+
     // Engine components
     private MetronomeEngine metronome_engine;
     private TapTempo tap_tempo;
-    
+    private PracticeTimer practice_timer;
+    private TempoTrainer tempo_trainer;
+
+    // Pattern components
+    private Tempo.PatternLibrary pattern_library;
+    private Tempo.PatternEngine pattern_engine;
+    private Gtk.StringList pattern_model;
+    private MetronomeMode current_mode = MetronomeMode.SIMPLE_BEATS;
+
+    // Preset manager
+    private PresetManager preset_manager;
+
     // Preferences dialog
     private PreferencesDialog? preferences_dialog = null;
-    
+
     // Keyboard shortcuts dialog
     private KeyboardShortcutsDialog? shortcuts_dialog = null;
-    
+
+    // Preset manager dialog
+    private PresetManagerDialog? preset_manager_dialog = null;
+
     // Settings for visual preferences
     private GLib.Settings settings;
-    
+
     // Beat indicator state
     private bool beat_active = false;
     private bool is_downbeat = false;
+    private bool is_muted = false;
     private int current_beat_number = 1;
 
     // Frame rate limiting for beat indicator (60 FPS = ~16.67ms per frame)
@@ -49,19 +99,52 @@ public class TempoWindow : Adw.ApplicationWindow {
 
     // Visual-only mode state
     private bool visual_only_mode = false;
-    
+
+    // Visual mode system
+    private VisualMode current_visual_mode;
+    private int64 beat_start_time = 0;
+    private double animation_progress = 0.0;
+    private uint animation_timer_id = 0;
+
+    // Independent tempo for each view
+    private int metronome_view_tempo = 120;
+    private int patterns_view_tempo = 120;
+    private string? current_view = null;
+
     public TempoWindow(Adw.Application app) {
         Object(application: app);
         
         // Initialize settings
         settings = new GLib.Settings(Config.APP_ID);
-        
+
         // Initialize engines
         metronome_engine = new MetronomeEngine();
         tap_tempo = new TapTempo();
-        
+        practice_timer = new PracticeTimer(settings);
+        tempo_trainer = new TempoTrainer();
+
+        // Initialize pattern system
+        pattern_library = new Tempo.PatternLibrary();
+        pattern_engine = new Tempo.PatternEngine();
+
+        // Initialize preset manager
+        preset_manager = new PresetManager();
+
+        // Initialize visual mode
+        initialize_visual_mode();
+
+        // Connect timer to metronome engine
+        metronome_engine.set_practice_timer(practice_timer);
+
+        // Connect tempo trainer to metronome
+        metronome_engine.beat_occurred.connect(on_trainer_beat_occurred);
+        tempo_trainer.tempo_should_change.connect(on_trainer_tempo_change);
+        tempo_trainer.target_reached.connect(on_trainer_target_reached);
+        tempo_trainer.progression_updated.connect(on_trainer_progression_updated);
+
         setup_ui();
         connect_signals();
+        setup_tempo_trainer_ui();
 
         // Listen for settings changes to update visuals
         settings.changed.connect(on_settings_changed);
@@ -80,7 +163,7 @@ public class TempoWindow : Adw.ApplicationWindow {
         // Load CSS styles using modern approach
         var css_provider = new CssProvider();
         css_provider.load_from_resource(Config.RESOURCE_PATH + "/style.css");
-        
+
         // Add CSS provider to display using modern API
         var display = this.get_display() ?? Gdk.Display.get_default();
         Gtk.StyleContext.add_provider_for_display(
@@ -88,31 +171,70 @@ public class TempoWindow : Adw.ApplicationWindow {
             css_provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         );
-        
+
         // Initialize UI values
         update_tempo_display();
         update_time_signature_display();
-        
-        // Setup beat indicator drawing
+        update_subdivision_display();
+        initialize_pattern_dropdown();
+
+        // Load mute pattern from settings
+        load_mute_pattern();
+
+        // Load saved pattern from settings
+        load_active_pattern();
+
+        // Setup beat indicator drawing for all tabs
         beat_indicator.set_draw_func(draw_beat_indicator);
+        patterns_beat_indicator.set_draw_func(draw_beat_indicator);
+        trainer_beat_indicator.set_draw_func(draw_beat_indicator);
+
+        // Initialize current view and independent tempo values
+        current_view = view_stack.get_visible_child_name();
+        metronome_view_tempo = metronome_engine.bpm;
+        patterns_view_tempo = metronome_engine.bpm;
     }
     
     private void connect_signals() {
+        // View switching
+        view_stack.notify["visible-child-name"].connect(on_view_changed);
+
         // Tempo controls
         tempo_spin.value_changed.connect(on_tempo_changed);
         tempo_scale.value_changed.connect(on_tempo_scale_changed);
-        
+
         // Time signature controls
         beats_spin.value_changed.connect(on_beats_changed);
         beat_value_dropdown.notify["selected"].connect(on_beat_value_changed);
-        
-        // Control buttons
+
+        // Subdivision controls
+        subdivision_dropdown.notify["selected"].connect(on_subdivision_changed);
+
+        // Pattern controls
+        pattern_dropdown.notify["selected"].connect(on_pattern_changed);
+        pattern_edit_button.clicked.connect(on_pattern_edit_clicked);
+
+        // Control buttons (all tabs use same handler)
         play_button.clicked.connect(on_play_clicked);
+        patterns_play_button.clicked.connect(on_play_clicked);
+        trainer_play_button.clicked.connect(on_play_clicked);
         tap_button.clicked.connect(on_tap_clicked);
-        
+
         // Metronome engine signals
         metronome_engine.beat_occurred.connect(on_beat_occurred);
-        
+
+        // Pattern engine signals
+        pattern_engine.step_occurred.connect(on_pattern_step_occurred);
+        pattern_engine.pattern_loop_completed.connect(on_pattern_loop_completed);
+
+        // Practice timer signals
+        practice_timer.tick.connect(on_timer_tick);
+        practice_timer.countdown_completed.connect(on_countdown_completed);
+        practice_timer.auto_stop_triggered.connect(on_auto_stop_triggered);
+
+        // Update timer visibility based on settings
+        settings.bind("timer-show-in-main-window", timer_box, "visible", SettingsBindFlags.DEFAULT);
+
         // Keyboard shortcuts
         setup_keyboard_shortcuts();
     }
@@ -141,19 +263,25 @@ public class TempoWindow : Adw.ApplicationWindow {
         try {
             metronome_engine.set_tempo(new_bpm);
             update_tempo_display();
+
+            // Sync to pattern engine
+            pattern_engine.bpm = new_bpm;
         } catch (MetronomeError e) {
             warning("Failed to set tempo: %s", e.message);
             // Revert to previous value
             tempo_spin.value = metronome_engine.bpm;
         }
     }
-    
+
     private void on_tempo_scale_changed() {
         var new_bpm = (int)tempo_scale.get_value();
         try {
             metronome_engine.set_tempo(new_bpm);
             tempo_label.label = new_bpm.to_string();
             tempo_spin.value = new_bpm;
+
+            // Sync to pattern engine
+            pattern_engine.bpm = new_bpm;
         } catch (MetronomeError e) {
             warning("Failed to set tempo: %s", e.message);
             // Revert to previous value
@@ -196,18 +324,160 @@ public class TempoWindow : Adw.ApplicationWindow {
             default: return 4;
         }
     }
-    
+
+    private void on_subdivision_changed() {
+        // Map dropdown index to subdivision mode
+        // 0 = None, 1 = Eighths, 2 = Triplets, 3 = Sixteenths
+        int mode_value;
+        switch (subdivision_dropdown.selected) {
+            case 0: mode_value = 0; break;  // NONE
+            case 1: mode_value = 2; break;  // EIGHTH
+            case 2: mode_value = 3; break;  // TRIPLET
+            case 3: mode_value = 4; break;  // SIXTEENTH
+            default: mode_value = 0; break;
+        }
+
+        // Update settings (which will update the engine via binding)
+        settings.set_int("subdivision-mode", mode_value);
+    }
+
+    private void update_subdivision_display() {
+        // Get current subdivision mode from settings
+        int mode_value = settings.get_int("subdivision-mode");
+
+        // Map mode to dropdown index
+        switch (mode_value) {
+            case 0: subdivision_dropdown.selected = 0; break;  // NONE
+            case 2: subdivision_dropdown.selected = 1; break;  // EIGHTH
+            case 3: subdivision_dropdown.selected = 2; break;  // TRIPLET
+            case 4: subdivision_dropdown.selected = 3; break;  // SIXTEENTH
+            default: subdivision_dropdown.selected = 0; break;
+        }
+    }
+
+    /**
+     * Handle view switching - save current tempo and restore new view's tempo
+     */
+    private void on_view_changed() {
+        var new_view = view_stack.get_visible_child_name();
+
+        // Don't process if metronome is running (view switching is disabled)
+        bool is_running = metronome_engine.is_running || pattern_engine.is_running;
+        if (is_running) {
+            return;
+        }
+
+        // Save current view's tempo
+        if (current_view != null) {
+            switch (current_view) {
+                case "metronome":
+                    metronome_view_tempo = metronome_engine.bpm;
+                    break;
+                case "patterns":
+                    patterns_view_tempo = metronome_engine.bpm;
+                    break;
+                // Trainer view uses its own start_tempo/target_tempo, no need to save
+            }
+        }
+
+        // Restore new view's tempo
+        switch (new_view) {
+            case "metronome":
+                try {
+                    metronome_engine.set_tempo(metronome_view_tempo);
+                    update_tempo_display();
+                } catch (MetronomeError e) {
+                    warning("Failed to restore metronome view tempo: %s", e.message);
+                }
+                break;
+            case "patterns":
+                try {
+                    metronome_engine.set_tempo(patterns_view_tempo);
+                    update_tempo_display();
+                } catch (MetronomeError e) {
+                    warning("Failed to restore patterns view tempo: %s", e.message);
+                }
+                break;
+            case "trainer":
+                // Trainer view shows its configured start tempo
+                try {
+                    metronome_engine.set_tempo(tempo_trainer.start_tempo);
+                    update_tempo_display();
+                } catch (MetronomeError e) {
+                    warning("Failed to set trainer tempo: %s", e.message);
+                }
+                break;
+        }
+
+        current_view = new_view;
+    }
+
     private void on_play_clicked() {
-        if (metronome_engine.is_running) {
+        // Determine which view is active
+        var visible_view = view_stack.get_visible_child_name();
+
+        // Check if anything is running
+        bool is_running = metronome_engine.is_running || pattern_engine.is_running;
+
+        if (is_running) {
+            // Stop everything
             metronome_engine.stop();
-            play_button.label = _("Start");
-            play_button.add_css_class("suggested-action");
-            play_button.remove_css_class("destructive-action");
+            pattern_engine.stop();
+            tempo_trainer.pause();
+            stop_animation_timer();
+
+            // Update all three buttons to "Start"
+            update_play_button(play_button, false);
+            update_play_button(patterns_play_button, false);
+            update_play_button(trainer_play_button, false);
+
+            // Enable view switching
+            view_switcher_bar.sensitive = true;
         } else {
-            metronome_engine.start();
-            play_button.label = _("Stop");
-            play_button.remove_css_class("suggested-action");
-            play_button.add_css_class("destructive-action");
+            // Start based on active view
+            start_animation_timer();
+
+            if (visible_view == "patterns" && current_mode == MetronomeMode.PATTERN) {
+                // Pattern view with active pattern
+                pattern_engine.bpm = metronome_engine.bpm;
+                pattern_engine.start();
+            } else if (visible_view == "trainer") {
+                // Trainer view - set tempo to trainer's start tempo
+                try {
+                    metronome_engine.set_tempo(tempo_trainer.start_tempo);
+                    update_tempo_display();
+                } catch (MetronomeError e) {
+                    warning("Failed to set trainer start tempo: %s", e.message);
+                }
+                metronome_engine.start();
+                tempo_trainer.start();
+            } else {
+                // Metronome view (default)
+                metronome_engine.start();
+            }
+
+            // Update all three buttons to "Stop"
+            update_play_button(play_button, true);
+            update_play_button(patterns_play_button, true);
+            update_play_button(trainer_play_button, true);
+
+            // Disable view switching while playing
+            view_switcher_bar.sensitive = false;
+        }
+    }
+
+    /**
+     * Update a play button's label and style
+     */
+    private void update_play_button(Button button, bool is_playing) {
+        if (is_playing) {
+            button.label = _("Stop");
+            button.remove_css_class("suggested-action");
+            button.add_css_class("destructive-action");
+        } else {
+            button.label = _("Start");
+            button.add_css_class("suggested-action");
+            button.remove_css_class("destructive-action");
         }
     }
     
@@ -224,14 +494,18 @@ public class TempoWindow : Adw.ApplicationWindow {
         }
     }
     
-    private void on_beat_occurred(int beat_number, bool downbeat) {
+    private void on_beat_occurred(int beat_number, bool downbeat, bool muted) {
         // Update beat indicator state
         beat_active = true;
         is_downbeat = downbeat;
+        is_muted = muted;
 
         // Store the beat number to display (convert to 1-based beat-in-bar)
         var beat_info = metronome_engine.get_beat_info();
         current_beat_number = beat_info["beat_in_bar"].get_int32();
+
+        // Record beat start time for animation progress calculation
+        beat_start_time = GLib.get_monotonic_time();
 
         // Trigger redraw with frame rate limiting
         request_redraw();
@@ -252,7 +526,10 @@ public class TempoWindow : Adw.ApplicationWindow {
 
         // Check if enough time has passed since last draw
         if (current_time - last_draw_time >= FRAME_INTERVAL_MS) {
+            // Redraw all beat indicators (one per tab)
             beat_indicator.queue_draw();
+            patterns_beat_indicator.queue_draw();
+            trainer_beat_indicator.queue_draw();
             last_draw_time = current_time;
             redraw_pending = false;
         } else if (!redraw_pending) {
@@ -261,7 +538,10 @@ public class TempoWindow : Adw.ApplicationWindow {
             uint delay = FRAME_INTERVAL_MS - (current_time - last_draw_time);
 
             Timeout.add(delay, () => {
+                // Redraw all beat indicators
                 beat_indicator.queue_draw();
+                patterns_beat_indicator.queue_draw();
+                trainer_beat_indicator.queue_draw();
                 last_draw_time = (uint)(GLib.get_monotonic_time() / 1000);
                 redraw_pending = false;
                 return false;
@@ -407,7 +687,7 @@ public class TempoWindow : Adw.ApplicationWindow {
         }
         preferences_dialog.present(this);
     }
-    
+
     /**
      * Show the keyboard shortcuts dialog.
      */
@@ -417,7 +697,19 @@ public class TempoWindow : Adw.ApplicationWindow {
         }
         shortcuts_dialog.present(this);
     }
-    
+
+    /**
+     * Show the preset manager dialog.
+     */
+    public void show_preset_manager() {
+        preset_manager_dialog = new PresetManagerDialog(this, preset_manager);
+        preset_manager_dialog.preset_loaded.connect((preset) => {
+            // Preset has been loaded, settings have been applied
+            // The UI will update automatically through settings bindings
+        });
+        preset_manager_dialog.present(this);
+    }
+
     /**
      * Handle settings changes to update visual preferences.
      */
@@ -427,12 +719,53 @@ public class TempoWindow : Adw.ApplicationWindow {
             case "flash-on-beat":
             case "downbeat-color":
             case "theme":
-                // Redraw beat indicator with new settings
+                // Redraw all beat indicators with new settings
                 beat_indicator.queue_draw();
+                patterns_beat_indicator.queue_draw();
+                trainer_beat_indicator.queue_draw();
+                break;
+            case "visual-mode":
+                // Switch visual mode
+                switch_visual_mode(settings.get_string("visual-mode"));
                 break;
             case "keep-on-top":
                 apply_keep_on_top_setting();
                 break;
+            case "mute-enabled":
+            case "mute-pattern-type":
+            case "mute-interval":
+            case "mute-percentage":
+            case "mute-specific-beats":
+            case "mute-progressive-start":
+            case "mute-progressive-end":
+            case "mute-progressive-interval":
+                // Reload mute pattern when any mute setting changes
+                load_mute_pattern();
+                break;
+        }
+    }
+
+    /**
+     * Load mute pattern from settings and apply to metronome engine.
+     */
+    private void load_mute_pattern() {
+        // Get mute enabled setting
+        bool mute_enabled = settings.get_boolean("mute-enabled");
+        metronome_engine.mute_enabled = mute_enabled;
+
+        if (mute_enabled) {
+            // Create pattern from settings
+            var pattern = Tempo.MutePatternFactory.create_from_settings(settings);
+
+            // Apply pattern to engine
+            metronome_engine.mute_pattern = pattern;
+
+            if (pattern != null) {
+                message("Loaded mute pattern: %s", pattern.get_description());
+            }
+        } else {
+            // Disable muting
+            metronome_engine.mute_pattern = null;
         }
     }
 
@@ -516,175 +849,519 @@ public class TempoWindow : Adw.ApplicationWindow {
     }
 
     /**
-     * Enhanced beat indicator drawing function with preference-driven visuals.
+     * Initialize visual mode from settings.
+     */
+    private void initialize_visual_mode() {
+        string mode_name = settings.get_string("visual-mode");
+        switch_visual_mode(mode_name);
+    }
+
+    /**
+     * Switch to a different visual mode.
+     */
+    private void switch_visual_mode(string mode_name) {
+        switch (mode_name) {
+            case "pendulum":
+                current_visual_mode = new PendulumMode(settings);
+                break;
+            case "bar":
+                current_visual_mode = new BarGraphMode(settings);
+                break;
+            case "ring":
+                current_visual_mode = new ProgressRingMode(settings);
+                break;
+            case "flash":
+                current_visual_mode = new MinimalistFlashMode(settings);
+                break;
+            case "circle":
+            default:
+                current_visual_mode = new CircleMode(settings);
+                break;
+        }
+
+        // Redraw all indicators with new mode
+        beat_indicator.queue_draw();
+        patterns_beat_indicator.queue_draw();
+        trainer_beat_indicator.queue_draw();
+    }
+
+    /**
+     * Calculate animation progress within current beat (0.0-1.0).
+     */
+    private double calculate_animation_progress() {
+        if (beat_start_time == 0 || !metronome_engine.is_running) {
+            return 0.0;
+        }
+
+        int64 current_time = GLib.get_monotonic_time();
+        int64 elapsed = current_time - beat_start_time;
+
+        // Calculate beat duration in microseconds
+        double beat_duration_us = 60.0 / metronome_engine.bpm * 1000000.0;
+
+        double progress = elapsed / beat_duration_us;
+        return progress.clamp(0.0, 1.0);
+    }
+
+    /**
+     * Start animation timer for smooth visual updates at 60fps.
+     */
+    private void start_animation_timer() {
+        // Stop existing timer if any
+        stop_animation_timer();
+
+        // Start 60fps timer (16ms)
+        animation_timer_id = Timeout.add(16, () => {
+            if (metronome_engine.is_running || pattern_engine.is_running) {
+                animation_progress = calculate_animation_progress();
+                beat_indicator.queue_draw();
+                patterns_beat_indicator.queue_draw();
+                trainer_beat_indicator.queue_draw();
+                return true; // Continue timer
+            }
+            return false; // Stop timer
+        });
+    }
+
+    /**
+     * Stop animation timer.
+     */
+    private void stop_animation_timer() {
+        if (animation_timer_id > 0) {
+            Source.remove(animation_timer_id);
+            animation_timer_id = 0;
+        }
+    }
+
+    /**
+     * Enhanced beat indicator drawing function using visual modes.
      */
     private void draw_beat_indicator(DrawingArea area, Cairo.Context cr, int width, int height) {
-        // Get center coordinates and radius - much larger circle with margin for pulse effect
-        double center_x = width / 2.0;
-        double center_y = height / 2.0;
-        double base_radius = double.min(width, height) / 2 - 85;
-        
         // Get current beat info
         var beat_info = metronome_engine.get_beat_info();
         var current_beat_in_bar = beat_info["beat_in_bar"].get_int32();
-        
-        // Read visual preferences
-        bool show_beat_numbers = settings.get_boolean("show-beat-numbers");
-        bool flash_on_beat = settings.get_boolean("flash-on-beat");
-        bool downbeat_color = settings.get_boolean("downbeat-color");
-        
-        // Get theme-responsive colors
-        var style_manager = Adw.StyleManager.get_default();
-        bool is_dark_theme = style_manager.dark;
-        
-        // Clear the area
-        cr.set_source_rgba(0, 0, 0, 0);
-        cr.paint();
-        
-        // Calculate dynamic radius for flash effect
-        double radius = base_radius;
-        double glow_intensity = 0.0;
-        
-        if (beat_active && flash_on_beat) {
-            // Enhanced flash effect with bigger scaling and glow
-            double flash_scale = 1.3;
-            radius = base_radius * flash_scale;
-            glow_intensity = 1.0;
+
+        // Calculate animation progress
+        animation_progress = calculate_animation_progress();
+
+        // Delegate drawing to current visual mode
+        if (current_visual_mode != null) {
+            current_visual_mode.draw(
+                cr,
+                metronome_engine.is_running ? current_beat_number : 0,
+                metronome_engine.beats_per_bar,
+                is_downbeat,
+                is_muted,
+                animation_progress,
+                width,
+                height
+            );
         }
-        
-        // Define theme-responsive colors
-        double[] regular_color;
-        if (is_dark_theme) {
-            regular_color = {0.3, 0.7, 1.0};     // Light blue for dark theme
+    }
+
+    /**
+     * Handle practice timer tick - update display and progress.
+     */
+    private void on_timer_tick(int64 elapsed, int64 remaining) {
+        // Format and display time
+        string time_str = format_timer_display(elapsed, remaining);
+        timer_display.label = time_str;
+
+        // Update auto-stop progress
+        update_auto_stop_progress();
+    }
+
+    /**
+     * Format timer display based on mode and duration.
+     */
+    private string format_timer_display(int64 elapsed, int64 remaining) {
+        int64 display_time = (practice_timer.mode == TimerMode.COUNTDOWN) ? remaining : elapsed;
+
+        // Convert microseconds to seconds
+        int total_seconds = (int)(display_time / 1000000);
+
+        int hours = total_seconds / 3600;
+        int minutes = (total_seconds % 3600) / 60;
+        int seconds = total_seconds % 60;
+
+        // Use HH:MM:SS for >= 1 hour, otherwise MM:SS
+        if (hours > 0) {
+            return "%02d:%02d:%02d".printf(hours, minutes, seconds);
         } else {
-            regular_color = {0.2, 0.5, 0.9};     // Darker blue for light theme
+            return "%02d:%02d".printf(minutes, seconds);
         }
-            
-        double[] downbeat_accent_color;
-        if (downbeat_color) {
-            if (is_dark_theme) {
-                downbeat_accent_color = {1.0, 0.4, 0.4};     // Light red for dark theme
-            } else {
-                downbeat_accent_color = {0.9, 0.2, 0.2};     // Dark red for light theme
-            }
-        } else {
-            downbeat_accent_color = regular_color;            // Use regular color if downbeat highlighting disabled
+    }
+
+    /**
+     * Update auto-stop progress display.
+     */
+    private void update_auto_stop_progress() {
+        if (practice_timer.auto_stop_mode == AutoStopMode.NONE) {
+            auto_stop_progress.label = "";
+            return;
         }
-        
-        double[] inactive_color;
-        if (is_dark_theme) {
-            inactive_color = {0.6, 0.6, 0.6};     // Light gray for dark theme
-        } else {
-            inactive_color = {0.4, 0.4, 0.4};     // Dark gray for light theme
+
+        string progress_text = "";
+
+        switch (practice_timer.auto_stop_mode) {
+            case AutoStopMode.BEATS:
+                // Access private beat count through calculation
+                progress_text = _("Target: %d beats").printf(practice_timer.auto_stop_value);
+                break;
+
+            case AutoStopMode.BARS:
+                progress_text = _("Target: %d bars").printf(practice_timer.auto_stop_value);
+                break;
+
+            case AutoStopMode.TIME:
+                int target_minutes = practice_timer.auto_stop_value;
+                progress_text = _("Target: %d minutes").printf(target_minutes);
+                break;
         }
-        
-        if (beat_active) {
-            // Choose color based on beat type and preferences
-            double[] active_color = (is_downbeat && downbeat_color) ? 
-                downbeat_accent_color : regular_color;
-            
-            if (flash_on_beat) {
-                // Multi-layer glow effect with more dramatic expansion
-                for (int i = 4; i >= 0; i--) {
-                    double layer_radius = radius + (i * 12);
-                    double layer_alpha = glow_intensity * (0.4 - i * 0.08);
-                    
-                    cr.set_source_rgba(active_color[0], active_color[1], active_color[2], layer_alpha);
-                    cr.arc(center_x, center_y, layer_radius, 0, 2 * Math.PI);
-                    cr.fill();
-                }
-            }
-            
-            // Main filled circle with gradient
-            var pattern = new Cairo.Pattern.radial(center_x, center_y, 0, 
-                                                  center_x, center_y, radius);
-            pattern.add_color_stop_rgba(0.0, active_color[0], active_color[1], active_color[2], 0.9);
-            pattern.add_color_stop_rgba(0.7, active_color[0], active_color[1], active_color[2], 0.7);
-            pattern.add_color_stop_rgba(1.0, active_color[0], active_color[1], active_color[2], 0.3);
-            
-            cr.set_source(pattern);
-            cr.arc(center_x, center_y, radius, 0, 2 * Math.PI);
-            cr.fill();
-            
-            // Inner highlight for 3D effect
-            var highlight = new Cairo.Pattern.radial(center_x - radius/3, center_y - radius/3, 0,
-                                                    center_x, center_y, radius * 0.6);
-            highlight.add_color_stop_rgba(0.0, 1.0, 1.0, 1.0, 0.4);
-            highlight.add_color_stop_rgba(1.0, 1.0, 1.0, 1.0, 0.0);
-            
-            cr.set_source(highlight);
-            cr.arc(center_x, center_y, radius * 0.6, 0, 2 * Math.PI);
-            cr.fill();
-            
-        } else {
-            // Inactive state - elegant outline with subtle gradient
-            double outline_width = 3.0;
-            
-            // Outer glow for inactive state
-            cr.set_source_rgba(inactive_color[0], inactive_color[1], inactive_color[2], 0.2);
-            cr.set_line_width(outline_width * 2);
-            cr.arc(center_x, center_y, base_radius + 2, 0, 2 * Math.PI);
-            cr.stroke();
-            
-            // Main outline
-            cr.set_source_rgba(inactive_color[0], inactive_color[1], inactive_color[2], 0.6);
-            cr.set_line_width(outline_width);
-            cr.arc(center_x, center_y, base_radius, 0, 2 * Math.PI);
-            cr.stroke();
-            
-            // Inner subtle fill
-            cr.set_source_rgba(inactive_color[0], inactive_color[1], inactive_color[2], 0.1);
-            cr.arc(center_x, center_y, base_radius - outline_width, 0, 2 * Math.PI);
-            cr.fill();
+
+        auto_stop_progress.label = progress_text;
+    }
+
+    /**
+     * Handle countdown completion - show toast notification.
+     */
+    private void on_countdown_completed() {
+        var toast = new Adw.Toast(_("Practice session completed"));
+        toast.timeout = 3;
+
+        // Get the toast overlay (assuming we're in an Adw.ApplicationWindow)
+        var overlay = this.content as Adw.ToastOverlay;
+        if (overlay != null) {
+            overlay.add_toast(toast);
         }
-        
-        // Draw beat number if enabled and running
-        if (show_beat_numbers && metronome_engine.is_running) {
-            // Calculate font size based on circle size
-            double font_size = base_radius * 0.4;
-            cr.select_font_face("Sans", Cairo.FontSlant.NORMAL, Cairo.FontWeight.BOLD);
-            cr.set_font_size(font_size);
-            
-            var beat_text = current_beat_number.to_string();
-            Cairo.TextExtents extents;
-            cr.text_extents(beat_text, out extents);
-            
-            // Text with subtle shadow for better readability
-            // Shadow
-            cr.set_source_rgba(0, 0, 0, 0.2);
-            cr.move_to(center_x - extents.width / 2 + 1, center_y + extents.height / 2 + 1);
-            cr.show_text(beat_text);
-            
-            // Main text
-            cr.set_source_rgba(is_dark_theme ? 0.95 : 0.1, 
-                             is_dark_theme ? 0.95 : 0.1, 
-                             is_dark_theme ? 0.95 : 0.1, 1.0);
-            cr.move_to(center_x - extents.width / 2, center_y + extents.height / 2);
-            cr.show_text(beat_text);
+    }
+
+    /**
+     * Handle auto-stop trigger - show toast with details.
+     */
+    private void on_auto_stop_triggered() {
+        string message = "";
+
+        switch (practice_timer.auto_stop_mode) {
+            case AutoStopMode.BEATS:
+                message = _("Auto-stop: %d beats completed").printf(practice_timer.auto_stop_value);
+                break;
+
+            case AutoStopMode.BARS:
+                message = _("Auto-stop: %d bars completed").printf(practice_timer.auto_stop_value);
+                break;
+
+            case AutoStopMode.TIME:
+                message = _("Auto-stop: %d minutes completed").printf(practice_timer.auto_stop_value);
+                break;
         }
-        
-        // Draw small beat progress indicators around the circle (when running)
-        if (metronome_engine.is_running) {
-            var total_beats = metronome_engine.beats_per_bar;
-            double indicator_radius = base_radius + 20;
-            double indicator_size = 4.0;
-            
-            for (int i = 1; i <= total_beats; i++) {
-                double angle = (i - 1) * 2 * Math.PI / total_beats - Math.PI / 2;
-                double dot_x = center_x + Math.cos(angle) * indicator_radius;
-                double dot_y = center_y + Math.sin(angle) * indicator_radius;
-                
-                if (i == current_beat_number) {
-                    // Current beat - larger, brighter
-                    cr.set_source_rgba(regular_color[0], regular_color[1], regular_color[2], 0.9);
-                    cr.arc(dot_x, dot_y, indicator_size * 1.5, 0, 2 * Math.PI);
-                } else {
-                    // Other beats - smaller, dimmer
-                    cr.set_source_rgba(inactive_color[0], inactive_color[1], inactive_color[2], 0.4);
-                    cr.arc(dot_x, dot_y, indicator_size, 0, 2 * Math.PI);
-                }
-                cr.fill();
+
+        if (message != "") {
+            var toast = new Adw.Toast(message);
+            toast.timeout = 3;
+
+            var overlay = this.content as Adw.ToastOverlay;
+            if (overlay != null) {
+                overlay.add_toast(toast);
             }
         }
+    }
+
+    // Tempo Trainer handlers
+    private void on_trainer_beat_occurred(int beat_num, bool is_downbeat, bool muted) {
+        if (!tempo_trainer.is_active) return;
+
+        int beats_per_bar = settings.get_int("time-signature-numerator");
+        tempo_trainer.on_beat_occurred(beat_num, beats_per_bar);
+    }
+
+    private void on_trainer_tempo_change(int new_tempo) {
+        // Update tempo spin button (will trigger metronome update)
+        tempo_spin.value = new_tempo;
+    }
+
+    private void on_trainer_target_reached() {
+        var toast = new Adw.Toast(_("Tempo Trainer: Target reached!"));
+        toast.timeout = 3;
+
+        var overlay = this.content as Adw.ToastOverlay;
+        if (overlay != null) {
+            overlay.add_toast(toast);
+        }
+
+        if (tempo_trainer.auto_stop_at_target) {
+            metronome_engine.stop();
+            play_button.label = _("Start");
+            play_button.add_css_class("suggested-action");
+            play_button.remove_css_class("destructive-action");
+        }
+    }
+
+    private void on_trainer_progression_updated(int current, int target, int remaining) {
+        if (!tempo_trainer.is_active) {
+            trainer_status_label.visible = false;
+            return;
+        }
+
+        string status = "";
+        if (tempo_trainer.interval_type == IntervalType.BARS) {
+            int bars_left = tempo_trainer.get_bars_until_next_increment();
+            status = _("%d/%d BPM, next in %d bars").printf(current, target, bars_left);
+        } else {
+            int secs_left = tempo_trainer.get_seconds_until_next_increment();
+            status = _("%d/%d BPM, next in %d seconds").printf(current, target, secs_left);
+        }
+
+        trainer_status_label.label = status;
+        trainer_status_label.visible = true;
+    }
+
+    private void setup_tempo_trainer_ui() {
+        // Load settings
+        tempo_trainer.start_tempo = settings.get_int("trainer-start-tempo");
+        tempo_trainer.target_tempo = settings.get_int("trainer-target-tempo");
+        tempo_trainer.increment = settings.get_int("trainer-increment");
+        tempo_trainer.interval_type = (IntervalType)settings.get_int("trainer-interval-type");
+        tempo_trainer.interval_value = settings.get_int("trainer-interval-value");
+        tempo_trainer.auto_stop_at_target = settings.get_boolean("trainer-auto-stop");
+
+        // Bind UI to trainer properties
+        trainer_start_spin.value = tempo_trainer.start_tempo;
+        trainer_target_spin.value = tempo_trainer.target_tempo;
+        trainer_increment_spin.value = tempo_trainer.increment;
+        trainer_interval_spin.value = tempo_trainer.interval_value;
+        trainer_interval_type.selected = (uint)tempo_trainer.interval_type;
+
+        // Connect UI signals
+        trainer_start_spin.value_changed.connect(() => {
+            tempo_trainer.start_tempo = (int)trainer_start_spin.value;
+            settings.set_int("trainer-start-tempo", tempo_trainer.start_tempo);
+        });
+
+        trainer_target_spin.value_changed.connect(() => {
+            tempo_trainer.target_tempo = (int)trainer_target_spin.value;
+            settings.set_int("trainer-target-tempo", tempo_trainer.target_tempo);
+        });
+
+        trainer_increment_spin.value_changed.connect(() => {
+            tempo_trainer.increment = (int)trainer_increment_spin.value;
+            settings.set_int("trainer-increment", tempo_trainer.increment);
+        });
+
+        trainer_interval_spin.value_changed.connect(() => {
+            tempo_trainer.interval_value = (int)trainer_interval_spin.value;
+            settings.set_int("trainer-interval-value", tempo_trainer.interval_value);
+        });
+
+        trainer_interval_type.notify["selected"].connect(() => {
+            tempo_trainer.interval_type = (IntervalType)trainer_interval_type.selected;
+            settings.set_int("trainer-interval-type", (int)tempo_trainer.interval_type);
+        });
+    }
+
+    // ========== Pattern Methods ==========
+
+    /**
+     * Initialize pattern dropdown with available patterns
+     */
+    private void initialize_pattern_dropdown() {
+        // Load patterns from library
+        try {
+            pattern_library.load_built_in_patterns();
+            pattern_library.load_user_patterns();
+        } catch (Error e) {
+            warning("Failed to load patterns: %s", e.message);
+        }
+
+        // Create string list model
+        pattern_model = new Gtk.StringList(null);
+
+        // Add "None" as first option
+        pattern_model.append(_("None"));
+
+        // Add all patterns
+        var patterns = pattern_library.get_all_patterns();
+        foreach (var pattern in patterns) {
+            pattern_model.append(pattern.name);
+        }
+
+        // Set model on dropdown
+        pattern_dropdown.model = pattern_model;
+        pattern_dropdown.selected = 0; // Select "None" by default
+    }
+
+    /**
+     * Load active pattern from settings
+     */
+    private void load_active_pattern() {
+        string pattern_name = settings.get_string("active-pattern");
+
+        if (pattern_name.length == 0) {
+            return; // No pattern to load
+        }
+
+        // Find pattern in dropdown
+        for (uint i = 0; i < pattern_model.get_n_items(); i++) {
+            var item = pattern_model.get_string(i);
+            if (item == pattern_name) {
+                pattern_dropdown.selected = i;
+                return;
+            }
+        }
+
+        // Pattern not found, clear setting
+        settings.set_string("active-pattern", "");
+    }
+
+    /**
+     * Handle pattern selection change
+     */
+    private void on_pattern_changed() {
+        uint selected = pattern_dropdown.selected;
+
+        if (selected == 0) {
+            // "None" selected - deactivate pattern mode
+            deactivate_pattern();
+            settings.set_string("active-pattern", "");
+            pattern_info_label.label = _("Select a pattern to begin");
+            return;
+        }
+
+        // Get selected pattern name
+        string pattern_name = pattern_model.get_string(selected);
+        var pattern = pattern_library.get_pattern(pattern_name);
+
+        if (pattern == null) {
+            warning("Pattern not found: %s", pattern_name);
+            return;
+        }
+
+        // Update info label with pattern description
+        pattern_info_label.label = pattern.description;
+
+        // Activate pattern
+        activate_pattern(pattern);
+        settings.set_string("active-pattern", pattern_name);
+    }
+
+    /**
+     * Handle pattern edit button click
+     */
+    private void on_pattern_edit_clicked() {
+        // TODO: Open pattern editor dialog
+        // For now, just show a placeholder message
+        var toast = new Adw.Toast(_("Pattern editor coming soon!"));
+        toast.set_timeout(2);
+
+        var overlay = this.content as Adw.ToastOverlay;
+        if (overlay != null) {
+            overlay.add_toast(toast);
+        }
+    }
+
+    /**
+     * Activate pattern mode
+     */
+    private void activate_pattern(Tempo.RhythmPattern pattern) {
+        // Stop if running
+        bool was_running = metronome_engine.is_running;
+        if (was_running) {
+            metronome_engine.stop();
+        }
+
+        // Switch to pattern mode
+        current_mode = MetronomeMode.PATTERN;
+
+        // Set pattern on engine
+        pattern_engine.set_pattern(pattern);
+
+        // Sync BPM from metronome to pattern engine
+        pattern_engine.bpm = metronome_engine.bpm;
+
+        // Enable edit button
+        pattern_edit_button.sensitive = true;
+
+        // Restart if was running
+        if (was_running) {
+            pattern_engine.start();
+            play_button.label = _("Stop");
+            play_button.remove_css_class("suggested-action");
+            play_button.add_css_class("destructive-action");
+        }
+
+        debug("Activated pattern mode: %s", pattern.name);
+    }
+
+    /**
+     * Deactivate pattern mode
+     */
+    private void deactivate_pattern() {
+        // Stop if running
+        bool was_running = pattern_engine.is_running;
+        if (was_running) {
+            pattern_engine.stop();
+        }
+
+        // Switch to simple beats mode
+        current_mode = MetronomeMode.SIMPLE_BEATS;
+
+        // Disable edit button
+        pattern_edit_button.sensitive = false;
+
+        // Restart if was running
+        if (was_running) {
+            metronome_engine.start();
+            play_button.label = _("Stop");
+            play_button.remove_css_class("suggested-action");
+            play_button.add_css_class("destructive-action");
+        }
+
+        debug("Deactivated pattern mode");
+    }
+
+    /**
+     * Handle pattern step event
+     */
+    private void on_pattern_step_occurred(Tempo.PatternStep step, int beat_number) {
+        // Update beat indicator
+        current_beat_number = beat_number;
+
+        // Determine colors based on accent level
+        switch (step.accent) {
+            case Tempo.AccentLevel.STRONG:
+                is_downbeat = true;
+                break;
+            case Tempo.AccentLevel.REGULAR:
+                is_downbeat = false;
+                break;
+            case Tempo.AccentLevel.GHOST:
+                is_downbeat = false;
+                break;
+        }
+
+        is_muted = false;
+        beat_active = true;
+
+        // Start animation
+        beat_start_time = GLib.get_monotonic_time();
+        animation_progress = 0.0;
+
+        // Redraw beat indicator
+        request_redraw();
+
+        // Reset beat indicator after short delay
+        Timeout.add(100, () => {
+            beat_active = false;
+            request_redraw();
+            return false;
+        });
+    }
+
+    /**
+     * Handle pattern loop completion
+     */
+    private void on_pattern_loop_completed() {
+        // Could add visual feedback here if desired
+        debug("Pattern loop completed");
     }
 }

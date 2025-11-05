@@ -22,12 +22,26 @@ Tempo is a simple, reliable, and aesthetically pleasing metronome application bu
 - **Precise Timing**: Sub-millisecond accuracy with drift-free timing engine
 - **Customizable Tempo**: Set BPM from 40 to 240 using slider, stepper, or tap tempo
 - **Time Signature Control**: Full support for time signatures with working denominators (4/4, 4/8, 4/2, 4/16, etc.)
-- **Visual Beat Indicator**: Clear visual feedback synchronized with audio
-- **Accented Downbeats**: Distinct sound for the first beat of each measure
+- **Visual Beat Indicator**: Clear visual feedback synchronized with audio in multiple styles
+- **Multiple Visual Modes**: Choose from 5 different beat indicators (Circle, Pendulum, Bar Graph, Progress Ring, Flash)
+- **Accented Downbeats**: Distinct sound and visuals for the first beat of each measure
 - **Low-Latency Audio**: Optimized GStreamer pipeline for minimal audio delay
 - **Modern UI**: Clean, adaptive interface following GNOME design principles
 - **Keyboard Shortcuts**: Spacebar to start/stop, arrow keys for tempo adjustment
 - **Settings Persistence**: Automatically saves your preferred settings
+
+### Rhythm Patterns (NEW)
+- **Authentic Rhythm Patterns**: Practice with genre-specific patterns beyond simple beats
+- **Built-in Patterns**: 6 professional patterns included
+  - Cuban clave patterns (Son 3-2, Son 2-3, Rumba)
+  - Brazilian rhythms (Bossa Nova)
+  - Jazz patterns (Swing Ride)
+  - Rock/Pop (Backbeat)
+- **Multi-Accent Support**: Strong, regular, and ghost notes with automatic volume adjustment
+- **Precision Timing**: Sub-millisecond accuracy maintains perfect groove
+- **Easy Selection**: Pattern dropdown in main window with instant switching
+- **Full Tempo Range**: All patterns work at 40-240 BPM
+- **Settings Persistence**: Last used pattern automatically restored
 
 ### Sound Selection (NEW in 1.4.0)
 - **Built-in Sound Types**: Choose from multiple sound types without managing external files
@@ -56,6 +70,17 @@ Tempo is a simple, reliable, and aesthetically pleasing metronome application bu
   - Beat indicator frame rate capped at 60 FPS
   - Settings debounced to prevent update storms
 - **Input Validation**: All user inputs thoroughly validated for security
+
+### Mobile & Responsive Design (NEW in 1.4.0)
+- **Adaptive Layout**: Automatically adjusts for phone, tablet, and desktop screens
+- **Responsive Breakpoints**:
+  - Phone (≤550px): Compact vertical layout with 200px beat indicator
+  - Tablet (551-900px): Balanced layout with 250px beat indicator
+  - Desktop (900px+): Full layout with 300px beat indicator
+- **Touch-Friendly Controls**: All interactive elements meet 44px minimum touch target size
+- **Scrollable Content**: Vertical scrolling on constrained screens
+- **Mobile Linux Support**: Optimized for PinePhone, Librem 5, and other mobile devices
+- **Minimum Screen Size**: 360x600 pixels
 
 ## Installation
 

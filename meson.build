@@ -28,6 +28,8 @@ gtk4_dep = dependency('gtk4', version: '>= 4.10.0')
 adw_dep = dependency('libadwaita-1', version: '>= 1.5')
 glib_dep = dependency('glib-2.0', version: '>= 2.76')
 gobject_dep = dependency('gobject-2.0', version: '>= 2.76')
+json_glib_dep = dependency('json-glib-1.0', version: '>= 1.6')
+gee_dep = dependency('gee-0.8', version: '>= 0.20')
 gstreamer_dep = dependency('gstreamer-1.0', version: '>= 1.18', required: false)
 gstreamer_audio_dep = dependency('gstreamer-audio-1.0', version: '>= 1.18', required: false)
 

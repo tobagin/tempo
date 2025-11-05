@@ -69,6 +69,33 @@
       <description>Built-in sound type for low/regular sounds: "default", "woodblock", "metal", or "digital"</description>
     </key>
 
+    <!-- Subdivision Settings -->
+    <key name="subdivision-mode" type="i">
+      <range min="0" max="4"/>
+      <default>0</default>
+      <summary>Subdivision mode</summary>
+      <description>0=None, 2=Eighths, 3=Triplets, 4=Sixteenths</description>
+    </key>
+
+    <key name="subdivision-volume" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.5</default>
+      <summary>Subdivision volume</summary>
+      <description>Volume level for subdivision clicks (relative to main beat)</description>
+    </key>
+
+    <key name="subdivision-sound-type" type="s">
+      <default>"default"</default>
+      <summary>Subdivision sound type</summary>
+      <description>Built-in sound type for subdivisions: "default", "woodblock", "metal", or "digital"</description>
+    </key>
+
+    <key name="show-subdivision-indicators" type="b">
+      <default>true</default>
+      <summary>Show subdivision visual indicators</summary>
+      <description>Whether to display subdivision dots/markers around beat circle</description>
+    </key>
+
     <!-- Behavior Settings -->
     <key name="tap-sensitivity" type="i">
       <range min="100" max="2000"/>
@@ -96,19 +123,25 @@
       <summary>Theme selection</summary>
       <description>Selected theme: 0=Auto, 1=Light, 2=Dark</description>
     </key>
-    
+
+    <key name="visual-mode" type="s">
+      <default>"circle"</default>
+      <summary>Visual indicator mode</summary>
+      <description>One of: "circle", "pendulum", "bar", "ring", "flash"</description>
+    </key>
+
     <key name="show-beat-numbers" type="b">
       <default>true</default>
       <summary>Show beat numbers</summary>
       <description>Whether to show beat numbers on the beat indicator</description>
     </key>
-    
+
     <key name="flash-on-beat" type="b">
       <default>true</default>
       <summary>Flash on beat</summary>
       <description>Whether the beat indicator should flash/pulse on each beat</description>
     </key>
-    
+
     <key name="downbeat-color" type="b">
       <default>true</default>
       <summary>Downbeat color highlighting</summary>
@@ -140,6 +173,188 @@
       <summary>Last version for which release notes were shown</summary>
       <description>Tracks the last application version for which release notes were displayed to avoid showing them repeatedly</description>
     </key>
-    
+
+    <!-- Practice Timer Settings -->
+    <key name="timer-enabled" type="b">
+      <default>false</default>
+      <summary>Timer enabled</summary>
+      <description>Whether the practice timer is visible and active</description>
+    </key>
+
+    <key name="timer-mode" type="i">
+      <range min="0" max="1"/>
+      <default>0</default>
+      <summary>Timer mode</summary>
+      <description>0=Count-up, 1=Countdown</description>
+    </key>
+
+    <key name="timer-countdown-duration" type="i">
+      <range min="1" max="180"/>
+      <default>25</default>
+      <summary>Countdown duration in minutes</summary>
+      <description>Target duration for countdown timer</description>
+    </key>
+
+    <key name="timer-pause-with-metronome" type="b">
+      <default>true</default>
+      <summary>Pause timer when metronome stops</summary>
+      <description>Whether timer should pause when metronome is stopped</description>
+    </key>
+
+    <key name="timer-auto-stop-mode" type="i">
+      <range min="0" max="3"/>
+      <default>0</default>
+      <summary>Auto-stop mode</summary>
+      <description>0=None, 1=Beats, 2=Bars, 3=Time</description>
+    </key>
+
+    <key name="timer-auto-stop-value" type="i">
+      <range min="1" max="10000"/>
+      <default>100</default>
+      <summary>Auto-stop value</summary>
+      <description>Number of beats/bars or minutes for auto-stop</description>
+    </key>
+
+    <key name="timer-show-in-main-window" type="b">
+      <default>true</default>
+      <summary>Show timer in main window</summary>
+      <description>Whether to display timer in main window</description>
+    </key>
+
+    <!-- Preset Settings -->
+    <key name="preset-sort-order" type="i">
+      <range min="0" max="7"/>
+      <default>0</default>
+      <summary>Preset sort order</summary>
+      <description>Sort order for presets: 0=Name A-Z, 1=Name Z-A, 2=Created (oldest), 3=Created (newest), 4=Last used (oldest), 5=Last used (newest), 6=Tempo (low-high), 7=Tempo (high-low)</description>
+    </key>
+
+    <key name="preset-quick-load-visible" type="b">
+      <default>true</default>
+      <summary>Show preset quick-load selector</summary>
+      <description>Whether to show the preset quick-load dropdown in main window</description>
+    </key>
+
+    <key name="preset-manager-last-selected" type="s">
+      <default>""</default>
+      <summary>Last selected preset ID in preset manager</summary>
+      <description>ID of the preset last selected in the preset manager dialog</description>
+    </key>
+
+    <!-- Tempo Trainer Settings -->
+    <key name="trainer-enabled" type="b">
+      <default>false</default>
+      <summary>Tempo trainer enabled</summary>
+      <description>Whether tempo trainer is active</description>
+    </key>
+
+    <key name="trainer-start-tempo" type="i">
+      <range min="40" max="240"/>
+      <default>60</default>
+      <summary>Trainer start tempo</summary>
+      <description>Starting tempo for tempo trainer progression</description>
+    </key>
+
+    <key name="trainer-target-tempo" type="i">
+      <range min="40" max="240"/>
+      <default>120</default>
+      <summary>Trainer target tempo</summary>
+      <description>Target tempo for tempo trainer progression</description>
+    </key>
+
+    <key name="trainer-increment" type="i">
+      <range min="-50" max="50"/>
+      <default>5</default>
+      <summary>Trainer increment</summary>
+      <description>BPM change per increment (positive for ascending, negative for descending)</description>
+    </key>
+
+    <key name="trainer-interval-type" type="i">
+      <range min="0" max="1"/>
+      <default>0</default>
+      <summary>Trainer interval type</summary>
+      <description>0=Bars, 1=Seconds</description>
+    </key>
+
+    <key name="trainer-interval-value" type="i">
+      <range min="1" max="1000"/>
+      <default>8</default>
+      <summary>Trainer interval value</summary>
+      <description>Number of bars or seconds between tempo increments</description>
+    </key>
+
+    <key name="trainer-auto-stop" type="b">
+      <default>false</default>
+      <summary>Auto-stop at target</summary>
+      <description>Whether to automatically stop metronome when target tempo reached</description>
+    </key>
+
+    <!-- Mute Pattern Settings -->
+    <key name="mute-enabled" type="b">
+      <default>false</default>
+      <summary>Enable beat muting</summary>
+      <description>Whether silent/muted beats feature is active</description>
+    </key>
+
+    <key name="mute-pattern-type" type="s">
+      <default>"none"</default>
+      <summary>Mute pattern type</summary>
+      <description>One of: "none", "every-nth", "random", "specific", "progressive"</description>
+    </key>
+
+    <key name="mute-interval" type="i">
+      <range min="2" max="16"/>
+      <default>2</default>
+      <summary>Interval for every-Nth pattern</summary>
+      <description>Mute every Nth beat (e.g., 2 = every other beat)</description>
+    </key>
+
+    <key name="mute-percentage" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.5</default>
+      <summary>Percentage for random muting</summary>
+      <description>Percentage of beats to mute randomly (0.0-1.0)</description>
+    </key>
+
+    <key name="mute-specific-beats" type="s">
+      <default>"2,4"</default>
+      <summary>Comma-separated beat numbers to mute</summary>
+      <description>Specific beats in each bar to mute (e.g., "2,4" for backbeat)</description>
+    </key>
+
+    <key name="mute-progressive-start" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.0</default>
+      <summary>Starting mute percentage for progressive mode</summary>
+      <description>Starting percentage for progressive muting (0.0-1.0)</description>
+    </key>
+
+    <key name="mute-progressive-end" type="d">
+      <range min="0.0" max="1.0"/>
+      <default>0.75</default>
+      <summary>Ending mute percentage for progressive mode</summary>
+      <description>Target percentage for progressive muting (0.0-1.0)</description>
+    </key>
+
+    <key name="mute-progressive-interval" type="i">
+      <range min="1" max="64"/>
+      <default>16</default>
+      <summary>Bars between mute increases in progressive mode</summary>
+      <description>Number of bars between progressive mute percentage increases</description>
+    </key>
+
+    <!-- Rhythm Pattern Settings -->
+    <key name="active-pattern" type="s">
+      <default>""</default>
+      <summary>Active rhythm pattern</summary>
+      <description>Name of the currently active rhythm pattern (empty = none)</description>
+    </key>
+
+    <key name="last-used-pattern" type="s">
+      <default>""</default>
+      <summary>Last used pattern</summary>
+      <description>Name of the last rhythm pattern that was successfully played</description>
+    </key>
+
   </schema>
 </schemalist>

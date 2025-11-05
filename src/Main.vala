@@ -54,19 +54,25 @@ public class TempoApplication : Adw.Application {
         preferences_action.activate.connect(on_preferences_action);
         this.add_action(preferences_action);
         this.set_accels_for_action("app.preferences", {"<Control>comma"});
-        
+
+        // Manage Presets action
+        var presets_action = new SimpleAction("manage-presets", null);
+        presets_action.activate.connect(on_manage_presets_action);
+        this.add_action(presets_action);
+        this.set_accels_for_action("app.manage-presets", {"<Control>p"});
+
         // Keyboard shortcuts action
         var shortcuts_action = new SimpleAction("show-help-overlay", null);
         shortcuts_action.activate.connect(on_shortcuts_action);
         this.add_action(shortcuts_action);
         this.set_accels_for_action("app.show-help-overlay", {"<Control>question"});
-        
+
         // About action
         var about_action = new SimpleAction("about", null);
         about_action.activate.connect(on_about_action);
         this.add_action(about_action);
         this.set_accels_for_action("app.about", {"F1"});
-        
+
         // Quit action
         var quit_action = new SimpleAction("quit", null);
         quit_action.activate.connect(on_quit_action);
@@ -79,7 +85,13 @@ public class TempoApplication : Adw.Application {
             main_window.show_preferences();
         }
     }
-    
+
+    private void on_manage_presets_action() {
+        if (main_window != null) {
+            main_window.show_preset_manager();
+        }
+    }
+
     private void on_shortcuts_action() {
         if (main_window != null) {
             main_window.show_keyboard_shortcuts();

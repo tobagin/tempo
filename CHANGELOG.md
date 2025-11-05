@@ -5,6 +5,141 @@ All notable changes to Tempo will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Rhythm Patterns**
+  - Play authentic rhythm patterns for genre-specific practice (Latin, jazz, and more)
+  - Six built-in patterns included:
+    - **Son Clave (3-2)**: Traditional Cuban clave pattern in 3-2 orientation
+    - **Son Clave (2-3)**: Traditional Cuban clave pattern in 2-3 orientation (reversed)
+    - **Rumba Clave**: Afro-Cuban rumba clave with displaced third note
+    - **Bossa Nova**: Classic Brazilian bossa nova pattern with ghost notes
+    - **Swing Ride**: Jazz swing ride cymbal pattern with triplet feel
+    - **Backbeat**: Simple rock/pop backbeat emphasizing beats 2 and 4
+  - Three accent levels per step (strong, regular, ghost) with automatic volume adjustment
+  - High-precision timing engine with sub-millisecond accuracy maintains perfect rhythm
+  - Pattern selector dropdown in main window for easy pattern switching
+  - "None" option returns to standard metronome mode
+  - Pattern selection persists across app restarts
+  - Patterns support variable lengths (4-8 beats typical, up to 64 beats possible)
+  - Full BPM control - patterns play at any tempo from 40-240 BPM
+  - Patterns use current sound type selection (default, woodblock, metal, digital)
+  - Visual beat indicator shows pattern playback with accent-level colors
+  - User patterns directory for future custom pattern support
+- **Visual Metronome Modes**
+  - Multiple visual indicator styles to suit different preferences and use cases
+  - Five visual modes available:
+    - **Circle**: Traditional pulsing circle (default, maintains original Tempo design)
+    - **Pendulum**: Swinging animation mimicking mechanical metronomes with realistic pendulum motion
+    - **Bar Graph**: Vertical bars showing beat positions within the measure
+    - **Progress Ring**: Circular progress indicator filling clockwise over each measure
+    - **Minimalist Flash**: Simple full-area color flash with fade effect for minimal distraction
+  - All modes support beat number display (when enabled)
+  - Downbeat highlighting with distinct colors (red) when configured
+  - Muted beat indicators showing dimmed visuals with "M" marker
+  - Smooth 60fps animations for natural motion
+  - Mode selection in Preferences > Visual > "Visual Mode" dropdown
+  - Settings persist across app restarts
+  - Real-time mode switching applies immediately without restart
+  - Theme-responsive colors adapting to light/dark mode
+  - Maintained timing accuracy across all visual modes
+- **Silent/Muted Beats Feature**
+  - Train internal timing by selectively muting beats while maintaining visual feedback
+  - Four mute patterns available:
+    - **Every Nth Beat**: Mute every 2nd, 3rd, 4th, etc. beat for regular practice intervals
+    - **Random Percentage**: Mute 25%, 50%, or 75% of beats randomly for unpredictable training
+    - **Specific Beats**: Mute only certain beats in each bar (e.g., beats 2 & 4 for backbeat training)
+    - **Progressive**: Gradually increase mute percentage over time to build confidence
+  - Visual indicators show all beats including muted ones (dimmed gray outline with "M" marker)
+  - Muted beats skip audio playback while maintaining precise timing
+  - Comprehensive preferences page: "Silent Beats" in settings
+  - Pattern-specific parameters with dynamic UI visibility
+  - Settings persist across app restarts
+  - Real-time pattern changes apply immediately during playback
+  - Mute logic integrated before audio playback to avoid glitches
+- **Tempo Trainer Feature**
+  - Progressive tempo change for gradual speed building during practice
+  - Configure start tempo, target tempo, and increment size (±1 to ±50 BPM)
+  - Two progression modes: bar-based (every N bars) and time-based (every N seconds)
+  - Real-time progress display showing current tempo, target, and countdown to next increment
+  - Automatic tempo changes applied at measure boundaries for smooth transitions
+  - Optional auto-stop when target tempo reached
+  - Target completion notifications via toast messages
+  - Works with both ascending (build speed) and descending (cool down) progressions
+  - Settings persist across app restarts
+  - Toggle trainer visibility via menu: "Show Tempo Trainer"
+  - Integrated with metronome beat tracking for precise bar counting
+- **Tempo Presets Feature**
+  - Save complete metronome configurations as named presets for quick recall
+  - Preset Manager dialog with full CRUD operations (Create, Read, Update, Delete)
+  - Search and filter presets by name or description
+  - Sort presets by name, creation date, last used date, or tempo
+  - Import and export presets as JSON files for backup and sharing
+  - Duplicate presets for creating variations
+  - Presets save all settings: tempo, time signature, subdivisions, trainer config, and audio/visual preferences
+  - Graceful handling of optional features (presets work even if subdivisions/trainer not configured)
+  - Preset data stored in `~/.config/tempo/presets.json`
+  - Maximum 100 presets with warning at 50
+  - Keyboard shortcut: Ctrl+P to open Preset Manager
+  - Accessible via main menu: "Manage Presets..."
+- **Practice Timer Feature**
+  - Session timer with count-up and countdown modes
+  - Auto-stop functionality based on beats, bars, or time duration
+  - Timer display below beat indicator (toggleable visibility)
+  - Timer synchronization with metronome playback (configurable)
+  - Countdown duration configurable from 1-180 minutes
+  - Toast notifications for countdown completion and auto-stop events
+  - Auto-stop progress indicator showing remaining beats/bars/time
+  - New Practice Timer preferences page with comprehensive settings
+  - Timer settings persist across application restarts
+  - Sub-millisecond timing accuracy using GLib monotonic time
+- **Subdivision Support**
+  - Comprehensive subdivision modes: Eighth Notes (2 per beat), Sixteenth Notes (4 per beat), and Triplets (3 per beat)
+  - Separate audio playback for subdivisions with adjustable volume
+  - Configurable subdivision sound types (default, woodblock, metal, digital)
+- **Mobile-Responsive Design**
+  - Adaptive layout with three responsive breakpoints:
+    - Phone (≤550px): Compact layout with 200x200px beat indicator, vertical time signature controls
+    - Tablet (551-900px): Balanced layout with 250x250px beat indicator
+    - Desktop (900px+): Full layout with 300x300px beat indicator (unchanged)
+  - Minimum window size constraints (360x600px) supporting smallest phone screens
+  - Touch-friendly controls meeting 44px minimum touch target requirements:
+    - Enhanced spinbutton heights and increment/decrement buttons
+    - Larger slider thumbs (24x24px) and taller troughs (12px) on touch devices
+    - All buttons meet minimum 44x44px size on touch devices
+  - Scrollable content on constrained screens (vertical scrolling only)
+  - Adaptive margins and spacing for better mobile space utilization
+  - Tempo trainer adaptive layout:
+    - Start/Target/Increment controls stack vertically on phone screens
+    - Interval controls (Every X bars/seconds) stack vertically on phone
+    - Arrow (→) hidden on phone screens
+    - Prevents horizontal scrollbar on narrow screens
+  - Responsive preset manager dialog:
+    - Redesigned with mobile-first UX
+    - Adw.SplitButton in headerbar for new preset with dropdown menu (Import, Export, Export All)
+    - Bottom toolbar with icon-only action buttons (Load, Rename, Duplicate, Delete) in title-widget
+    - Icon buttons: Load (checkmark), Rename (edit), Duplicate (copy), Delete (trash)
+    - Removed redundant close button (dialog X button is sufficient, show-end-title-buttons: false)
+    - Fixed horizontal scrollbar in preset details (vertical scrolling only)
+    - Vertical pane orientation on phones (preset list stacks above details)
+  - Automatic adaptation of Adw.PreferencesDialog and Adw.AlertDialog for mobile screens
+  - CSS media queries for touch device detection (@media pointer: coarse)
+  - Optimized for mobile Linux devices (PinePhone, Librem 5, etc.)
+  - Subdivision dropdown selector in main window for quick mode switching
+  - Dedicated subdivisions section in Audio preferences
+  - Visual indicator toggle for subdivision markers (configurable)
+  - Smart audio overlap prevention at high tempos
+  - Precise subdivision timing using same absolute time reference as main beats
+  - Settings persistence across app restarts
+  - Maintains sub-millisecond timing accuracy with subdivisions enabled
+
+### Changed
+- MetronomeEngine now supports optional PracticeTimer integration
+- Main window layout updated to include timer display area and subdivision controls
+- MetronomeEngine timing loop refactored to handle both beats and subdivisions
+- Audio system extended with third GStreamer player for subdivision sounds
+
 ## [1.4.0] - 2025-11-03
 
 ### Added

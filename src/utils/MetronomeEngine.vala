@@ -17,6 +17,16 @@ public errordomain MetronomeError {
 }
 
 /**
+ * Subdivision modes for metronome timing.
+ */
+public enum SubdivisionMode {
+    NONE = 0,      // No subdivisions (current behavior)
+    EIGHTH = 2,    // 2 per beat (eighth notes)
+    SIXTEENTH = 4, // 4 per beat (sixteenth notes)
+    TRIPLET = 3    // 3 per beat (triplet feel)
+}
+
+/**
  * High-precision metronome timing engine.
  * 
  * Uses absolute time references with GLib.get_monotonic_time() to prevent
@@ -30,24 +40,44 @@ public class MetronomeEngine : GLib.Object {
     public int beat_value { get; set; default = 4; }
     public bool is_running { get; private set; default = false; }
     public int current_beat { get; set; default = 0; }
-    
+
+    // Subdivision properties
+    public SubdivisionMode subdivision_mode { get; set; default = SubdivisionMode.NONE; }
+    public double subdivision_volume { get; set; default = 0.5; }
+
+    // Mute pattern properties
+    public bool mute_enabled { get; set; default = false; }
+    public Tempo.MutePattern? mute_pattern { get; set; default = null; }
+
     // Signal for beat events (replaces Python callback)
-    public signal void beat_occurred(int beat_number, bool is_downbeat);
+    public signal void beat_occurred(int beat_number, bool is_downbeat, bool is_muted);
+
+    // Signal for subdivision events
+    public signal void subdivision_occurred(int beat_number, int subdivision_index, int subdivisions_per_beat);
     
     // Private timing state
     private uint timeout_id = 0;
     private int64 next_beat_time = 0;
     private double beat_duration = 0.5; // 120 BPM = 0.5 seconds per beat
-    
+
+    // Subdivision timing state
+    private int subdivisions_per_beat = 1;
+    private int64 next_subdivision_time = 0;
+    private int current_subdivision_index = 0; // 0 = main beat, 1,2,3... = subdivisions
+
     // Audio playback elements
     private Gst.Element? high_sound_player = null;
     private Gst.Element? low_sound_player = null;
+    private Gst.Element? subdivision_sound_player = null;
     private GLib.Settings? settings = null;
     private bool audio_initialized = false;
 
+    // Practice timer integration (optional)
+    private PracticeTimer? practice_timer = null;
+
     // Signal for audio initialization failure
     public signal void audio_system_failed(string error_message);
-    
+
     /**
      * Creates a new MetronomeEngine with default settings.
      */
@@ -56,16 +86,39 @@ public class MetronomeEngine : GLib.Object {
         this.notify["bpm"].connect(() => {
             this.beat_duration = calculate_beat_duration();
         });
-        
+
         this.notify["beat_value"].connect(() => {
             this.beat_duration = calculate_beat_duration();
         });
-        
-        // Initialize beat duration
+
+        this.notify["subdivision_mode"].connect(() => {
+            update_subdivisions_per_beat();
+            // If metronome is running, reset to main beat on next cycle
+            if (is_running) {
+                current_subdivision_index = 0;
+            }
+        });
+
+        // Initialize beat duration and subdivisions
         this.beat_duration = calculate_beat_duration();
-        
+        update_subdivisions_per_beat();
+
         // Initialize audio
         initialize_audio();
+    }
+
+    /**
+     * Set the practice timer instance for integration.
+     */
+    public void set_practice_timer(PracticeTimer? timer) {
+        this.practice_timer = timer;
+
+        if (this.practice_timer != null) {
+            // Connect auto-stop signal to stop metronome
+            this.practice_timer.auto_stop_triggered.connect(() => {
+                this.stop();
+            });
+        }
     }
     
     /**
@@ -75,16 +128,27 @@ public class MetronomeEngine : GLib.Object {
         if (is_running) {
             return; // Already running
         }
-        
+
         is_running = true;
         current_beat = 0;
-        
+
         // Initialize timing
         beat_duration = calculate_beat_duration();
-        next_beat_time = GLib.get_monotonic_time() + (int64)(beat_duration * 1000000);
-        
+        update_subdivisions_per_beat();
+
+        // Initialize subdivision state - always start on a main beat
+        current_subdivision_index = 0;
+        next_subdivision_time = GLib.get_monotonic_time() + (int64)(beat_duration * 1000000);
+
+        // Start practice timer if enabled and sync is on
+        if (practice_timer != null && practice_timer.enabled) {
+            if (settings != null && settings.get_boolean("timer-pause-with-metronome")) {
+                practice_timer.start();
+            }
+        }
+
         // Start the timing loop
-        schedule_next_beat();
+        schedule_next_click();
     }
     
     /**
@@ -94,9 +158,19 @@ public class MetronomeEngine : GLib.Object {
         if (!is_running) {
             return; // Already stopped
         }
-        
+
         is_running = false;
-        
+
+        // Reset subdivision state
+        current_subdivision_index = 0;
+
+        // Pause practice timer if enabled and sync is on
+        if (practice_timer != null && practice_timer.enabled) {
+            if (settings != null && settings.get_boolean("timer-pause-with-metronome")) {
+                practice_timer.pause();
+            }
+        }
+
         // Remove timeout source
         if (timeout_id != 0) {
             Source.remove(timeout_id);
@@ -150,6 +224,7 @@ public class MetronomeEngine : GLib.Object {
      */
     public void reset_beat_counter() {
         current_beat = 0;
+        current_subdivision_index = 0;
     }
     
     /**
@@ -181,77 +256,168 @@ public class MetronomeEngine : GLib.Object {
     }
     
     /**
-     * Schedule the next beat using GLib.Timeout.
+     * Schedule the next click (beat or subdivision) using GLib.Timeout.
      */
-    private void schedule_next_beat() {
+    private void schedule_next_click() {
         if (!is_running) {
             return;
         }
-        
+
         int64 current_time = GLib.get_monotonic_time();
-        int64 wait_time_us = next_beat_time - current_time;
-        
+        int64 wait_time_us = next_subdivision_time - current_time;
+
         // Check if we're too far behind (e.g., after system sleep)
         if (wait_time_us < -((int64)(beat_duration * 1000000))) {
             // Reset timing to current time
-            next_beat_time = current_time + (int64)(beat_duration * 1000000);
+            next_subdivision_time = current_time + (int64)(beat_duration * 1000000);
             wait_time_us = (int64)(beat_duration * 1000000);
+            current_subdivision_index = 0; // Reset to main beat
         }
-        
+
         // Convert microseconds to milliseconds for GLib.Timeout
         uint wait_time_ms = (uint)int64.max(1, wait_time_us / 1000);
-        
+
         timeout_id = Timeout.add(wait_time_ms, () => {
-            return on_beat_timeout();
+            return on_click_timeout();
         });
     }
     
     /**
-     * Handle beat timeout - emit signal and schedule next beat.
-     * 
+     * Handle click timeout - emit signal and schedule next click (beat or subdivision).
+     *
      * @return false to remove the timeout source
      */
-    private bool on_beat_timeout() {
+    private bool on_click_timeout() {
         if (!is_running) {
             timeout_id = 0;
             return false; // Remove timeout
         }
-        
-        // Update beat counter first
-        current_beat++;
-        
-        // Determine if this is a downbeat (after incrementing)
-        bool is_downbeat = (current_beat % beats_per_bar) == 1;
-        
-        // Play click sound
-        play_click_sound(is_downbeat);
-        
-        // Emit beat signal
-        beat_occurred(current_beat, is_downbeat);
-        
-        // Calculate next beat time (absolute time to prevent drift)
-        next_beat_time += (int64)(beat_duration * 1000000);
-        
+
+        // Determine if this is a main beat or subdivision
+        bool is_main_beat = (current_subdivision_index == 0);
+
+        if (is_main_beat) {
+            // This is a main beat
+            current_beat++;
+
+            // Determine if this is a downbeat
+            bool is_downbeat = (current_beat % beats_per_bar) == 1;
+
+            // Calculate beat in bar (1-based)
+            int beat_in_bar = ((current_beat - 1) % beats_per_bar) + 1;
+
+            // Notify practice timer about beat occurrence
+            if (practice_timer != null && practice_timer.enabled) {
+                practice_timer.on_beat_occurred(beat_in_bar, beats_per_bar);
+            }
+
+            // Determine if this beat should be muted
+            bool is_muted = should_mute_current_beat();
+
+            // Play main beat sound only if not muted
+            if (!is_muted) {
+                play_click_sound(is_downbeat);
+            }
+
+            // Emit beat signal (always emit, even if muted)
+            beat_occurred(current_beat, is_downbeat, is_muted);
+        } else {
+            // This is a subdivision
+            play_subdivision_click();
+
+            // Emit subdivision signal
+            subdivision_occurred(current_beat, current_subdivision_index, subdivisions_per_beat);
+        }
+
+        // Advance to next subdivision
+        current_subdivision_index++;
+        if (current_subdivision_index >= subdivisions_per_beat) {
+            current_subdivision_index = 0; // Next click will be a main beat
+        }
+
+        // Calculate next click time (absolute time to prevent drift)
+        double click_duration = calculate_subdivision_duration();
+        next_subdivision_time += (int64)(click_duration * 1000000);
+
         // Update beat duration if tempo or time signature changed
         double new_duration = calculate_beat_duration();
         if (Math.fabs(new_duration - beat_duration) > 0.001) { // 1ms tolerance
             beat_duration = new_duration;
         }
-        
-        // Schedule next beat
-        schedule_next_beat();
-        
+
+        // Schedule next click
+        schedule_next_click();
+
         // Remove this timeout (we created a new one)
         timeout_id = 0;
         return false;
     }
+
+    /**
+     * Determine if the current beat should be muted.
+     *
+     * @return true if beat should be muted (silent), false otherwise
+     */
+    private bool should_mute_current_beat() {
+        if (!mute_enabled || mute_pattern == null) {
+            return false;
+        }
+
+        return mute_pattern.should_mute_beat(current_beat, beats_per_bar);
+    }
     
+    /**
+     * Calculate the duration for a single subdivision based on current mode.
+     *
+     * @return Subdivision duration in seconds
+     */
+    private double calculate_subdivision_duration() {
+        if (subdivision_mode == SubdivisionMode.NONE) {
+            return beat_duration;
+        }
+
+        // Calculate duration per subdivision based on mode
+        if (subdivision_mode == SubdivisionMode.TRIPLET) {
+            // Triplets: divide beat into 3 equal parts
+            return beat_duration / 3.0;
+        } else {
+            // Eighths (2) or Sixteenths (4): divide evenly
+            return beat_duration / (double)subdivisions_per_beat;
+        }
+    }
+
+    /**
+     * Update the subdivisions_per_beat value based on current subdivision_mode.
+     */
+    private void update_subdivisions_per_beat() {
+        switch (subdivision_mode) {
+            case SubdivisionMode.NONE:
+                subdivisions_per_beat = 1;
+                break;
+            case SubdivisionMode.EIGHTH:
+                subdivisions_per_beat = 2;
+                break;
+            case SubdivisionMode.TRIPLET:
+                subdivisions_per_beat = 3;
+                break;
+            case SubdivisionMode.SIXTEENTH:
+                subdivisions_per_beat = 4;
+                break;
+            default:
+                subdivisions_per_beat = 1;
+                break;
+        }
+    }
+
     /**
      * Initialize audio system.
      */
     private void initialize_audio() {
         try {
             settings = new GLib.Settings(Config.APP_ID);
+
+            // Bind subdivision settings
+            bind_subdivision_settings();
 
             // Initialize GStreamer elements
             bool success = create_audio_players();
@@ -264,6 +430,81 @@ public class MetronomeEngine : GLib.Object {
             warning("Failed to initialize audio: %s", e.message);
             audio_system_failed("Audio system initialization failed: %s".printf(e.message));
         }
+    }
+
+    /**
+     * Bind subdivision settings from GSettings to MetronomeEngine properties.
+     */
+    private void bind_subdivision_settings() {
+        if (settings == null) {
+            return;
+        }
+
+        // Bind subdivision mode (with validation)
+        int mode_value = settings.get_int("subdivision-mode");
+        if (mode_value < 0 || mode_value > 4) {
+            warning("Invalid subdivision mode %d in settings, resetting to NONE", mode_value);
+            mode_value = 0;
+            settings.set_int("subdivision-mode", 0);
+        }
+
+        // Convert int to SubdivisionMode enum
+        switch (mode_value) {
+            case 2:
+                subdivision_mode = SubdivisionMode.EIGHTH;
+                break;
+            case 3:
+                subdivision_mode = SubdivisionMode.TRIPLET;
+                break;
+            case 4:
+                subdivision_mode = SubdivisionMode.SIXTEENTH;
+                break;
+            default:
+                subdivision_mode = SubdivisionMode.NONE;
+                break;
+        }
+
+        // Bind subdivision volume (with validation)
+        double volume = settings.get_double("subdivision-volume");
+        subdivision_volume = double.max(0.0, double.min(1.0, volume)); // Clamp to 0.0-1.0
+
+        // Connect to settings changes
+        settings.changed["subdivision-mode"].connect(() => {
+            int new_mode = settings.get_int("subdivision-mode");
+            switch (new_mode) {
+                case 2:
+                    subdivision_mode = SubdivisionMode.EIGHTH;
+                    break;
+                case 3:
+                    subdivision_mode = SubdivisionMode.TRIPLET;
+                    break;
+                case 4:
+                    subdivision_mode = SubdivisionMode.SIXTEENTH;
+                    break;
+                default:
+                    subdivision_mode = SubdivisionMode.NONE;
+                    break;
+            }
+        });
+
+        settings.changed["subdivision-volume"].connect(() => {
+            double new_volume = settings.get_double("subdivision-volume");
+            subdivision_volume = double.max(0.0, double.min(1.0, new_volume));
+        });
+
+        // Sync property changes back to settings
+        this.notify["subdivision-mode"].connect(() => {
+            int mode_int = (int)subdivision_mode;
+            if (settings.get_int("subdivision-mode") != mode_int) {
+                settings.set_int("subdivision-mode", mode_int);
+            }
+        });
+
+        this.notify["subdivision-volume"].connect(() => {
+            if (Math.fabs(settings.get_double("subdivision-volume") - subdivision_volume) > 0.01) {
+                settings.set_double("subdivision-volume", subdivision_volume);
+            }
+        });
     }
 
     /**
@@ -282,11 +523,12 @@ public class MetronomeEngine : GLib.Object {
      */
     private bool create_audio_players() {
         try {
-            // Create players for high and low sounds
+            // Create players for high, low, and subdivision sounds
             high_sound_player = Gst.ElementFactory.make("playbin", "high_sound_player");
             low_sound_player = Gst.ElementFactory.make("playbin", "low_sound_player");
+            subdivision_sound_player = Gst.ElementFactory.make("playbin", "subdivision_sound_player");
 
-            if (high_sound_player == null || low_sound_player == null) {
+            if (high_sound_player == null || low_sound_player == null || subdivision_sound_player == null) {
                 warning("Failed to create GStreamer playbin elements");
                 return false;
             }
@@ -298,6 +540,7 @@ public class MetronomeEngine : GLib.Object {
 
             high_sound_player.set("uri", high_file.get_uri());
             low_sound_player.set("uri", low_file.get_uri());
+            subdivision_sound_player.set("uri", low_file.get_uri()); // Start with low sound
 
             return true;
 
@@ -307,6 +550,44 @@ public class MetronomeEngine : GLib.Object {
         }
     }
     
+    /**
+     * Play a subdivision click sound.
+     */
+    private void play_subdivision_click() {
+        if (!audio_initialized || settings == null || subdivision_sound_player == null) {
+            return;
+        }
+
+        try {
+            // Determine which sound URI to use for subdivisions
+            string sound_uri = get_subdivision_sound_uri();
+            subdivision_sound_player.set("uri", sound_uri);
+
+            // Apply subdivision volume
+            subdivision_sound_player.set("volume", subdivision_volume);
+
+            // Reset to beginning and play
+            subdivision_sound_player.set_state(Gst.State.NULL);
+            subdivision_sound_player.set_state(Gst.State.PLAYING);
+
+            // Calculate safe duration based on tempo to prevent overlap
+            double subdivision_duration = calculate_subdivision_duration();
+            int stop_duration_ms = (int)(subdivision_duration * 1000 * 0.8); // 80% of subdivision duration
+            stop_duration_ms = int.min(stop_duration_ms, 200); // Cap at 200ms
+
+            // Stop after duration to prevent overlap
+            Timeout.add(stop_duration_ms, () => {
+                if (subdivision_sound_player != null) {
+                    subdivision_sound_player.set_state(Gst.State.NULL);
+                }
+                return false;
+            });
+
+        } catch (Error e) {
+            warning("Error playing subdivision click sound: %s", e.message);
+        }
+    }
+
     /**
      * Play a click sound.
      *
@@ -394,6 +675,35 @@ public class MetronomeEngine : GLib.Object {
             settings.get_string("low-sound-type");
 
         return get_sound_type_uri(sound_type, is_downbeat, default_uri);
+    }
+
+    /**
+     * Get the appropriate sound URI for subdivisions based on settings.
+     *
+     * @return The URI string to use for subdivision playback
+     */
+    private string get_subdivision_sound_uri() {
+        string app_data_dir = "/app/share/tempo/sounds";
+        var default_file = GLib.File.new_for_path(app_data_dir + "/low.wav");
+        string default_uri = default_file.get_uri();
+
+        // Check if subdivision-sound-type setting exists
+        if (settings == null) {
+            return default_uri;
+        }
+
+        // Get subdivision sound type setting (will add to schema later)
+        // For now, use low sound type as default
+        string sound_type = "default";
+        try {
+            sound_type = settings.get_string("subdivision-sound-type");
+        } catch (Error e) {
+            // Setting doesn't exist yet, use default
+            return default_uri;
+        }
+
+        // Use same logic as get_sound_type_uri but for low sound
+        return get_sound_type_uri(sound_type, false, default_uri);
     }
 
     /**

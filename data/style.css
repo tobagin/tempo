@@ -212,6 +212,35 @@ spinbutton:focus {
   background: @card_bg_color;
 }
 
+/* Touch-friendly spinbutton enhancements */
+@media (pointer: coarse) {
+  spinbutton {
+    min-height: 44px;
+  }
+
+  spinbutton button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Touch-friendly tempo slider */
+  scale slider {
+    min-width: 24px;
+    min-height: 24px;
+    margin: 6px;
+  }
+
+  scale trough {
+    min-height: 12px;
+  }
+
+  /* Touch-friendly buttons */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
 /* Enhanced volume slider */
 .volume-slider {
   min-width: 220px;

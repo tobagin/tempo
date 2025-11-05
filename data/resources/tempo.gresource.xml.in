@@ -5,6 +5,7 @@
     <file preprocess="xml-stripblanks" alias="ui/main_window.ui">main_window.ui</file>
     <file preprocess="xml-stripblanks" alias="ui/preferences_dialog.ui">preferences_dialog.ui</file>
     <file preprocess="xml-stripblanks" alias="ui/keyboard_shortcuts_dialog.ui">keyboard_shortcuts_dialog.ui</file>
+    <file preprocess="xml-stripblanks" alias="preset_manager_dialog.ui">preset_manager_dialog.ui</file>
 
     <!-- Audio Files -->
     <file>sounds/high.wav</file>
@@ -15,7 +16,15 @@
     <file>sounds/metal-low.wav</file>
     <file>sounds/digital-high.wav</file>
     <file>sounds/digital-low.wav</file>
-    
+
+    <!-- Rhythm Patterns -->
+    <file>patterns/son-clave-32.json</file>
+    <file>patterns/son-clave-23.json</file>
+    <file>patterns/rumba-clave.json</file>
+    <file>patterns/bossa-nova.json</file>
+    <file>patterns/swing-ride.json</file>
+    <file>patterns/backbeat.json</file>
+
     <!-- CSS Styles -->
     <file>style.css</file>
   </gresource>

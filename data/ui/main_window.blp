@@ -4,16 +4,17 @@ using Adw 1;
 template $TempoWindow : Adw.ApplicationWindow {
   default-width: 400;
   default-height: 500;
-  
-  Gtk.Box {
-    orientation: vertical;
-    
+  width-request: 360;
+  height-request: 600;
+
+  Adw.ToolbarView {
+    [top]
     Adw.HeaderBar {
       title-widget: Adw.WindowTitle {
         title: _("Tempo");
         subtitle: _("Metronome");
       };
-      
+
       [end]
       Gtk.MenuButton {
         icon-name: "open-menu-symbolic";
@@ -22,144 +23,480 @@ template $TempoWindow : Adw.ApplicationWindow {
       }
     }
 
-    Adw.BreakpointBin {
+    content: Adw.ViewStack view_stack {
       vexpand: true;
-      
-      Gtk.Box {
-        orientation: vertical;
-        spacing: 24;
-        margin-top: 24;
-        margin-bottom: 24;
-        margin-start: 12;
-        margin-end: 12;
-        halign: center;
-        
-        styles ["clamp"]
 
-        // BPM Display and Control
-        Gtk.Box {
-          orientation: vertical;
-          spacing: 12;
-          
-          Gtk.Label tempo_label {
-            label: "120";
-            css-classes: ["title-1"];
-          }
-          
-          Gtk.Label {
-            label: _("BPM");
-            css-classes: ["caption"];
-          }
-          
-          Gtk.SpinButton tempo_spin {
-            adjustment: Gtk.Adjustment {
-              lower: 40;
-              upper: 240;
-              step-increment: 1;
-              page-increment: 10;
-              value: 120;
-            };
-            climb-rate: 1;
-            numeric: true;
-            wrap: false;
-            width-chars: 5;
-            // // css_classes ["tempo-input"];
-          }
-          
-          Gtk.Scale tempo_scale {
-            adjustment: bind tempo_spin.adjustment;
-            draw-value: false;
-            hexpand: true;
-            margin-top: 12;
+      // ========== METRONOME VIEW ==========
+      Adw.ViewStackPage {
+        name: "metronome";
+        title: _("Metronome");
+        icon-name: "audio-input-microphone-symbolic";
+
+        child: Gtk.ScrolledWindow {
+          hscrollbar-policy: never;
+          vscrollbar-policy: automatic;
+
+          Gtk.Box {
+            orientation: vertical;
+            spacing: 20;
+            margin-top: 24;
+            margin-bottom: 24;
             margin-start: 12;
             margin-end: 12;
-          }
-        }
-
-        // Time Signature Control
-        Gtk.Box {
-          orientation: vertical;
-          spacing: 12;
-          
-          Gtk.Label {
-            label: _("Time Signature");
-            css-classes: ["heading"];
-          }
-          
-          Gtk.Box {
-            orientation: horizontal;
-            spacing: 12;
             halign: center;
-            
-            Gtk.SpinButton beats_spin {
-              adjustment: Gtk.Adjustment {
-                lower: 1;
-                upper: 16;
-                step-increment: 1;
-                value: 4;
-              };
-              climb-rate: 1;
-              numeric: true;
-              wrap: false;
-              width-chars: 3;
-              // // css_classes ["time-signature"];
-            }
-            
-            Gtk.Label {
-              label: "/";
-              // // css_classes ["time-signature"];
-            }
-            
-            Gtk.DropDown beat_value_dropdown {
-              model: Gtk.StringList {
-                strings [
-                  "2",
-                  "4", 
-                  "8",
-                  "16"
-                ]
-              };
-              selected: 1;
-              // // css_classes ["time-signature"];
-            }
-          }
-        }
 
-        // Visual Beat Indicator
-        Gtk.Box {
-          orientation: vertical;
-          spacing: 12;
-          
-          Gtk.Label {
-            label: _("Beat Indicator");
-            css-classes: ["heading"];
-          }
-          
-          Gtk.DrawingArea beat_indicator {
-            content-width: 300;
-            content-height: 300;
-            halign: center;
-            // // css_classes ["beat-indicator"];
-          }
-        }
+            styles ["clamp"]
 
-        // Play/Stop Button
-        Gtk.Button play_button {
-          label: _("Start");
-          halign: center;
-          margin-top: 12;
-          css-classes: ["suggested-action", "pill"];
-        }
-        
-        // Tap Tempo Button
-        Gtk.Button tap_button {
-          label: _("Tap Tempo");
-          halign: center;
-          margin-top: 6;
-          css-classes: ["flat"];
-          tooltip-text: _("Tap repeatedly to set tempo");
-        }
+            // BPM Controls
+            Gtk.Box {
+              orientation: vertical;
+              spacing: 12;
+
+              Gtk.Label tempo_label {
+                label: "120";
+                css-classes: ["title-1"];
+              }
+
+              Gtk.Label {
+                label: _("BPM");
+                css-classes: ["caption"];
+              }
+
+              Gtk.SpinButton tempo_spin {
+                adjustment: Gtk.Adjustment {
+                  lower: 40;
+                  upper: 240;
+                  step-increment: 1;
+                  page-increment: 10;
+                  value: 120;
+                };
+                climb-rate: 1;
+                numeric: true;
+                wrap: false;
+                width-chars: 5;
+              }
+
+              Gtk.Scale tempo_scale {
+                adjustment: bind tempo_spin.adjustment;
+                draw-value: false;
+                hexpand: true;
+                margin-start: 12;
+                margin-end: 12;
+              }
+            }
+
+            // Time Signature
+            Gtk.Box {
+              orientation: vertical;
+              spacing: 12;
+
+              Gtk.Label {
+                label: _("Time Signature");
+                css-classes: ["heading"];
+              }
+
+              Gtk.Box time_signature_controls_box {
+                orientation: horizontal;
+                spacing: 12;
+                halign: center;
+
+                Gtk.SpinButton beats_spin {
+                  adjustment: Gtk.Adjustment {
+                    lower: 1;
+                    upper: 16;
+                    step-increment: 1;
+                    value: 4;
+                  };
+                  climb-rate: 1;
+                  numeric: true;
+                  wrap: false;
+                  width-chars: 3;
+                }
+
+                Gtk.Label {
+                  label: "/";
+                }
+
+                Gtk.DropDown beat_value_dropdown {
+                  model: Gtk.StringList {
+                    strings ["2", "4", "8", "16"]
+                  };
+                  selected: 1;
+                }
+              }
+            }
+
+            // Subdivisions
+            Gtk.Box {
+              orientation: vertical;
+              spacing: 12;
+
+              Gtk.Label {
+                label: _("Subdivisions");
+                css-classes: ["heading"];
+              }
+
+              Gtk.DropDown subdivision_dropdown {
+                model: Gtk.StringList {
+                  strings [
+                    _("None"),
+                    _("Eighth Notes (2 per beat)"),
+                    _("Triplets (3 per beat)"),
+                    _("Sixteenth Notes (4 per beat)")
+                  ]
+                };
+                selected: 0;
+                halign: center;
+                tooltip-text: _("Hear subdivisions within each beat");
+              }
+            }
+
+            // Beat Indicator
+            Gtk.Box {
+              orientation: vertical;
+              spacing: 12;
+
+              Gtk.Label {
+                label: _("Beat Indicator");
+                css-classes: ["heading"];
+              }
+
+              Gtk.DrawingArea beat_indicator {
+                content-width: 300;
+                content-height: 300;
+                halign: center;
+              }
+
+              // Practice Timer Display
+              Gtk.Box timer_box {
+                orientation: vertical;
+                spacing: 6;
+                halign: center;
+                margin-top: 12;
+
+                Gtk.Label timer_display {
+                  label: "00:00";
+                  css-classes: ["title-2"];
+                  halign: center;
+                }
+
+                Gtk.Label auto_stop_progress {
+                  label: "";
+                  css-classes: ["caption", "dim-label"];
+                  halign: center;
+                }
+              }
+            }
+
+            // Controls
+            Gtk.Button play_button {
+              label: _("Start");
+              halign: center;
+              margin-top: 12;
+              css-classes: ["suggested-action", "pill"];
+            }
+
+            Gtk.Button tap_button {
+              label: _("Tap Tempo");
+              halign: center;
+              margin-top: 6;
+              css-classes: ["flat"];
+              tooltip-text: _("Tap repeatedly to set tempo");
+            }
+          }
+        };
       }
+
+      // ========== PATTERNS VIEW ==========
+      Adw.ViewStackPage {
+        name: "patterns";
+        title: _("Patterns");
+        icon-name: "view-list-symbolic";
+
+        child: Gtk.ScrolledWindow {
+          hscrollbar-policy: never;
+          vscrollbar-policy: automatic;
+
+          Gtk.Box {
+            orientation: vertical;
+            spacing: 20;
+            margin-top: 24;
+            margin-bottom: 24;
+            margin-start: 12;
+            margin-end: 12;
+            halign: center;
+
+            styles ["clamp"]
+
+            // BPM Controls (shared)
+            Gtk.Box {
+              orientation: vertical;
+              spacing: 12;
+
+              Gtk.Label patterns_tempo_label {
+                label: bind tempo_label.label;
+                css-classes: ["title-1"];
+              }
+
+              Gtk.Label {
+                label: _("BPM");
+                css-classes: ["caption"];
+              }
+
+              Gtk.Scale patterns_tempo_scale {
+                adjustment: bind tempo_spin.adjustment;
+                draw-value: false;
+                hexpand: true;
+                margin-start: 12;
+                margin-end: 12;
+              }
+            }
+
+            // Pattern Selection
+            Gtk.Box {
+              orientation: vertical;
+              spacing: 12;
+
+              Gtk.Box {
+                orientation: horizontal;
+                spacing: 6;
+                halign: center;
+
+                Gtk.Label {
+                  label: _("Rhythm Pattern");
+                  css-classes: ["title-4"];
+                }
+
+                Gtk.Button pattern_edit_button {
+                  icon-name: "document-edit-symbolic";
+                  valign: center;
+                  css-classes: ["flat", "circular"];
+                  tooltip-text: _("Manage Patterns");
+                  sensitive: false;
+                }
+              }
+
+              Gtk.DropDown pattern_dropdown {
+                halign: center;
+                tooltip-text: _("Select a rhythm pattern or None for standard metronome");
+              }
+
+              // Pattern Info
+              Gtk.Label pattern_info_label {
+                label: _("Select a pattern to begin");
+                css-classes: ["dim-label"];
+                halign: center;
+                margin-top: 6;
+                wrap: true;
+                justify: center;
+              }
+            }
+
+            // Beat Indicator (shared visual)
+            Gtk.Box {
+              orientation: vertical;
+              spacing: 12;
+
+              Gtk.Label {
+                label: _("Visual Feedback");
+                css-classes: ["heading"];
+              }
+
+              Gtk.DrawingArea patterns_beat_indicator {
+                content-width: 300;
+                content-height: 300;
+                halign: center;
+              }
+            }
+
+            // Controls
+            Gtk.Button patterns_play_button {
+              label: _("Start");
+              halign: center;
+              margin-top: 12;
+              css-classes: ["suggested-action", "pill"];
+            }
+          }
+        };
+      }
+
+      // ========== TRAINER VIEW ==========
+      Adw.ViewStackPage {
+        name: "trainer";
+        title: _("Trainer");
+        icon-name: "go-up-symbolic";
+
+        child: Gtk.ScrolledWindow {
+          hscrollbar-policy: never;
+          vscrollbar-policy: automatic;
+
+          Gtk.Box {
+            orientation: vertical;
+            spacing: 20;
+            margin-top: 24;
+            margin-bottom: 24;
+            margin-start: 12;
+            margin-end: 12;
+            halign: center;
+
+            styles ["clamp"]
+
+            // Trainer Title
+            Gtk.Label {
+              label: _("Tempo Trainer");
+              css-classes: ["title-2"];
+            }
+
+            Gtk.Label {
+              label: _("Gradually increase tempo to build speed");
+              css-classes: ["caption", "dim-label"];
+              wrap: true;
+              justify: center;
+            }
+
+            // Trainer Controls
+            Gtk.Box trainer_start_box {
+              orientation: horizontal;
+              spacing: 12;
+              halign: center;
+              margin-top: 12;
+
+              Gtk.Label {
+                label: _("Start");
+              }
+
+              Gtk.SpinButton trainer_start_spin {
+                adjustment: Gtk.Adjustment {
+                  lower: 40;
+                  upper: 240;
+                  step-increment: 1;
+                  value: 60;
+                };
+                width-chars: 4;
+              }
+
+              Gtk.Label {
+                label: _("BPM");
+              }
+            }
+
+            Gtk.Box trainer_target_box {
+              orientation: horizontal;
+              spacing: 12;
+              halign: center;
+
+              Gtk.Label {
+                label: _("Target");
+              }
+
+              Gtk.SpinButton trainer_target_spin {
+                adjustment: Gtk.Adjustment {
+                  lower: 40;
+                  upper: 240;
+                  step-increment: 1;
+                  value: 120;
+                };
+                width-chars: 4;
+              }
+
+              Gtk.Label {
+                label: _("BPM");
+              }
+            }
+
+            Gtk.Box trainer_increment_box {
+              orientation: horizontal;
+              spacing: 12;
+              halign: center;
+
+              Gtk.Label {
+                label: _("Increment");
+              }
+
+              Gtk.SpinButton trainer_increment_spin {
+                adjustment: Gtk.Adjustment {
+                  lower: 1;
+                  upper: 50;
+                  step-increment: 1;
+                  value: 5;
+                };
+                width-chars: 3;
+              }
+
+              Gtk.Label {
+                label: _("BPM");
+              }
+            }
+
+            Gtk.Box trainer_interval_box {
+              orientation: horizontal;
+              spacing: 6;
+              halign: center;
+
+              Gtk.Label {
+                label: _("Every");
+              }
+
+              Gtk.SpinButton trainer_interval_spin {
+                adjustment: Gtk.Adjustment {
+                  lower: 1;
+                  upper: 100;
+                  step-increment: 1;
+                  value: 8;
+                };
+                width-chars: 3;
+              }
+
+              Gtk.DropDown trainer_interval_type {
+                model: Gtk.StringList {
+                  strings [_("bars"), _("seconds")]
+                };
+                selected: 0;
+              }
+            }
+
+            // Status
+            Gtk.Label trainer_status_label {
+              label: "";
+              css-classes: ["caption", "dim-label"];
+              visible: false;
+              margin-top: 12;
+            }
+
+            // Beat Indicator (shared visual)
+            Gtk.Box {
+              orientation: vertical;
+              spacing: 12;
+              margin-top: 12;
+
+              Gtk.Label {
+                label: _("Visual Feedback");
+                css-classes: ["heading"];
+              }
+
+              Gtk.DrawingArea trainer_beat_indicator {
+                content-width: 300;
+                content-height: 300;
+                halign: center;
+              }
+            }
+
+            // Controls
+            Gtk.Button trainer_play_button {
+              label: _("Start");
+              halign: center;
+              margin-top: 12;
+              css-classes: ["suggested-action", "pill"];
+            }
+          }
+        };
+      }
+    };
+
+    [bottom]
+    Adw.ViewSwitcherBar view_switcher_bar {
+      stack: view_stack;
+      reveal: true;
     }
   }
 }
@@ -167,23 +504,28 @@ template $TempoWindow : Adw.ApplicationWindow {
 menu primary_menu {
   section {
     item {
+      label: _("Manage Presets…");
+      action: "app.manage-presets";
+    }
+
+    item {
       label: _("Preferences");
       action: "app.preferences";
     }
   }
-  
+
   section {
     item {
       label: _("Keyboard Shortcuts");
       action: "app.show-help-overlay";
     }
-    
+
     item {
       label: _("About Tempo");
       action: "app.about";
     }
   }
-  
+
   section {
     item {
       label: _("Quit");

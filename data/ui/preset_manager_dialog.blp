@@ -1,0 +1,196 @@
+using Gtk 4.0;
+using Adw 1;
+
+menu presets_menu {
+  section {
+    item {
+      label: _("Import…");
+      action: "preset.import";
+    }
+
+    item {
+      label: _("Export…");
+      action: "preset.export";
+    }
+
+    item {
+      label: _("Export All…");
+      action: "preset.export-all";
+    }
+  }
+}
+
+template $PresetManagerDialog : Adw.Dialog {
+  content-width: 600;
+  content-height: 500;
+  title: _("Tempo Presets");
+
+  Adw.BreakpointBin {
+    width-request: 360;
+    height-request: 400;
+
+    Adw.Breakpoint mobile_breakpoint {
+      condition ("max-width: 550sp")
+
+      setters {
+        paned_container.orientation: vertical;
+        preset_list_scroll.width-request: -1;
+        preset_list_scroll.height-request: 200;
+      }
+    }
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      show-title: true;
+
+      [start]
+      Adw.SplitButton new_preset_button {
+        icon-name: "list-add-symbolic";
+        tooltip-text: _("Save Current Settings as Preset");
+        direction: down;
+        menu-model: presets_menu;
+      }
+    }
+
+    [bottom]
+    Adw.HeaderBar bottom_bar {
+      show-end-title-buttons: false;
+
+      title-widget: Gtk.Box {
+        spacing: 6;
+        halign: center;
+
+        Gtk.Button load_button {
+          icon-name: "go-jump-symbolic";
+          tooltip-text: _("Load");
+          css-classes: ["suggested-action"];
+          sensitive: false;
+        }
+
+        Gtk.Button rename_button {
+          icon-name: "document-edit-symbolic";
+          tooltip-text: _("Rename");
+          sensitive: false;
+        }
+
+        Gtk.Button duplicate_button {
+          icon-name: "edit-copy-symbolic";
+          tooltip-text: _("Duplicate");
+          sensitive: false;
+        }
+
+        Gtk.Button delete_button {
+          icon-name: "user-trash-symbolic";
+          tooltip-text: _("Delete");
+          css-classes: ["destructive-action"];
+          sensitive: false;
+        }
+      };
+    }
+
+    content: Gtk.Box {
+      orientation: vertical;
+      spacing: 12;
+      margin-top: 12;
+      margin-bottom: 12;
+      margin-start: 12;
+      margin-end: 12;
+
+      // Search
+      Gtk.SearchEntry search_entry {
+        placeholder-text: _("Search presets…");
+      }
+
+      // Main content area
+      Gtk.Paned paned_container {
+        orientation: horizontal;
+        vexpand: true;
+        shrink-start-child: false;
+        shrink-end-child: false;
+        resize-start-child: false;
+
+        [start]
+        Gtk.ScrolledWindow preset_list_scroll {
+          width-request: 250;
+          hscrollbar-policy: never;
+
+          Gtk.Box {
+            orientation: vertical;
+
+            Gtk.ListBox preset_list {
+              css-classes: ["navigation-sidebar"];
+              selection-mode: single;
+            }
+
+            Gtk.Label empty_state_label {
+              label: _("No presets yet.\nClick + to create one.");
+              justify: center;
+              css-classes: ["dim-label"];
+              margin-top: 48;
+              margin-bottom: 48;
+              visible: false;
+            }
+          }
+        }
+
+        [end]
+        Gtk.ScrolledWindow {
+          hscrollbar-policy: never;
+          vscrollbar-policy: automatic;
+
+          Gtk.Box detail_box {
+            orientation: vertical;
+            spacing: 12;
+            margin-top: 12;
+            margin-bottom: 12;
+            margin-start: 12;
+            margin-end: 12;
+
+            Adw.PreferencesGroup {
+              title: _("Preset Details");
+
+              Adw.ActionRow {
+                title: _("Name");
+
+                Gtk.Label preset_name_label {
+                  label: "—";
+                  css-classes: ["dim-label"];
+                }
+              }
+
+              Adw.ActionRow {
+                title: _("Tempo");
+
+                Gtk.Label preset_tempo_label {
+                  label: "—";
+                  css-classes: ["dim-label"];
+                }
+              }
+
+              Adw.ActionRow {
+                title: _("Time Signature");
+
+                Gtk.Label preset_time_sig_label {
+                  label: "—";
+                  css-classes: ["dim-label"];
+                }
+              }
+
+              Adw.ActionRow {
+                title: _("Description");
+
+                Gtk.Label preset_description_label {
+                  label: "—";
+                  css-classes: ["dim-label"];
+                  wrap: true;
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+  }
+  }
+}

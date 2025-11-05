@@ -1,0 +1,13 @@
+{
+  "name": "Son Clave (3-2)",
+  "description": "Traditional Cuban clave pattern in 3-2 orientation",
+  "length_beats": 8,
+  "time_signature": "4/4",
+  "steps": [
+    {"beat": 0, "subdivision": 0, "accent": "strong", "sound": "high"},
+    {"beat": 1, "subdivision": 2, "accent": "regular", "sound": "high"},
+    {"beat": 3, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 4, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 5, "subdivision": 2, "accent": "regular", "sound": "high"}
+  ]
+}

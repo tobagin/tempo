@@ -132,6 +132,78 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         }
       }
     }
+
+    Adw.PreferencesGroup {
+      title: _("Subdivisions");
+      description: _("Configure subdivision sounds and visual indicators");
+
+      Adw.ActionRow {
+        title: _("Subdivision Mode");
+        subtitle: _("Rhythm subdivision for eighth notes, triplets, or sixteenth notes");
+
+        [suffix]
+        DropDown subdivision_mode_dropdown {
+          model: StringList {
+            strings [
+              _("None"),
+              _("Eighth Notes (2 per beat)"),
+              _("Triplets (3 per beat)"),
+              _("Sixteenth Notes (4 per beat)")
+            ]
+          };
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Subdivision Volume");
+        subtitle: _("Volume for subdivision clicks (relative to main beat)");
+
+        [suffix]
+        Scale subdivision_volume_scale {
+          orientation: horizontal;
+          adjustment: Adjustment {
+            lower: 0.0;
+            upper: 1.0;
+            step-increment: 0.01;
+            page-increment: 0.1;
+            value: 0.5;
+          };
+          digits: 2;
+          draw-value: true;
+          hexpand: true;
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Subdivision Sound Type");
+        subtitle: _("Built-in sound for subdivision clicks");
+
+        [suffix]
+        DropDown subdivision_sound_type_dropdown {
+          model: StringList {
+            strings [
+              _("Default"),
+              _("Woodblock"),
+              _("Metal"),
+              _("Digital")
+            ]
+          };
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Show Subdivision Indicators");
+        subtitle: _("Display subdivision dots/markers around beat circle");
+
+        [suffix]
+        Switch show_subdivision_indicators_switch {
+          valign: center;
+        }
+      }
+    }
   }
 
   Adw.PreferencesPage behavior_page {
@@ -216,6 +288,21 @@ template $PreferencesDialog : Adw.PreferencesDialog {
       title: _("Beat Indicator");
       description: _("Configure visual beat indicator settings");
 
+      Adw.ComboRow visual_mode_row {
+        title: _("Visual Mode");
+        subtitle: _("Choose the style of the beat indicator");
+
+        model: StringList {
+          strings [
+            _("Circle - Traditional pulsing circle"),
+            _("Pendulum - Swinging like mechanical metronomes"),
+            _("Bar Graph - Vertical bars showing beat positions"),
+            _("Progress Ring - Circular progress indicator"),
+            _("Minimalist Flash - Simple color flash")
+          ]
+        };
+      }
+
       Adw.ActionRow {
         title: _("Show Beat Numbers");
         subtitle: _("Display the current beat number during playback");
@@ -244,6 +331,274 @@ template $PreferencesDialog : Adw.PreferencesDialog {
         Switch downbeat_color_switch {
           valign: center;
         }
+      }
+    }
+  }
+
+  Adw.PreferencesPage timer_page {
+    title: _("Practice Timer");
+    icon-name: "alarm-symbolic";
+
+    Adw.PreferencesGroup {
+      title: _("Timer Settings");
+      description: _("Configure practice session timer");
+
+      Adw.ActionRow {
+        title: _("Enable Timer");
+        subtitle: _("Show and track practice session time");
+
+        [suffix]
+        Switch timer_enabled_switch {
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Show in Main Window");
+        subtitle: _("Display timer below beat indicator");
+
+        [suffix]
+        Switch timer_show_switch {
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Timer Mode");
+        subtitle: _("Count up from zero or countdown from target");
+
+        [suffix]
+        DropDown timer_mode_dropdown {
+          model: StringList {
+            strings [
+              _("Count Up"),
+              _("Countdown")
+            ]
+          };
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Countdown Duration");
+        subtitle: _("Target duration in minutes for countdown mode");
+
+        [suffix]
+        SpinButton countdown_duration_spin {
+          adjustment: Adjustment {
+            lower: 1.0;
+            upper: 180.0;
+            step-increment: 1.0;
+            page-increment: 5.0;
+            value: 25.0;
+          };
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Pause with Metronome");
+        subtitle: _("Automatically pause timer when metronome stops");
+
+        [suffix]
+        Switch timer_pause_with_metronome_switch {
+          valign: center;
+        }
+      }
+    }
+
+    Adw.PreferencesGroup {
+      title: _("Auto-Stop");
+      description: _("Automatically stop metronome after a specified duration");
+
+      Adw.ActionRow {
+        title: _("Auto-Stop Mode");
+        subtitle: _("Stop after beats, bars, or time duration");
+
+        [suffix]
+        DropDown auto_stop_mode_dropdown {
+          model: StringList {
+            strings [
+              _("None"),
+              _("Beats"),
+              _("Bars"),
+              _("Time (Minutes)")
+            ]
+          };
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Auto-Stop Value");
+        subtitle: _("Number of beats/bars or minutes before stopping");
+
+        [suffix]
+        SpinButton auto_stop_value_spin {
+          adjustment: Adjustment {
+            lower: 1.0;
+            upper: 10000.0;
+            step-increment: 1.0;
+            page-increment: 10.0;
+            value: 100.0;
+          };
+          valign: center;
+        }
+      }
+    }
+  }
+
+  Adw.PreferencesPage mute_page {
+    title: _("Silent Beats");
+    icon-name: "audio-volume-muted-symbolic";
+
+    Adw.PreferencesGroup {
+      title: _("Silent/Muted Beats");
+      description: _("Train internal timing by muting selected beats while keeping visual indicators");
+
+      Adw.ActionRow {
+        title: _("Enable Silent Beats");
+        subtitle: _("Selectively mute beats based on chosen pattern");
+
+        [suffix]
+        Switch mute_enabled_switch {
+          valign: center;
+        }
+      }
+
+      Adw.ComboRow mute_pattern_row {
+        title: _("Mute Pattern");
+        subtitle: _("Select which beats to silence");
+
+        model: StringList {
+          strings [
+            _("None"),
+            _("Every Nth Beat"),
+            _("Random Percentage"),
+            _("Specific Beats"),
+            _("Progressive")
+          ]
+        };
+      }
+    }
+
+    Adw.PreferencesGroup every_nth_group {
+      title: _("Every Nth Beat Settings");
+      visible: false;
+
+      Adw.SpinRow mute_interval_spin {
+        title: _("Interval");
+        subtitle: _("Mute every Nth beat (e.g., 2 = every other beat)");
+
+        adjustment: Adjustment {
+          lower: 2.0;
+          upper: 16.0;
+          step-increment: 1.0;
+          page-increment: 1.0;
+          value: 2.0;
+        };
+      }
+    }
+
+    Adw.PreferencesGroup random_group {
+      title: _("Random Percentage Settings");
+      visible: false;
+
+      Adw.ActionRow {
+        title: _("Mute Percentage");
+        subtitle: _("Percentage of beats to randomly mute");
+
+        [suffix]
+        Scale mute_percentage_scale {
+          orientation: horizontal;
+          adjustment: Adjustment {
+            lower: 0.0;
+            upper: 1.0;
+            step-increment: 0.05;
+            page-increment: 0.1;
+            value: 0.5;
+          };
+          digits: 2;
+          draw-value: true;
+          hexpand: true;
+          valign: center;
+        }
+      }
+    }
+
+    Adw.PreferencesGroup specific_group {
+      title: _("Specific Beats Settings");
+      visible: false;
+
+      Adw.EntryRow mute_specific_beats_entry {
+        title: _("Beats to Mute");
+        text: "2,4";
+
+        [suffix]
+        Label {
+          label: _("Example: 2,4");
+          styles ["dim-label"]
+        }
+      }
+    }
+
+    Adw.PreferencesGroup progressive_group {
+      title: _("Progressive Settings");
+      visible: false;
+
+      Adw.ActionRow {
+        title: _("Starting Percentage");
+        subtitle: _("Initial mute percentage (usually 0%)");
+
+        [suffix]
+        Scale progressive_start_scale {
+          orientation: horizontal;
+          adjustment: Adjustment {
+            lower: 0.0;
+            upper: 1.0;
+            step-increment: 0.05;
+            page-increment: 0.1;
+            value: 0.0;
+          };
+          digits: 2;
+          draw-value: true;
+          hexpand: true;
+          valign: center;
+        }
+      }
+
+      Adw.ActionRow {
+        title: _("Ending Percentage");
+        subtitle: _("Target mute percentage (e.g., 75%)");
+
+        [suffix]
+        Scale progressive_end_scale {
+          orientation: horizontal;
+          adjustment: Adjustment {
+            lower: 0.0;
+            upper: 1.0;
+            step-increment: 0.05;
+            page-increment: 0.1;
+            value: 0.75;
+          };
+          digits: 2;
+          draw-value: true;
+          hexpand: true;
+          valign: center;
+        }
+      }
+
+      Adw.SpinRow progressive_interval_spin {
+        title: _("Bars Between Increases");
+        subtitle: _("Number of bars before mute percentage increases");
+
+        adjustment: Adjustment {
+          lower: 1.0;
+          upper: 64.0;
+          step-increment: 1.0;
+          page-increment: 4.0;
+          value: 16.0;
+        };
       }
     }
   }

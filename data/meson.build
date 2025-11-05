@@ -60,7 +60,8 @@ gnome.compile_schemas(build_by_default: true)
 ui_files = [
   'ui/main_window.blp',
   'ui/preferences_dialog.blp',
-  'ui/keyboard_shortcuts_dialog.blp'
+  'ui/keyboard_shortcuts_dialog.blp',
+  'ui/preset_manager_dialog.blp'
 ]
 
 ui_compiled = []

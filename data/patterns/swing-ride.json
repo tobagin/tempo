@@ -1,0 +1,16 @@
+{
+  "name": "Swing Ride",
+  "description": "Jazz swing ride cymbal pattern with triplet feel",
+  "length_beats": 4,
+  "time_signature": "4/4",
+  "steps": [
+    {"beat": 0, "subdivision": 0, "accent": "strong", "sound": "high"},
+    {"beat": 0, "subdivision": 2, "accent": "ghost", "sound": "high"},
+    {"beat": 1, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 1, "subdivision": 2, "accent": "ghost", "sound": "high"},
+    {"beat": 2, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 2, "subdivision": 2, "accent": "ghost", "sound": "high"},
+    {"beat": 3, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 3, "subdivision": 2, "accent": "ghost", "sound": "high"}
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Bossa Nova",
+  "description": "Classic Brazilian bossa nova pattern",
+  "length_beats": 8,
+  "time_signature": "4/4",
+  "steps": [
+    {"beat": 0, "subdivision": 0, "accent": "strong", "sound": "low"},
+    {"beat": 0, "subdivision": 2, "accent": "ghost", "sound": "high"},
+    {"beat": 1, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 1, "subdivision": 2, "accent": "ghost", "sound": "high"},
+    {"beat": 2, "subdivision": 0, "accent": "regular", "sound": "low"},
+    {"beat": 3, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 3, "subdivision": 2, "accent": "ghost", "sound": "high"},
+    {"beat": 4, "subdivision": 0, "accent": "strong", "sound": "low"},
+    {"beat": 5, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 6, "subdivision": 0, "accent": "regular", "sound": "low"},
+    {"beat": 6, "subdivision": 2, "accent": "ghost", "sound": "high"},
+    {"beat": 7, "subdivision": 0, "accent": "regular", "sound": "high"},
+    {"beat": 7, "subdivision": 2, "accent": "ghost", "sound": "high"}
+  ]
+}

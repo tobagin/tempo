@@ -1,0 +1,12 @@
+{
+  "name": "Backbeat",
+  "description": "Simple rock/pop backbeat emphasizing beats 2 and 4",
+  "length_beats": 4,
+  "time_signature": "4/4",
+  "steps": [
+    {"beat": 0, "subdivision": 0, "accent": "regular", "sound": "low"},
+    {"beat": 1, "subdivision": 0, "accent": "strong", "sound": "high"},
+    {"beat": 2, "subdivision": 0, "accent": "regular", "sound": "low"},
+    {"beat": 3, "subdivision": 0, "accent": "strong", "sound": "high"}
+  ]
+}
