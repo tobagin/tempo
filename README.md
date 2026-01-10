@@ -1,303 +1,139 @@
 # Tempo
-**A Modern Metronome for Musicians**
 
-Tempo is a simple, reliable, and aesthetically pleasing metronome application built with GTK4 and Libadwaita. It provides precise timing, customizable settings, and a distraction-free user experience for musicians of all levels.
+A modern metronome for musicians built with GTK4 and Libadwaita.
 
-## Screenshots
+![Tempo Application](data/screenshots/main-window.png)
 
-<table>
-  <tr>
-    <td><img src="screenshots/main-window.png" alt="Main Window" width="400"/><br/><em>Main window with tempo controls</em></td>
-    <td><img src="screenshots/preference-general.png" alt="General Preferences" width="400"/><br/><em>General preferences</em></td>
-  </tr>
-  <tr>
-    <td><img src="screenshots/preferences-visual.png" alt="Visual Preferences" width="400"/><br/><em>Visual preferences with theme selection</em></td>
-    <td><img src="screenshots/about-dialog.png" alt="About Dialog" width="400"/><br/><em>About dialog</em></td>
-  </tr>
-</table>
+## 🎉 Version 1.5.0 - Latest Release
+
+**Tempo 1.5.0** brings significant improvements to accessibility and mobile support, alongside the new Setlists feature.
+
+### ✨ Key Features
+
+- **🚀 Precise Timing**: Sub-millisecond accuracy with a drift-free timing engine
+- **📱 Responsive Design**: Fully adaptive layout for mobile, tablet, and desktop
+- **🎨 Visual Feedback**: Multiple visual modes (Circle, Pendulum, Bar Graph, etc.)
+- **🎹 Rhythm Patterns**: Authentic genre-specific patterns (Clave, Bossa Nova, etc.)
+- **⚙️ Advanced Controls**: Tap tempo, custom sounds, and practice timer
+- **🔒 Privacy Focused**: No telemetry, all data stays on your machine
+
+### 🆕 What's New in 1.5.0
+
+- **Mobile Support**: Optimized layout for mobile Linux devices like PinePhone and Librem 5.
+- **Sound Types**: Built-in Woodblock, Metal, and Digital sound profiles.
+- **Improved Denominators**: Better musical accuracy for complex time signatures.
+- **Setlists**: Organize your presets into sequences for practice or performance.
+- **✨ New Icons**: Fresh new application icons (Thanks to @oiimrosabel).
+
+For detailed release notes and version history, see [CHANGELOG.md](CHANGELOG.md).
 
 ## Features
 
-### Core Functionality
-- **Precise Timing**: Sub-millisecond accuracy with drift-free timing engine
-- **Customizable Tempo**: Set BPM from 40 to 240 using slider, stepper, or tap tempo
-- **Time Signature Control**: Full support for time signatures with working denominators (4/4, 4/8, 4/2, 4/16, etc.)
-- **Visual Beat Indicator**: Clear visual feedback synchronized with audio in multiple styles
-- **Multiple Visual Modes**: Choose from 5 different beat indicators (Circle, Pendulum, Bar Graph, Progress Ring, Flash)
-- **Accented Downbeats**: Distinct sound and visuals for the first beat of each measure
-- **Low-Latency Audio**: Optimized GStreamer pipeline for minimal audio delay
-- **Modern UI**: Clean, adaptive interface following GNOME design principles
-- **Keyboard Shortcuts**: Spacebar to start/stop, arrow keys for tempo adjustment
-- **Settings Persistence**: Automatically saves your preferred settings
+### Core Features
+- **High-Precision Timing**: Uses absolute time references to prevent cumulative drift.
+- **Dynamic Tempo**: Adjust BPM from 40 to 240 with slider, stepper, or tap tempo.
+- **Time Signatures**: Full support for various meters and note values.
+- **Rhythm Patterns**: Practice with professional Cuban, Brazilian, Jazz, and Rock patterns.
 
-### Rhythm Patterns (NEW)
-- **Authentic Rhythm Patterns**: Practice with genre-specific patterns beyond simple beats
-- **Built-in Patterns**: 6 professional patterns included
-  - Cuban clave patterns (Son 3-2, Son 2-3, Rumba)
-  - Brazilian rhythms (Bossa Nova)
-  - Jazz patterns (Swing Ride)
-  - Rock/Pop (Backbeat)
-- **Multi-Accent Support**: Strong, regular, and ghost notes with automatic volume adjustment
-- **Precision Timing**: Sub-millisecond accuracy maintains perfect groove
-- **Easy Selection**: Pattern dropdown in main window with instant switching
-- **Full Tempo Range**: All patterns work at 40-240 BPM
-- **Settings Persistence**: Last used pattern automatically restored
+### User Experience
+- **Adaptive Layout**: Reconfigures UI elements for optimal use on any screen size.
+- **Visual Modes**: Choose from 5 different animation styles to suit your preference.
+- **Shortcuts**: Comprehensive keyboard controls for efficient operation.
+- **Practice Timer**: Session tracking with countdowns and auto-stop functionality.
 
-### Sound Selection (NEW in 1.4.0)
-- **Built-in Sound Types**: Choose from multiple sound types without managing external files
-  - **Default**: Classic metronome click sounds
-  - **Woodblock**: Warm, percussive wood sounds (500ms)
-  - **Metal**: Bright, ringing bell-like sounds (350ms)
-  - **Digital**: Clean, electronic beeps (80-90ms)
-- **Independent High/Low Selection**: Mix and match sound types for creative combinations
-- **Smart Precedence**: Custom sounds override built-in types when enabled
-- **Visual Feedback**: Dropdowns automatically disable when custom sounds are active
-
-### Custom Sounds (1.3.0)
-- **File Validation**: Comprehensive security checks for custom audio files
-  - 10MB file size limit to prevent memory issues
-  - MIME type validation (WAV, MP3, OGG, FLAC supported)
-  - Symlink resolution and validation
-  - GStreamer pre-validation before saving
-- **User-Friendly Errors**: Clear alert dialogs explain why files are rejected
-- **Safe Fallback**: Invalid files automatically revert to default sounds
-
-### Reliability (NEW in 1.3.0)
-- **Visual-Only Mode**: Continue using the metronome for visual timing even if audio fails
-- **Audio System Error Handling**: Clear feedback when audio issues occur
-- **Resource Protection**:
-  - Tap history limited to prevent memory exhaustion
-  - Beat indicator frame rate capped at 60 FPS
-  - Settings debounced to prevent update storms
-- **Input Validation**: All user inputs thoroughly validated for security
-
-### Mobile & Responsive Design (NEW in 1.4.0)
-- **Adaptive Layout**: Automatically adjusts for phone, tablet, and desktop screens
-- **Responsive Breakpoints**:
-  - Phone (≤550px): Compact vertical layout with 200px beat indicator
-  - Tablet (551-900px): Balanced layout with 250px beat indicator
-  - Desktop (900px+): Full layout with 300px beat indicator
-- **Touch-Friendly Controls**: All interactive elements meet 44px minimum touch target size
-- **Scrollable Content**: Vertical scrolling on constrained screens
-- **Mobile Linux Support**: Optimized for PinePhone, Librem 5, and other mobile devices
-- **Minimum Screen Size**: 360x600 pixels
+### Privacy & Performance
+- **Low-Latency Audio**: Optimized GStreamer pipeline for immediate response.
+- **Resource Protection**: Intelligent limiting to ensure stability on all hardware.
+- **Local Data**: Presets and setlists are stored locally in standard config paths.
+- **Open Source**: Built using modern Vala and GNOME technologies.
 
 ## Installation
 
 ### Flatpak (Recommended)
 
-The easiest way to install Tempo is via Flatpak:
+[![Get it on Flathub](https://flathub.org/api/badge)](https://flathub.org/en/apps/io.github.tobagin.tempo)
 
+#### Development Version
 ```bash
-flatpak install flathub io.github.tobagin.tempo
-```
-
-### Building from Source
-
-#### Prerequisites
-
-- Python 3.8 or newer
-- GTK4 development libraries
-- Libadwaita development libraries
-- GStreamer development libraries
-- Meson build system
-- Blueprint compiler
-
-On Ubuntu/Debian:
-```bash
-sudo apt install python3-dev libgtk-4-dev libadwaita-1-dev \
-    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-    meson blueprint-compiler
-```
-
-On Fedora:
-```bash
-sudo dnf install python3-devel gtk4-devel libadwaita-devel \
-    gstreamer1-devel gstreamer1-plugins-base-devel \
-    meson blueprint-compiler
-```
-
-#### Build Instructions
-
-1. Clone the repository:
-```bash
+# Clone the repository
 git clone https://github.com/tobagin/tempo.git
 cd tempo
-```
 
-2. Build with Meson:
-```bash
-meson setup builddir
-meson compile -C builddir
-```
-
-3. Install (optional):
-```bash
-meson install -C builddir
-```
-
-#### Development Build
-
-For development, you can build and run locally:
-
-```bash
-./build.sh --dev --install
-flatpak run io.github.tobagin.tempo
+# Build and install development version
+./scripts/build.sh --dev --install
+flatpak run io.github.tobagin.tempo.Devel
 ```
 
 ## Usage
 
-### Basic Controls
+### Basic Usage
 
-- **Start/Stop**: Click the play button or press `Spacebar`
-- **Adjust Tempo**: Use the slider, spin button, or arrow keys (`↑`/`↓`)
-- **Tap Tempo**: Click "Tap Tempo" or press `T` repeatedly to set tempo
-- **Time Signature**: Set beats per measure and note value
+Launch Tempo from your applications menu or run:
+```bash
+flatpak run io.github.tobagin.tempo
+```
+
+- **Start/Stop**: Click the play button or press `Spacebar`.
+- **Adjust Tempo**: Use the slider or arrow keys (`↑`/`↓`).
+- **Tap Tempo**: Press `T` repeatedly to set the tempo.
 
 ### Keyboard Shortcuts
 
-- `Spacebar`: Start/stop metronome
-- `T`: Tap tempo
-- `↑`: Increase tempo by 1 BPM
-- `↓`: Decrease tempo by 1 BPM
-- `Ctrl+Q`: Quit application
+- `Spacebar` - Start/Stop metronome
+- `T` - Tap tempo
+- `↑` / `↓` - Increase / Decrease BPM
+- `Ctrl+,` - Open Preferences
+- `Ctrl+P` - Manage Presets
+- `F1` - Show Keyboard Shortcuts
 
-### Visual Feedback
+## Architecture
 
-The beat indicator shows:
-- **Blue circle**: Regular beats
-- **Red circle**: Downbeats (first beat of measure)
-- **Beat numbers**: Current beat position in measure
+Tempo is built with modern Linux technologies:
 
-## Technical Details
+- **Vala**: For high-performance native code.
+- **GTK4 / Libadwaita**: For a professional, adaptive user interface.
+- **Blueprint**: For clean and maintainable UI definitions.
+- **GStreamer**: For the low-latency audio engine.
 
-### Architecture
+## Privacy & Security
 
-Tempo is built with modern technologies:
+Tempo is designed to respect your privacy:
 
-- **Frontend**: GTK4 with Libadwaita for native Linux integration
-- **UI Definition**: Blueprint markup language for clean, maintainable UI
-- **Audio Engine**: GStreamer with optimized low-latency pipeline
-- **Timing Engine**: High-precision threading with drift compensation
-- **Build System**: Meson for cross-platform building
-- **Packaging**: Flatpak for universal Linux distribution
-
-### Precision Timing
-
-The metronome engine uses several techniques to ensure accuracy:
-
-- **Absolute time references** prevent cumulative drift
-- **High-resolution performance counter** (time.perf_counter)
-- **Compensation for system delays** and sleep interruptions
-- **Separate timing thread** to avoid GUI blocking
-- **Buffer management** for consistent audio latency
-
-## Development
-
-### Project Structure
-
-```
-tempo/
-├── data/           # UI files, icons, sounds, schemas
-├── src/            # Python source code
-├── tests/          # Unit tests
-├── packaging/      # Flatpak manifests
-├── po/             # Translations
-├── meson.build     # Build configuration
-└── build.sh        # Convenience build script
-```
-
-### Running Tests
-
-```bash
-# Run all tests
-pytest tests/ -v
-
-# Run with coverage
-pytest tests/ -v --cov=src --cov-report=html
-
-# Run specific test file
-pytest tests/test_metronome.py -v
-```
-
-### Code Style
-
-The project uses:
-- **Ruff** for linting and formatting
-- **MyPy** for type checking
-- **Black** for code formatting
-
-```bash
-# Check code style
-ruff check src/ tests/
-mypy src/ --strict
-
-# Auto-fix issues
-ruff check src/ tests/ --fix
-```
-
-### Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
-
-## Troubleshooting
-
-### Audio Issues
-
-If you experience audio problems:
-
-1. **Check audio permissions**: Ensure Flatpak has audio access
-2. **Verify GStreamer**: Make sure GStreamer plugins are installed
-3. **Audio system**: Try switching between PulseAudio and PipeWire
-4. **Latency**: Check audio settings in system preferences
-
-### Performance Issues
-
-For timing accuracy problems:
-
-1. **System load**: Close unnecessary applications
-2. **Power management**: Disable CPU scaling if possible
-3. **Audio buffer**: Adjust buffer sizes in audio settings
-4. **Real-time priority**: Some systems may require RT permissions
-
-### Common Solutions
-
-```bash
-# Reinstall Flatpak version
-flatpak uninstall io.github.tobagin.tempo
-flatpak install flathub io.github.tobagin.tempo
-
-# Reset settings
-rm -rf ~/.config/tempo
-
-# Check GStreamer plugins
-gst-inspect-1.0 | grep audio
-```
-
-## License
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+- **Sandboxed**: Distributed as a Flatpak with minimal necessary permissions.
+- **No Tracking**: No telemetry, analytics, or external data reporting.
+- **Secure Handling**: Validates all custom audio files and user inputs.
 
 ## Contributing
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-## Recent Changes (v1.1.8)
+- Reporting Bugs: [GitHub Issues](https://github.com/tobagin/tempo/issues)
+- Discussions: [GitHub Discussions](https://github.com/tobagin/tempo/discussions)
 
-- **Fixed Time Signature Denominators**: Time signature denominators now properly affect beat timing
-  - 4/4 = quarter notes get the beat (normal speed)
-  - 4/8 = eighth notes get the beat (twice as fast)
-  - 4/2 = half notes get the beat (half speed)
-  - 4/16 = sixteenth notes get the beat (very fast)
-- **Enhanced Musical Accuracy**: Improved beat duration calculation for practice sessions
+## License
 
-## Support
+Tempo is licensed under the [GPL-3.0-or-later](LICENSE).
 
-- **Bug Reports**: [GitHub Issues](https://github.com/tobagin/tempo/issues)
-- **Feature Requests**: [GitHub Discussions](https://github.com/tobagin/tempo/discussions)
-- **Documentation**: [Project Wiki](https://github.com/tobagin/tempo/wiki)
+## Acknowledgments
+
+- **GTK / Libadwaita Team**: For the excellent UI toolkit.
+- **GStreamer**: For the powerful multimedia framework.
+- **Vala**: For the productive native language.
+
+## Screenshots
+
+| Metronome View | Setlists View | Patterns View |
+|:---:|:---:|:---:|
+| ![Main Window](data/screenshots/main-window.png) | ![Setlists](data/screenshots/setlist.png) | ![Patterns](data/screenshots/patterns.png) |
+
+| Trainer View | Presets View | Preferences |
+|:---:|:---:|:---:|
+| ![Trainer](data/screenshots/trainer.png) | ![Presets](data/screenshots/presets.png) | ![Preferences](data/screenshots/preferences.png) |
+
+| About Dialog |
+|:---:|
+| ![About](data/screenshots/about.png) |
+
+---
+
+**Tempo** - A modern metronome for musicians.

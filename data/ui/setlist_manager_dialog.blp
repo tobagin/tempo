@@ -1,0 +1,116 @@
+using Gtk 4.0;
+using Adw 1;
+
+menu setlists_menu {
+  section {
+    item {
+      label: _("New Setlist");
+      action: "setlist.new";
+    }
+  }
+}
+
+template $SetlistManagerDialog : Adw.Dialog {
+  content-width: 600;
+  content-height: 500;
+  title: _("Manage Setlists");
+
+  Adw.ToolbarView {
+    [top]
+    Adw.HeaderBar {
+      show-title: true;
+
+      [start]
+      Gtk.Button add_setlist_button {
+        icon-name: "list-add-symbolic";
+        tooltip-text: _("Create New Setlist");
+      }
+    }
+
+    [bottom]
+    Adw.HeaderBar bottom_bar {
+      show-end-title-buttons: false;
+
+      title-widget: Gtk.Box {
+        spacing: 6;
+        halign: center;
+
+        Gtk.Button activate_button {
+          icon-name: "media-playback-start-symbolic";
+          tooltip-text: _("Activate Setlist");
+          css-classes: ["suggested-action"];
+          sensitive: false;
+        }
+
+        Gtk.Button edit_name_button {
+          icon-name: "document-edit-symbolic";
+          tooltip-text: _("Rename Setlist");
+          sensitive: false;
+        }
+
+        Gtk.Button delete_setlist_button {
+          icon-name: "user-trash-symbolic";
+          tooltip-text: _("Delete Setlist");
+          css-classes: ["destructive-action"];
+          sensitive: false;
+        }
+      };
+    }
+
+    content: Gtk.Box {
+      orientation: vertical;
+      spacing: 12;
+      margin-top: 12;
+      margin-bottom: 12;
+      margin-start: 12;
+      margin-end: 12;
+
+      Gtk.Paned paned_container {
+        orientation: horizontal;
+        vexpand: true;
+        shrink-start-child: false;
+        shrink-end-child: false;
+        resize-start-child: false;
+
+        [start]
+        Gtk.ScrolledWindow {
+          width-request: 200;
+          hscrollbar-policy: never;
+          Gtk.ListBox setlist_list {
+            css-classes: ["navigation-sidebar"];
+            selection-mode: single;
+          }
+        }
+
+        [end]
+        Gtk.Box {
+          orientation: vertical;
+          spacing: 12;
+          margin-start: 12;
+
+          Gtk.Label presets_header {
+            label: _("Presets in Setlist");
+            css-classes: ["heading"];
+            halign: start;
+          }
+
+          Gtk.ScrolledWindow {
+            vexpand: true;
+            hscrollbar-policy: never;
+            Gtk.ListBox setlist_presets_list {
+              css-classes: ["boxed-list"];
+              selection-mode: none;
+            }
+          }
+
+          Gtk.Button add_preset_to_setlist_button {
+            label: _("Add Preset…");
+            icon-name: "list-add-symbolic";
+            halign: center;
+            sensitive: false;
+          }
+        }
+      }
+    };
+  }
+}

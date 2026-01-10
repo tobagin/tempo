@@ -59,6 +59,15 @@ public class TempoWindow : Adw.ApplicationWindow {
     [GtkChild] private unowned DrawingArea trainer_beat_indicator;
     [GtkChild] private unowned Button trainer_play_button;
 
+    // Setlists tab widgets
+    [GtkChild] private unowned Box setlist_nav_box;
+    [GtkChild] private unowned Button prev_setlist_button;
+    [GtkChild] private unowned Label setlist_pos_label;
+    [GtkChild] private unowned Button next_setlist_button;
+    [GtkChild] private unowned Label active_setlist_name;
+    [GtkChild] private unowned ListBox active_setlist_presets;
+    [GtkChild] private unowned Button manage_setlists_button;
+
     // Engine components
     private MetronomeEngine metronome_engine;
     private TapTempo tap_tempo;
@@ -78,10 +87,15 @@ public class TempoWindow : Adw.ApplicationWindow {
     private PreferencesDialog? preferences_dialog = null;
 
     // Keyboard shortcuts dialog
-    private KeyboardShortcutsDialog? shortcuts_dialog = null;
 
     // Preset manager dialog
     private PresetManagerDialog? preset_manager_dialog = null;
+
+    // Setlist manager
+    private SetlistManager setlist_manager;
+    private SetlistManagerDialog? setlist_manager_dialog = null;
+    private Setlist? active_setlist = null;
+    private int active_setlist_index = -1;
 
     // Settings for visual preferences
     private GLib.Settings settings;
@@ -129,6 +143,9 @@ public class TempoWindow : Adw.ApplicationWindow {
 
         // Initialize preset manager
         preset_manager = new PresetManager();
+
+        // Initialize setlist manager
+        setlist_manager = new SetlistManager();
 
         // Initialize visual mode
         initialize_visual_mode();
@@ -219,6 +236,12 @@ public class TempoWindow : Adw.ApplicationWindow {
         patterns_play_button.clicked.connect(on_play_clicked);
         trainer_play_button.clicked.connect(on_play_clicked);
         tap_button.clicked.connect(on_tap_clicked);
+
+        // Setlist controls
+        manage_setlists_button.clicked.connect(on_manage_setlists_clicked);
+        prev_setlist_button.clicked.connect(on_prev_setlist_clicked);
+        next_setlist_button.clicked.connect(on_next_setlist_clicked);
+        active_setlist_presets.row_selected.connect(on_setlist_preset_selected);
 
         // Metronome engine signals
         metronome_engine.beat_occurred.connect(on_beat_occurred);
@@ -692,10 +715,7 @@ public class TempoWindow : Adw.ApplicationWindow {
      * Show the keyboard shortcuts dialog.
      */
     public void show_keyboard_shortcuts() {
-        if (shortcuts_dialog == null) {
-            shortcuts_dialog = new KeyboardShortcutsDialog();
-        }
-        shortcuts_dialog.present(this);
+        KeyboardShortcutsDialog.present(this);
     }
 
     /**
@@ -800,6 +820,124 @@ public class TempoWindow : Adw.ApplicationWindow {
         });
 
         dialog.present(this);
+    }
+
+    private void on_manage_setlists_clicked() {
+        setlist_manager_dialog = new SetlistManagerDialog(this, setlist_manager, preset_manager);
+        setlist_manager_dialog.setlist_activated.connect(on_setlist_activated);
+        setlist_manager_dialog.present(this);
+    }
+
+    private void on_setlist_activated(Setlist setlist) {
+        active_setlist = setlist;
+        active_setlist_name.label = setlist.name;
+        active_setlist_index = 0;
+        
+        populate_active_setlist_presets();
+        apply_active_setlist_preset();
+        
+        setlist_nav_box.visible = true;
+        update_setlist_nav_ui();
+
+        // Switch to metronome view when a setlist is activated
+        view_stack.visible_child_name = "metronome";
+    }
+
+    private void populate_active_setlist_presets() {
+        Gtk.ListBoxRow? row = active_setlist_presets.get_row_at_index(0);
+        while (row != null) {
+            active_setlist_presets.remove(row);
+            row = active_setlist_presets.get_row_at_index(0);
+        }
+
+        if (active_setlist == null) return;
+
+        for (int i = 0; i < active_setlist.preset_ids.size; i++) {
+            var preset_id = active_setlist.preset_ids[i];
+            var preset = preset_manager.get_preset(preset_id);
+            if (preset != null) {
+                var preset_row = create_active_setlist_row(preset, i);
+                active_setlist_presets.append(preset_row);
+            }
+        }
+    }
+
+    private Gtk.ListBoxRow create_active_setlist_row(Preset preset, int index) {
+        var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
+        box.margin_start = box.margin_end = 12;
+        box.margin_top = box.margin_bottom = 8;
+
+        var name_label = new Gtk.Label(preset.name);
+        name_label.hexpand = true;
+        name_label.halign = Gtk.Align.START;
+        box.append(name_label);
+
+        var tempo_label = new Gtk.Label("%d BPM".printf(preset.tempo));
+        tempo_label.add_css_class("dim-label");
+        box.append(tempo_label);
+
+        var row = new Gtk.ListBoxRow();
+        row.child = box;
+        row.set_data("index", index);
+        return row;
+    }
+
+    private void on_setlist_preset_selected(Gtk.ListBoxRow? row) {
+        if (row == null) return;
+        active_setlist_index = (int)row.get_data<int>("index");
+        apply_active_setlist_preset();
+        update_setlist_nav_ui();
+    }
+
+    private void apply_active_setlist_preset() {
+        if (active_setlist == null || active_setlist_index < 0 || active_setlist_index >= active_setlist.preset_ids.size) {
+            return;
+        }
+
+        var preset_id = active_setlist.preset_ids[active_setlist_index];
+        try {
+            preset_manager.apply_preset(preset_id);
+            // Updating UI is handled by settings bindings in PresetManager
+            update_tempo_display();
+            update_time_signature_display();
+            update_subdivision_display();
+        } catch (Error e) {
+            warning("Failed to apply setlist preset: %s", e.message);
+        }
+    }
+
+    private void update_setlist_nav_ui() {
+        if (active_setlist == null) {
+            setlist_nav_box.visible = false;
+            return;
+        }
+
+        setlist_pos_label.label = "%d / %d".printf(active_setlist_index + 1, active_setlist.preset_ids.size);
+        prev_setlist_button.sensitive = active_setlist_index > 0;
+        next_setlist_button.sensitive = active_setlist_index < active_setlist.preset_ids.size - 1;
+
+        // Highlight current row in the list
+        var row = active_setlist_presets.get_row_at_index(active_setlist_index);
+        if (row != null) {
+            active_setlist_presets.select_row(row);
+        }
+    }
+
+    private void on_prev_setlist_clicked() {
+        if (active_setlist_index > 0) {
+            active_setlist_index--;
+            apply_active_setlist_preset();
+            update_setlist_nav_ui();
+        }
+    }
+
+    private void on_next_setlist_clicked() {
+        if (active_setlist == null) return;
+        if (active_setlist_index < active_setlist.preset_ids.size - 1) {
+            active_setlist_index++;
+            apply_active_setlist_preset();
+            update_setlist_nav_ui();
+        }
     }
 
     /**

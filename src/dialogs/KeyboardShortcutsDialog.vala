@@ -2,41 +2,24 @@
  * Keyboard shortcuts dialog for the Tempo metronome application.
  * 
  * This class displays all available keyboard shortcuts in an organized manner
- * using Libadwaita components for a professional interface.
+ * using the modern Libadwaita ShortcutsDialog via Gtk.Builder.
  */
 
 using Gtk;
 using Adw;
 
+public class KeyboardShortcutsDialog {
+    
+    /**
+     * Present the keyboard shortcuts dialog.
+     */
+    public static void present(Gtk.Window parent) {
 #if DEVELOPMENT
-    [GtkTemplate (ui = "/io/github/tobagin/tempo/Devel/ui/keyboard_shortcuts_dialog.ui")]
+        var builder = new Gtk.Builder.from_resource("/io/github/tobagin/tempo/Devel/ui/keyboard_shortcuts_dialog.ui");
 #else
-    [GtkTemplate (ui = "/io/github/tobagin/tempo/ui/keyboard_shortcuts_dialog.ui")]
+        var builder = new Gtk.Builder.from_resource("/io/github/tobagin/tempo/ui/keyboard_shortcuts_dialog.ui");
 #endif
-public class KeyboardShortcutsDialog : Adw.Dialog {
-    
-    /**
-     * Create a new keyboard shortcuts dialog.
-     */
-    public KeyboardShortcutsDialog() {
-        GLib.Object();
-        
-        // Set dialog properties
-        this.title = _("Keyboard Shortcuts");
-        
-        // Setup dialog
-        setup_dialog();
-    }
-    
-    private void setup_dialog() {
-        // The UI is defined in the Blueprint template
-        // This method can be used for additional setup if needed
-    }
-    
-    /**
-     * Show the keyboard shortcuts dialog.
-     */
-    public void show_dialog(Gtk.Widget parent) {
-        this.present(parent);
+        var dialog = builder.get_object("shortcuts_dialog") as Adw.ShortcutsDialog;
+        dialog.present(parent);
     }
 }

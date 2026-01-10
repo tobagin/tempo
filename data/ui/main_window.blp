@@ -1,7 +1,7 @@
 using Gtk 4.0;
 using Adw 1;
 
-template $TempoWindow : Adw.ApplicationWindow {
+template $TempoWindow: Adw.ApplicationWindow {
   default-width: 400;
   default-height: 500;
   width-request: 360;
@@ -25,7 +25,6 @@ template $TempoWindow : Adw.ApplicationWindow {
 
     content: Adw.ViewStack view_stack {
       vexpand: true;
-
       // ========== METRONOME VIEW ==========
       Adw.ViewStackPage {
         name: "metronome";
@@ -45,7 +44,9 @@ template $TempoWindow : Adw.ApplicationWindow {
             margin-end: 12;
             halign: center;
 
-            styles ["clamp"]
+            styles [
+              "clamp",
+            ]
 
             // BPM Controls
             Gtk.Box {
@@ -54,12 +55,18 @@ template $TempoWindow : Adw.ApplicationWindow {
 
               Gtk.Label tempo_label {
                 label: "120";
-                css-classes: ["title-1"];
+
+                css-classes: [
+                  "title-1",
+                ];
               }
 
               Gtk.Label {
                 label: _("BPM");
-                css-classes: ["caption"];
+
+                css-classes: [
+                  "caption",
+                ];
               }
 
               Gtk.SpinButton tempo_spin {
@@ -70,6 +77,7 @@ template $TempoWindow : Adw.ApplicationWindow {
                   page-increment: 10;
                   value: 120;
                 };
+
                 climb-rate: 1;
                 numeric: true;
                 wrap: false;
@@ -92,7 +100,10 @@ template $TempoWindow : Adw.ApplicationWindow {
 
               Gtk.Label {
                 label: _("Time Signature");
-                css-classes: ["heading"];
+
+                css-classes: [
+                  "heading",
+                ];
               }
 
               Gtk.Box time_signature_controls_box {
@@ -107,6 +118,7 @@ template $TempoWindow : Adw.ApplicationWindow {
                     step-increment: 1;
                     value: 4;
                   };
+
                   climb-rate: 1;
                   numeric: true;
                   wrap: false;
@@ -119,8 +131,14 @@ template $TempoWindow : Adw.ApplicationWindow {
 
                 Gtk.DropDown beat_value_dropdown {
                   model: Gtk.StringList {
-                    strings ["2", "4", "8", "16"]
+                    strings [
+                      "2",
+                      "4",
+                      "8",
+                      "16",
+                    ]
                   };
+
                   selected: 1;
                 }
               }
@@ -133,7 +151,10 @@ template $TempoWindow : Adw.ApplicationWindow {
 
               Gtk.Label {
                 label: _("Subdivisions");
-                css-classes: ["heading"];
+
+                css-classes: [
+                  "heading",
+                ];
               }
 
               Gtk.DropDown subdivision_dropdown {
@@ -142,9 +163,10 @@ template $TempoWindow : Adw.ApplicationWindow {
                     _("None"),
                     _("Eighth Notes (2 per beat)"),
                     _("Triplets (3 per beat)"),
-                    _("Sixteenth Notes (4 per beat)")
+                    _("Sixteenth Notes (4 per beat)"),
                   ]
                 };
+
                 selected: 0;
                 halign: center;
                 tooltip-text: _("Hear subdivisions within each beat");
@@ -158,7 +180,10 @@ template $TempoWindow : Adw.ApplicationWindow {
 
               Gtk.Label {
                 label: _("Beat Indicator");
-                css-classes: ["heading"];
+
+                css-classes: [
+                  "heading",
+                ];
               }
 
               Gtk.DrawingArea beat_indicator {
@@ -176,13 +201,22 @@ template $TempoWindow : Adw.ApplicationWindow {
 
                 Gtk.Label timer_display {
                   label: "00:00";
-                  css-classes: ["title-2"];
+
+                  css-classes: [
+                    "title-2",
+                  ];
+
                   halign: center;
                 }
 
                 Gtk.Label auto_stop_progress {
                   label: "";
-                  css-classes: ["caption", "dim-label"];
+
+                  css-classes: [
+                    "caption",
+                    "dim-label",
+                  ];
+
                   halign: center;
                 }
               }
@@ -193,14 +227,61 @@ template $TempoWindow : Adw.ApplicationWindow {
               label: _("Start");
               halign: center;
               margin-top: 12;
-              css-classes: ["suggested-action", "pill"];
+
+              css-classes: [
+                "suggested-action",
+                "pill",
+              ];
+            }
+
+            Gtk.Box setlist_nav_box {
+              orientation: horizontal;
+              spacing: 12;
+              halign: center;
+              margin-top: 12;
+              visible: false;
+
+              Gtk.Button prev_setlist_button {
+                icon-name: "go-previous-symbolic";
+                tooltip-text: _("Previous in Setlist");
+
+                css-classes: [
+                  "flat",
+                  "circular",
+                ];
+              }
+
+              Gtk.Label setlist_pos_label {
+                label: "1 / 5";
+
+                css-classes: [
+                  "caption",
+                  "dim-label",
+                ];
+
+                valign: center;
+              }
+
+              Gtk.Button next_setlist_button {
+                icon-name: "go-next-symbolic";
+                tooltip-text: _("Next in Setlist");
+
+                css-classes: [
+                  "flat",
+                  "circular",
+                ];
+              }
             }
 
             Gtk.Button tap_button {
               label: _("Tap Tempo");
               halign: center;
               margin-top: 6;
-              css-classes: ["flat"];
+
+              css-classes: [
+                "flat",
+              ];
+
               tooltip-text: _("Tap repeatedly to set tempo");
             }
           }
@@ -226,7 +307,9 @@ template $TempoWindow : Adw.ApplicationWindow {
             margin-end: 12;
             halign: center;
 
-            styles ["clamp"]
+            styles [
+              "clamp",
+            ]
 
             // BPM Controls (shared)
             Gtk.Box {
@@ -235,12 +318,18 @@ template $TempoWindow : Adw.ApplicationWindow {
 
               Gtk.Label patterns_tempo_label {
                 label: bind tempo_label.label;
-                css-classes: ["title-1"];
+
+                css-classes: [
+                  "title-1",
+                ];
               }
 
               Gtk.Label {
                 label: _("BPM");
-                css-classes: ["caption"];
+
+                css-classes: [
+                  "caption",
+                ];
               }
 
               Gtk.Scale patterns_tempo_scale {
@@ -264,13 +353,21 @@ template $TempoWindow : Adw.ApplicationWindow {
 
                 Gtk.Label {
                   label: _("Rhythm Pattern");
-                  css-classes: ["title-4"];
+
+                  css-classes: [
+                    "title-4",
+                  ];
                 }
 
                 Gtk.Button pattern_edit_button {
                   icon-name: "document-edit-symbolic";
                   valign: center;
-                  css-classes: ["flat", "circular"];
+
+                  css-classes: [
+                    "flat",
+                    "circular",
+                  ];
+
                   tooltip-text: _("Manage Patterns");
                   sensitive: false;
                 }
@@ -284,7 +381,11 @@ template $TempoWindow : Adw.ApplicationWindow {
               // Pattern Info
               Gtk.Label pattern_info_label {
                 label: _("Select a pattern to begin");
-                css-classes: ["dim-label"];
+
+                css-classes: [
+                  "dim-label",
+                ];
+
                 halign: center;
                 margin-top: 6;
                 wrap: true;
@@ -299,7 +400,10 @@ template $TempoWindow : Adw.ApplicationWindow {
 
               Gtk.Label {
                 label: _("Visual Feedback");
-                css-classes: ["heading"];
+
+                css-classes: [
+                  "heading",
+                ];
               }
 
               Gtk.DrawingArea patterns_beat_indicator {
@@ -314,7 +418,11 @@ template $TempoWindow : Adw.ApplicationWindow {
               label: _("Start");
               halign: center;
               margin-top: 12;
-              css-classes: ["suggested-action", "pill"];
+
+              css-classes: [
+                "suggested-action",
+                "pill",
+              ];
             }
           }
         };
@@ -339,17 +447,27 @@ template $TempoWindow : Adw.ApplicationWindow {
             margin-end: 12;
             halign: center;
 
-            styles ["clamp"]
+            styles [
+              "clamp",
+            ]
 
             // Trainer Title
             Gtk.Label {
               label: _("Tempo Trainer");
-              css-classes: ["title-2"];
+
+              css-classes: [
+                "title-2",
+              ];
             }
 
             Gtk.Label {
               label: _("Gradually increase tempo to build speed");
-              css-classes: ["caption", "dim-label"];
+
+              css-classes: [
+                "caption",
+                "dim-label",
+              ];
+
               wrap: true;
               justify: center;
             }
@@ -372,6 +490,7 @@ template $TempoWindow : Adw.ApplicationWindow {
                   step-increment: 1;
                   value: 60;
                 };
+
                 width-chars: 4;
               }
 
@@ -396,6 +515,7 @@ template $TempoWindow : Adw.ApplicationWindow {
                   step-increment: 1;
                   value: 120;
                 };
+
                 width-chars: 4;
               }
 
@@ -420,6 +540,7 @@ template $TempoWindow : Adw.ApplicationWindow {
                   step-increment: 1;
                   value: 5;
                 };
+
                 width-chars: 3;
               }
 
@@ -444,13 +565,18 @@ template $TempoWindow : Adw.ApplicationWindow {
                   step-increment: 1;
                   value: 8;
                 };
+
                 width-chars: 3;
               }
 
               Gtk.DropDown trainer_interval_type {
                 model: Gtk.StringList {
-                  strings [_("bars"), _("seconds")]
+                  strings [
+                    _("bars"),
+                    _("seconds"),
+                  ]
                 };
+
                 selected: 0;
               }
             }
@@ -458,7 +584,12 @@ template $TempoWindow : Adw.ApplicationWindow {
             // Status
             Gtk.Label trainer_status_label {
               label: "";
-              css-classes: ["caption", "dim-label"];
+
+              css-classes: [
+                "caption",
+                "dim-label",
+              ];
+
               visible: false;
               margin-top: 12;
             }
@@ -471,7 +602,10 @@ template $TempoWindow : Adw.ApplicationWindow {
 
               Gtk.Label {
                 label: _("Visual Feedback");
-                css-classes: ["heading"];
+
+                css-classes: [
+                  "heading",
+                ];
               }
 
               Gtk.DrawingArea trainer_beat_indicator {
@@ -486,7 +620,74 @@ template $TempoWindow : Adw.ApplicationWindow {
               label: _("Start");
               halign: center;
               margin-top: 12;
-              css-classes: ["suggested-action", "pill"];
+
+              css-classes: [
+                "suggested-action",
+                "pill",
+              ];
+            }
+          }
+        };
+      }
+
+      // ========== SETLISTS VIEW ==========
+      Adw.ViewStackPage {
+        name: "setlists_view";
+        title: _("Setlists");
+        icon-name: "view-list-bullet-symbolic";
+
+        child: Gtk.ScrolledWindow {
+          hscrollbar-policy: never;
+          vscrollbar-policy: automatic;
+
+          Gtk.Box {
+            orientation: vertical;
+            spacing: 20;
+            margin-top: 24;
+            margin-bottom: 24;
+            margin-start: 12;
+            margin-end: 12;
+            halign: center;
+
+            styles [
+              "clamp",
+            ]
+
+            Gtk.Label {
+              label: _("Active Setlist");
+
+              css-classes: [
+                "title-2",
+              ];
+            }
+
+            Gtk.Label active_setlist_name {
+              label: _("No active setlist");
+
+              css-classes: [
+                "title-4",
+                "dim-label",
+              ];
+            }
+
+            Gtk.ListBox active_setlist_presets {
+              css-classes: [
+                "boxed-list",
+              ];
+
+              selection-mode: single;
+              vexpand: true;
+              width-request: 300;
+            }
+
+            Gtk.Button manage_setlists_button {
+              label: _("Manage Setlists...");
+              halign: center;
+              margin-top: 12;
+
+              css-classes: [
+                "pill",
+              ];
             }
           }
         };
@@ -504,7 +705,7 @@ template $TempoWindow : Adw.ApplicationWindow {
 menu primary_menu {
   section {
     item {
-      label: _("Manage Presets…");
+      label: _("Manage Presets...");
       action: "app.manage-presets";
     }
 

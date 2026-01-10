@@ -8,6 +8,7 @@ vala_sources = [
   'dialogs/PreferencesDialog.vala',
   'dialogs/KeyboardShortcutsDialog.vala',
   'dialogs/PresetManagerDialog.vala',
+  'dialogs/SetlistManagerDialog.vala',
   'utils/MetronomeEngine.vala',
   'utils/TapTempo.vala',
   'utils/PracticeTimer.vala',
@@ -20,6 +21,8 @@ vala_sources = [
   'utils/RhythmPattern.vala',
   'utils/PatternLibrary.vala',
   'utils/PatternEngine.vala',
+  'utils/Setlist.vala',
+  'utils/SetlistManager.vala',
   config_vala,  # Generated config.vala file
 ]
 

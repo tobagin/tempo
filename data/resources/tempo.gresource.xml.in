@@ -6,6 +6,7 @@
     <file preprocess="xml-stripblanks" alias="ui/preferences_dialog.ui">preferences_dialog.ui</file>
     <file preprocess="xml-stripblanks" alias="ui/keyboard_shortcuts_dialog.ui">keyboard_shortcuts_dialog.ui</file>
     <file preprocess="xml-stripblanks" alias="preset_manager_dialog.ui">preset_manager_dialog.ui</file>
+    <file preprocess="xml-stripblanks" alias="setlist_manager_dialog.ui">setlist_manager_dialog.ui</file>
 
     <!-- Audio Files -->
     <file>sounds/high.wav</file>

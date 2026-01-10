@@ -24,20 +24,32 @@
   
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/main-window.png</image>
-      <caption translatable="yes">Main window showing tempo controls and beat indicator</caption>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/data/screenshots/main-window.png</image>
+      <caption translatable="yes">Main metronome view with tempo and beat indicator</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preference-general.png</image>
-      <caption translatable="yes">General preferences with audio and behavior settings</caption>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/data/screenshots/setlist.png</image>
+      <caption translatable="yes">Setlist management view for organizing practice sessions</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/preferences-visual.png</image>
-      <caption translatable="yes">Visual preferences with theme selection and beat indicator options</caption>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/data/screenshots/patterns.png</image>
+      <caption translatable="yes">Rhythm patterns library with genre-specific beats</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/tobagin/tempo/main/screenshots/about-dialog.png</image>
-      <caption translatable="yes">About dialog showing application information</caption>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/data/screenshots/trainer.png</image>
+      <caption translatable="yes">Tempo trainer for gradual speed increases during practice</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/data/screenshots/presets.png</image>
+      <caption translatable="yes">Preset management for saving and loading configurations</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/data/screenshots/preferences.png</image>
+      <caption translatable="yes">Application preferences for audio, visual, and behavior settings</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/tobagin/tempo/main/data/screenshots/about.png</image>
+      <caption translatable="yes">About dialog with application version and credits</caption>
     </screenshot>
   </screenshots>
   
@@ -86,6 +98,19 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.5.0" date="2026-01-10">
+      <description>
+        <p>Setlists and modern UI refinements</p>
+        <ul>
+          <li>Setlists: Organize presets into sequences for practice or performance</li>
+          <li>Setlist Manager: Dedicated dialog to manage your setlist collection</li>
+          <li>✨ New Icons: Fresh new application icons (Thanks to @oiimrosabel)</li>
+          <li>Modern Shortcuts: Replaced custom dialog with native AdwShortcutsDialog</li>
+          <li>Mobile Layout: Adaptive UI improvements for mobile Linux devices</li>
+          <li>Refined Assets: Organized screenshots and differentiated development icons</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.4.0" date="2025-11-03">
       <description>
         <p>Sound type selection feature with multiple built-in sounds</p>

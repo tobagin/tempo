@@ -61,7 +61,8 @@ ui_files = [
   'ui/main_window.blp',
   'ui/preferences_dialog.blp',
   'ui/keyboard_shortcuts_dialog.blp',
-  'ui/preset_manager_dialog.blp'
+  'ui/preset_manager_dialog.blp',
+  'ui/setlist_manager_dialog.blp'
 ]
 
 ui_compiled = []
@@ -77,12 +78,22 @@ foreach ui_file : ui_files
 endforeach
 
 # Install scalable app icon
+icon_name = development ? 'io.github.tobagin.tempo.Devel.svg' : 'io.github.tobagin.tempo.svg'
 configure_file(
-  input: 'icons/hicolor/scalable/io.github.tobagin.tempo.svg',
+  input: join_paths('icons/hicolor/scalable', icon_name),
   output: application_id + '.svg',
   copy: true,
   install: true,
   install_dir: join_paths(icondir, 'hicolor', 'scalable', 'apps')
+)
+
+# Install symbolic icon
+configure_file(
+  input: 'icons/hicolor/scalable/io.github.tobagin.tempo.symbolic.svg',
+  output: application_id + '-symbolic.svg',
+  copy: true,
+  install: true,
+  install_dir: join_paths(icondir, 'hicolor', 'symbolic', 'apps')
 )
 
 # Sound files

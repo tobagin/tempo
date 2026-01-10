@@ -1,5 +1,5 @@
 project('tempo', ['c', 'vala'],
-  version: '1.4.0',
+  version: '1.5.0',
   license: 'GPL3+',
   meson_version: '>= 0.59.0',
   default_options: [
@@ -25,7 +25,7 @@ fs = import('fs')
 
 # Dependencies
 gtk4_dep = dependency('gtk4', version: '>= 4.10.0')
-adw_dep = dependency('libadwaita-1', version: '>= 1.5')
+adw_dep = dependency('libadwaita-1', version: '>= 1.8')
 glib_dep = dependency('glib-2.0', version: '>= 2.76')
 gobject_dep = dependency('gobject-2.0', version: '>= 2.76')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.6')

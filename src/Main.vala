@@ -101,7 +101,7 @@ public class TempoApplication : Adw.Application {
     private void on_about_action() {
         string[] developers = { "Thiago Fernandes" };
         string[] designers = { "Thiago Fernandes" };
-        string[] artists = { "Thiago Fernandes" };
+        string[] artists = { "Thiago Fernandes", "oiimrosabel" };
         
         string app_name = "Tempo";
         string comments = "A modern metronome for musicians with precise timing and intuitive interface";
