@@ -1,12 +1,19 @@
 # Tempo
 
-A modern metronome for musicians built with GTK4 and Libadwaita.
+A modern metronome for musicians.
+
+<div align="center">
 
 ![Tempo Application](data/screenshots/main-window.png)
 
-## 🎉 Version 1.5.0 - Latest Release
+<a href="https://flathub.org/en/apps/io.github.tobagin.tempo"><img src="https://flathub.org/api/badge" height="110" alt="Get it on Flathub"></a>
+<a href="https://ko-fi.com/tobagin"><img src="data/kofi_button.png" height="82" alt="Support me on Ko-Fi"></a>
 
-**Tempo 1.5.0** brings significant improvements to accessibility and mobile support, alongside the new Setlists feature.
+</div>
+
+## 🎉 Version 1.5.1 - Latest Release
+
+**Tempo 1.5.1** brings metadata improvements and documentation updates.
 
 ### ✨ Key Features
 
@@ -16,6 +23,11 @@ A modern metronome for musicians built with GTK4 and Libadwaita.
 - **🎹 Rhythm Patterns**: Authentic genre-specific patterns (Clave, Bossa Nova, etc.)
 - **⚙️ Advanced Controls**: Tap tempo, custom sounds, and practice timer
 - **🔒 Privacy Focused**: No telemetry, all data stays on your machine
+
+### 🆕 What's New in 1.5.1
+
+- **Metadata Improvements**: Verified and improved metainfo validation (summary, description, branding).
+- **Documentation**: Simplified README, added Flathub/Ko-Fi badges, and improved build instructions.
 
 ### 🆕 What's New in 1.5.0
 
@@ -47,13 +59,8 @@ For detailed release notes and version history, see [CHANGELOG.md](CHANGELOG.md)
 - **Local Data**: Presets and setlists are stored locally in standard config paths.
 - **Open Source**: Built using modern Vala and GNOME technologies.
 
-## Installation
+## Building from source
 
-### Flatpak (Recommended)
-
-[![Get it on Flathub](https://flathub.org/api/badge)](https://flathub.org/en/apps/io.github.tobagin.tempo)
-
-#### Development Version
 ```bash
 # Clone the repository
 git clone https://github.com/tobagin/tempo.git
@@ -86,14 +93,7 @@ flatpak run io.github.tobagin.tempo
 - `Ctrl+P` - Manage Presets
 - `F1` - Show Keyboard Shortcuts
 
-## Architecture
 
-Tempo is built with modern Linux technologies:
-
-- **Vala**: For high-performance native code.
-- **GTK4 / Libadwaita**: For a professional, adaptive user interface.
-- **Blueprint**: For clean and maintainable UI definitions.
-- **GStreamer**: For the low-latency audio engine.
 
 ## Privacy & Security
 

@@ -4,19 +4,14 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <name>@PROJECT_NAME@</name>
-  <summary translatable="yes">A modern metronome for musicians</summary>
+  <summary translatable="yes">Modern metronome for musicians</summary>
   
   <description>
     <p translatable="yes">
-      Tempo is a modern, feature-rich metronome application designed for musicians of all levels. 
-      Built with GTK4 and Libadwaita using Blueprint UI templates, it provides precise timing, 
-      comprehensive keyboard shortcuts, and a beautiful animated beat indicator.
+      Practice with precision using this feature-rich metronome. Designed for musicians of all levels, it provides accurate timing, comprehensive keyboard shortcuts, and a beautiful animated beat indicator.
     </p>
     <p translatable="yes">
-      Key features include GStreamer audio integration with distinct beat/downbeat sounds, 
-      customizable tempo (40-240 BPM), multiple time signatures, animated Cairo-based visual 
-      indicators with pulse effects, comprehensive preferences dialog, tap tempo functionality, 
-      and full keyboard control. The high-precision timing engine ensures professional accuracy.
+      Features include distinct beat and downbeat sounds, customizable tempo (40-240 BPM), multiple time signatures, animated visual indicators with pulse effects, tap tempo functionality, and full keyboard control. The high-precision timing engine ensures professional accuracy.
     </p>
   </description>
   
@@ -57,6 +52,7 @@
   <url type="bugtracker">https://github.com/tobagin/tempo/issues</url>
   <url type="help">https://github.com/tobagin/tempo/discussions</url>
   <url type="donation">https://github.com/sponsors/tobagin</url>
+  <url type="vcs-browser">https://github.com/tobagin/tempo</url>
   <url type="contact">https://github.com/tobagin</url>
   <url type="contribute">https://github.com/tobagin/tempo</url>
 
@@ -98,6 +94,16 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.5.1" date="2026-01-12">
+      <description>
+        <p>Metadata improvements and documentation updates</p>
+        <ul>
+          <li>Improved metainfo summary and description for better clarity</li>
+          <li>Updated branding colors to a cohesive Teal theme</li>
+          <li>Refined documentation with Flathub and Ko-Fi badges</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.5.0" date="2026-01-10">
       <description>
         <p>Setlists and modern UI refinements</p>
@@ -438,7 +444,7 @@
   <translation type="gettext">tempo</translation>
   
   <branding>
-    <color type="primary" scheme_preference="light">#3584e4</color>
-    <color type="primary" scheme_preference="dark">#1c71d8</color>
+    <color type="primary" scheme_preference="light">#2ec27e</color>
+    <color type="primary" scheme_preference="dark">#26a269</color>
   </branding>
 </component>
