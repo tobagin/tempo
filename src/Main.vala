@@ -25,6 +25,8 @@ public class TempoApplication : Adw.Application {
     protected override void startup() {
         base.startup();
         
+        DebugLogger.get_instance().log("Application startup sequence initiated");
+        
         // Setup application actions
         setup_actions();
     }
