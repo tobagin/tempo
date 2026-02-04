@@ -23,6 +23,7 @@ vala_sources = [
   'utils/PatternEngine.vala',
   'utils/Setlist.vala',
   'utils/SetlistManager.vala',
+  'utils/DebugLogger.vala',
   config_vala,  # Generated config.vala file
 ]
 
