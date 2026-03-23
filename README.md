@@ -11,9 +11,9 @@ A modern metronome for musicians.
 
 </div>
 
-## 🎉 Version 1.5.1 - Latest Release
+## 🎉 Version 1.5.2 - Keyboard Fix & Runtime Update
 
-**Tempo 1.5.1** brings metadata improvements and documentation updates.
+**Tempo 1.5.2** fixes the spacebar shortcut on launch and updates to GNOME Platform 50.
 
 ### ✨ Key Features
 
@@ -24,18 +24,15 @@ A modern metronome for musicians.
 - **⚙️ Advanced Controls**: Tap tempo, custom sounds, and practice timer
 - **🔒 Privacy Focused**: No telemetry, all data stays on your machine
 
+### 🆕 What's New in 1.5.2
+
+- **Keyboard Fix**: Spacebar now starts/stops the metronome immediately on launch (fixes #15).
+- **GNOME Platform 50**: Updated Flatpak runtime and SDK to the latest GNOME Platform.
+
 ### 🆕 What's New in 1.5.1
 
 - **Metadata Improvements**: Verified and improved metainfo validation (summary, description, branding).
 - **Documentation**: Simplified README, added Flathub/Ko-Fi badges, and improved build instructions.
-
-### 🆕 What's New in 1.5.0
-
-- **Mobile Support**: Optimized layout for mobile Linux devices like PinePhone and Librem 5.
-- **Sound Types**: Built-in Woodblock, Metal, and Digital sound profiles.
-- **Improved Denominators**: Better musical accuracy for complex time signatures.
-- **Setlists**: Organize your presets into sequences for practice or performance.
-- **✨ New Icons**: Fresh new application icons (Thanks to @oiimrosabel).
 
 For detailed release notes and version history, see [CHANGELOG.md](CHANGELOG.md).
 

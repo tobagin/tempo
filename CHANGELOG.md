@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2026-03-23
+
+### 🐛 Fixed
+
+- **Keyboard Shortcuts**: Spacebar now starts/stops the metronome immediately on launch, regardless of which widget has focus (fixes #15).
+
+### 🔧 Changed
+
+- **Flatpak Runtime**: Updated runtime and SDK to GNOME Platform 50.
+- **Build Script**: Updated to use a shared local Flatpak repo to avoid stale build artifacts.
+
 ## [1.5.1] - 2026-01-12
 
 ### Changed

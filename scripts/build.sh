@@ -5,6 +5,9 @@
 
 set -e
 
+# Change to project root directory (script is in scripts/)
+cd "$(dirname "$0")/.."
+
 # Default to production build
 BUILD_TYPE="prod"
 
@@ -35,22 +38,31 @@ done
 if [ "$BUILD_TYPE" = "dev" ]; then
     MANIFEST="packaging/io.github.tobagin.tempo.Devel.yml"
     APP_ID="io.github.tobagin.tempo.Devel"
-    echo -e "\033[0;34m[INFO]\033[0m Building development version"
+    echo "Building development version..."
 else
     MANIFEST="packaging/io.github.tobagin.tempo.yml"
     APP_ID="io.github.tobagin.tempo"
-    echo -e "\033[0;34m[INFO]\033[0m Building production version"
+    echo "Building production version..."
 fi
 
-echo -e "\033[0;34m[INFO]\033[0m Using manifest: $(basename $MANIFEST)"
-echo -e "\033[0;34m[INFO]\033[0m Build directory: build"
+# Build directory (always 'build')
+BUILD_DIR="build"
 
-# Check for required Flatpak runtimes
-echo -e "\033[0;34m[INFO]\033[0m Checking for required Flatpak runtimes..."
+echo "Using manifest: $MANIFEST"
+echo "Build directory: $BUILD_DIR"
 
-# Build and install with Flatpak (always install)
-echo -e "\033[0;34m[INFO]\033[0m Running: flatpak-builder --force-clean --install --user build $MANIFEST"
-flatpak-builder --force-clean --install --user "build" "$MANIFEST"
+# Shared local Flatpak repo (reused across all local apps)
+REPO_DIR="$HOME/repo"
+REMOTE_NAME="local"
 
-echo -e "\033[0;32m[SUCCESS]\033[0m Build and installation complete!"
-echo -e "\033[0;32m[SUCCESS]\033[0m Run with: flatpak run $APP_ID"
+echo "Running flatpak-builder..."
+flatpak-builder --force-clean --install-deps-from=flathub --repo="$REPO_DIR" "$BUILD_DIR" "$MANIFEST"
+
+echo "Installing from local repo..."
+flatpak remote-add --user --no-gpg-verify --if-not-exists "$REMOTE_NAME" "$REPO_DIR"
+# Uninstall any existing installation (may reference a stale remote)
+flatpak uninstall --user -y "$APP_ID" 2>/dev/null || true
+flatpak install --user -y "$REMOTE_NAME" "$APP_ID"
+
+echo "Build and installation complete!"
+echo "Run with: flatpak run $APP_ID"

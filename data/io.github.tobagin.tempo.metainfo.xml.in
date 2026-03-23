@@ -94,6 +94,16 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.5.2" date="2026-03-23">
+      <description>
+        <p>🐛 Bug fix and runtime update</p>
+        <ul>
+          <li>Fixed spacebar not starting the metronome immediately on launch</li>
+          <li>Updated Flatpak runtime to GNOME Platform 50</li>
+          <li>Improved build script to use shared local repo for cleaner builds</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.5.1" date="2026-01-12">
       <description>
         <p>Metadata improvements and documentation updates</p>

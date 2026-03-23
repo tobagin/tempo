@@ -575,9 +575,14 @@ public class TempoWindow : Adw.ApplicationWindow {
     // Keyboard shortcuts setup
     private void setup_keyboard_shortcuts() {
         var key_controller = new EventControllerKey();
+        // Use CAPTURE phase so the window intercepts key events before child
+        // widgets (e.g. the BPM SpinButton) can consume them.  This ensures
+        // shortcuts like Space work immediately on launch regardless of which
+        // widget currently holds focus.
+        key_controller.set_propagation_phase(PropagationPhase.CAPTURE);
         key_controller.key_pressed.connect(on_key_pressed);
         ((Widget)this).add_controller(key_controller);
-        
+
         // Make sure window can receive focus for keyboard events
         this.can_focus = true;
     }
