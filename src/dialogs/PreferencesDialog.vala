@@ -31,6 +31,7 @@ public class PreferencesDialog : Adw.PreferencesDialog {
     [GtkChild] private unowned SpinButton tap_sensitivity_spin;
     [GtkChild] private unowned Switch start_on_launch_switch;
     [GtkChild] private unowned Switch keep_on_top_switch;
+    [GtkChild] private unowned Switch scroll_bpm_switch;
     
     // UI Elements - Visual Settings
     [GtkChild] private unowned DropDown theme_dropdown;
@@ -145,6 +146,7 @@ public class PreferencesDialog : Adw.PreferencesDialog {
         tap_sensitivity_spin.set_value(settings.get_int("tap-sensitivity"));
         start_on_launch_switch.set_active(settings.get_boolean("start-on-launch"));
         keep_on_top_switch.set_active(settings.get_boolean("keep-on-top"));
+        scroll_bpm_switch.set_active(settings.get_boolean("scroll-to-change-bpm"));
         
         // Load visual settings
         theme_dropdown.set_selected(settings.get_int("theme"));
@@ -230,7 +232,12 @@ public class PreferencesDialog : Adw.PreferencesDialog {
             settings.set_boolean("keep-on-top", state);
             return false;
         });
-        
+
+        scroll_bpm_switch.state_set.connect((state) => {
+            settings.set_boolean("scroll-to-change-bpm", state);
+            return false;
+        });
+
         // Visual settings
         theme_dropdown.notify["selected"].connect(() => {
             settings.set_int("theme", (int)theme_dropdown.get_selected());
