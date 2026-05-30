@@ -27,6 +27,9 @@ testable gap is the GSettings key round-trip (`scroll-to-change-bpm` read/write)
 the upcoming settings persistence PR, which will extend the test infrastructure to support GIO
 and per-test environment variables.
 
+**Note:** `test_bpm_clamping` in `test_tap_tempo` has a pre-existing timing flakiness (sleep of
+exactly 2 s races the 2 s timeout boundary). Not introduced by this PR; tracked separately.
+
 ## Screenshots (if UI changes)
 
 [Add screenshot of new toggle in Preferences → Behavior]
@@ -36,7 +39,7 @@ and per-test environment variables.
 - [x] Code follows project style guidelines
 - [x] Self-review completed
 - [x] Comments added for complex code
-- [ ] Documentation updated
-- [ ] No new warnings generated
-- [ ] Tests added/updated
-- [ ] All tests passing
+- [x] Documentation updated
+- [x] No new warnings generated
+- [ ] Tests added/updated (deferred — see note above)
+- [ ] All tests passing (pre-existing flaky test in `test_bpm_clamping`; not introduced by this PR)
