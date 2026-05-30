@@ -255,6 +255,16 @@ template $PreferencesDialog : Adw.PreferencesDialog {
           valign: center;
         }
       }
+
+      Adw.ActionRow {
+        title: _("Scroll Wheel Changes BPM");
+        subtitle: _("Allow scrolling over BPM controls to change the tempo");
+
+        [suffix]
+        Switch scroll_bpm_switch {
+          valign: center;
+        }
+      }
     }
   }
 

@@ -115,6 +115,12 @@
       <summary>Keep window on top</summary>
       <description>Whether to keep the main window always on top</description>
     </key>
+
+    <key name="scroll-to-change-bpm" type="b">
+      <default>true</default>
+      <summary>Scroll wheel changes BPM</summary>
+      <description>Whether scrolling over the BPM controls changes the tempo</description>
+    </key>
     
     <!-- Visual Settings -->
     <key name="theme" type="i">
