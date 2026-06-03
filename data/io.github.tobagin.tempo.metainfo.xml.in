@@ -94,6 +94,14 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.5.3" date="2026-06-03">
+      <description>
+        <p>🔧 Maintenance release</p>
+        <ul>
+          <li>Raised minimum dependency versions to the GNOME 50 baseline (GTK 4.18, libadwaita 1.9, GLib 2.84, json-glib 1.10, GStreamer 1.24)</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.5.2" date="2026-03-23">
       <description>
         <p>🐛 Bug fix and runtime update</p>
