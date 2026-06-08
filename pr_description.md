@@ -25,14 +25,14 @@ N/A
 `EventControllerScroll` in capture phase, which requires a display to exercise directly. The
 testable gap is the GSettings key round-trip (`scroll-to-change-bpm` read/write) — deferred to
 the upcoming settings persistence PR, which will extend the test infrastructure to support GIO
-and per-test environment variables.
+and per-test environment variables. ***Please let me know*** if it is preferrable to make these significant changes to meson.build now in order to have a test for this feature.
 
 **Note:** `test_bpm_clamping` in `test_tap_tempo` has a pre-existing timing flakiness (sleep of
 exactly 2 s races the 2 s timeout boundary). Not introduced by this PR; tracked separately.
 
 ## Screenshots (if UI changes)
 
-[Add screenshot of new toggle in Preferences → Behavior]
+<img width="491" height="745" alt="image" src="https://github.com/user-attachments/assets/8dc98a2d-fd60-4c6e-96dd-35f470ef7262" />
 
 ## Checklist
 
