@@ -1,5 +1,5 @@
 project('tempo', ['c', 'vala'],
-  version: '1.5.3',
+  version: '1.5.4',
   license: 'GPL3+',
   meson_version: '>= 0.59.0',
   default_options: [
@@ -24,14 +24,14 @@ i18n = import('i18n')
 fs = import('fs')
 
 # Dependencies
-gtk4_dep = dependency('gtk4', version: '>= 4.18')
-adw_dep = dependency('libadwaita-1', version: '>= 1.9')
-glib_dep = dependency('glib-2.0', version: '>= 2.84')
-gobject_dep = dependency('gobject-2.0', version: '>= 2.84')
+gtk4_dep = dependency('gtk4', version: '>= 4.24')
+adw_dep = dependency('libadwaita-1', version: '>= 1.10')
+glib_dep = dependency('glib-2.0', version: '>= 2.90')
+gobject_dep = dependency('gobject-2.0', version: '>= 2.90')
 json_glib_dep = dependency('json-glib-1.0', version: '>= 1.10')
 gee_dep = dependency('gee-0.8', version: '>= 0.20')
-gstreamer_dep = dependency('gstreamer-1.0', version: '>= 1.24', required: false)
-gstreamer_audio_dep = dependency('gstreamer-audio-1.0', version: '>= 1.24', required: false)
+gstreamer_dep = dependency('gstreamer-1.0', version: '>= 1.28', required: false)
+gstreamer_audio_dep = dependency('gstreamer-audio-1.0', version: '>= 1.28', required: false)
 
 if not gstreamer_dep.found() or not gstreamer_audio_dep.found()
   warning('GStreamer not found - audio functionality will be limited')

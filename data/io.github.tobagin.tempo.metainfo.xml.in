@@ -94,6 +94,15 @@
   <update_contact>noreply@github.com</update_contact>
   
   <releases>
+    <release version="1.5.4" date="2026-10-01">
+      <description>
+        <p>🔧 Maintenance release</p>
+        <ul>
+          <li>Updated Flatpak runtime and SDK to GNOME Platform 51</li>
+          <li>Raised minimum dependency versions to the GNOME 51 baseline (GTK 4.24, libadwaita 1.10, GLib 2.90, GStreamer 1.28)</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.5.3" date="2026-06-03">
       <description>
         <p>🔧 Maintenance release</p>
