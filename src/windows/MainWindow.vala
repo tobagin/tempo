@@ -162,6 +162,7 @@ public class TempoWindow : Adw.ApplicationWindow {
         setup_ui();
         connect_signals();
         setup_tempo_trainer_ui();
+        setup_scroll_blocking();
 
         // Listen for settings changes to update visuals
         settings.changed.connect(on_settings_changed);
@@ -572,6 +573,20 @@ public class TempoWindow : Adw.ApplicationWindow {
         }
     }
     
+    private void setup_scroll_blocking() {
+        // Add scroll controllers in CAPTURE phase to intercept scroll events on
+        // BPM controls before the widgets handle them. When scroll-to-change-bpm
+        // is disabled, returning true consumes the event so BPM is not changed.
+        foreach (var widget in new Gtk.Widget[] { tempo_spin, tempo_scale, patterns_tempo_scale }) {
+            var controller = new EventControllerScroll(EventControllerScrollFlags.VERTICAL);
+            controller.set_propagation_phase(PropagationPhase.CAPTURE);
+            controller.scroll.connect((dx, dy) => {
+                return !settings.get_boolean("scroll-to-change-bpm");
+            });
+            widget.add_controller(controller);
+        }
+    }
+
     // Keyboard shortcuts setup
     private void setup_keyboard_shortcuts() {
         var key_controller = new EventControllerKey();
