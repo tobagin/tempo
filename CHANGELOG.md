@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Scroll Wheel BPM Toggle**: Added a preference to disable scroll wheel changes to the tempo. When disabled, scrolling over BPM controls (spin box, BPM scale, pattern tempo scale) no longer changes the tempo, preventing accidental changes during performance.
 
+## [1.5.4] - 2026-10-01
+
+### 🔧 Changed
+
+- **Flatpak Runtime**: Updated runtime and SDK to GNOME Platform 51.
+- **Dependencies**: Raised minimum build dependency versions to match the GNOME 51 runtime baseline (GTK ≥ 4.24, libadwaita ≥ 1.10, GLib/GObject ≥ 2.90, GStreamer ≥ 1.28).
+
+## [1.5.3] - 2026-06-03
+
+### 🔧 Changed
+
+- **Dependencies**: Raised minimum build dependency versions to match the GNOME 50 runtime baseline (GTK ≥ 4.18, libadwaita ≥ 1.9, GLib/GObject ≥ 2.84, json-glib ≥ 1.10, GStreamer ≥ 1.24).
+
 ## [1.5.2] - 2026-03-23
 
 ### 🐛 Fixed
